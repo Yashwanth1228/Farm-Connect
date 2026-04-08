@@ -12,7 +12,9 @@ export const Subheading = styled.h2`
   color: black;
 `;
 
-export const text = styled.p`
+export const Text = styled.p`
   font-size: 16px;
   color: #555;
+  margin-top: 10px;
+  margin-bottom: 20px;
 `;
