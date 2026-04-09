@@ -149,15 +149,37 @@ export default function Login() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!form.email || !form.password) {
       alert("Please fill all the details");
       return;
     }
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Login Successfully");
+        router.push("/");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    }
 
     console.log(form);
-    router.push("/");
   };
 
   return (

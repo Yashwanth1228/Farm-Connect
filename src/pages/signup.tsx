@@ -162,7 +162,7 @@ export default function Signup() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.password) {
@@ -175,8 +175,31 @@ export default function Signup() {
       return;
     }
 
+    try {
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Account created successfully");
+        // window.location.href = "/login";
+        router.push("/login");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong");
+    }
+
     console.log(form);
-    router.push("/login");
+    // router.push("/login");
   };
 
   return (
