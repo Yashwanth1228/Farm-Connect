@@ -1,48 +1,24 @@
-/** @jsxImportSource @emotion/react */
+import type { NextPage } from "next";
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import Features from "../components/Features";
+import Equipment from "../components/Equipment";
+import Testimonials from "../components/Testimonials";
+import CTA from "../components/CTA";
+import Footer from "../components/Footer";
 
-import Link from "next/link";
-import { css } from "@emotion/react";
-import Navbar from "@/components/Navbar";
-import { Heading, Subheading, Text } from "../components/Text";
-import ProductCard from "../components/ProductCard";
-import { Button } from "../components/Button";
-
-function Homepage() {
+const Home: NextPage = () => {
   return (
     <>
-      <Heading>Heading </Heading>
-      <Link href="/login">
-        <button
-          css={css`
-            color: hotpink;
-          `}
-        >
-          Login
-        </button>
-      </Link>
-
-      <Subheading>Subheading</Subheading>
-
-      <text>Text</text>
-
-      <Link href="/signup">
-        <button
-          css={css`
-            color: hotpink;
-          `}
-        >
-          signup
-        </button>
-      </Link>
       <Navbar />
-
-      <ProductCard
-        name="Tractor"
-        price={500}
-        image="https://www.deere.co.in/assets/images/region-1/products/tractors/john-deere-d-series-tractor.jpg"
-      />
+      <Hero />
+      <Features />
+      <Equipment />
+      <Testimonials />
+      <CTA />
+      <Footer />
     </>
   );
-}
+};
 
-export default Homepage;
+export default Home;
