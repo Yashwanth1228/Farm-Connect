@@ -5,7 +5,6 @@ import Features from "../components/Features";
 import Equipment from "../components/Equipment";
 import Testimonials from "../components/Testimonials";
 import CTA from "../components/CTA";
-import Footer from "../components/Footer";
 
 const Home: NextPage = () => {
   return (
@@ -16,7 +15,6 @@ const Home: NextPage = () => {
       <Equipment />
       <Testimonials />
       <CTA />
-      <Footer />
     </>
   );
 };

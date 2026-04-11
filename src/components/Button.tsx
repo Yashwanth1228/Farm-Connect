@@ -13,8 +13,8 @@ export const Button = styled.a`
   display: flex;
   padding: 15px 20px;
   font-weight: bold;
-  // justify-content: center;
-  // align-items: center;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     background: #094d14;

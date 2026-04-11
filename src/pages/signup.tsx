@@ -6,6 +6,8 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { Heading, Text } from "../components/Text";
 import { useRouter } from "next/navigation";
+import { Input, InputGroup } from "@/components/InputBox";
+import { Button } from "@/components/Button";
 
 /* MAIN LAYOUT */
 const Main = styled.div`
@@ -90,50 +92,50 @@ const SubText = styled.p`
   gap: 5px;
 `;
 
-const InputGroup = styled.div`
-  width: 100%;
-  margin-bottom: 25px;
-`;
+// const InputGroup = styled.div`
+//   width: 100%;
+//   margin-bottom: 25px;
+// `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-bottom: 2px solid #ccc;
+// const Input = styled.input`
+//   width: 100%;
+//   padding: 10px;
+//   border: none;
+//   border-bottom: 2px solid #ccc;
 
-  &:hover {
-    border-bottom: 2px solid #0d631b;
-    transform: scale(1.01);
-    transition: all 0.5s;
-  }
+//   &:hover {
+//     border-bottom: 2px solid #0d631b;
+//     transform: scale(1.01);
+//     transition: all 0.5s;
+//   }
 
-  &:focus {
-    outline: none;
-    border-color: #0d631b;
-    background: #f9f9f9;
-  }
-`;
+//   &:focus {
+//     outline: none;
+//     border-color: #0d631b;
+//     background: #f9f9f9;
+//   }
+// `;
 
 const Row = styled.div`
   display: flex;
   gap: 20px;
 `;
 
-const Button = styled.button`
-  width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #0d631b, #2e7d32);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  margin-top: 20px;
-  cursor: pointer;
+// const Button = styled.button`
+//   width: 100%;
+//   padding: 14px;
+//   background: linear-gradient(135deg, #0d631b, #2e7d32);
+//   color: white;
+//   border: none;
+//   border-radius: 12px;
+//   margin-top: 20px;
+//   cursor: pointer;
 
-  &:hover {
-    background: #094d14;
-    transform: scale(1.02);
-  }
-`;
+//   &:hover {
+//     background: #094d14;
+//     transform: scale(1.02);
+//   }
+// `;
 
 const Anc = styled.a`
   color: #0d631b;

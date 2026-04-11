@@ -32,7 +32,7 @@ const Subtitle = styled.p`
   max-width: 400px;
 `;
 
-const ViewButton = styled.button`
+const ViewEquipment = styled.a`
   display: none;
   align-items: center;
   font-weight: bold;
@@ -172,10 +172,10 @@ export default function FeaturedEquipment() {
             </Subtitle>
           </div>
 
-          <ViewButton>
-            View All Fleet
+          <ViewEquipment href="/equipment">
+            View All
             <span>arrow_forward</span>
-          </ViewButton>
+          </ViewEquipment>
         </Header>
 
         <Grid>
