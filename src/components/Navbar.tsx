@@ -3,6 +3,7 @@ import { Button } from "./Button";
 import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Header = styled.header`
   position: fixed;
@@ -101,6 +102,7 @@ const SearchContainer = styled.div`
 `;
 
 export default function Navbar() {
+  const router = useRouter();
   return (
     <Header>
       <Container>
@@ -121,7 +123,7 @@ export default function Navbar() {
         </SearchContainer>
 
         <ButtonGroup>
-          <Button href="/login">Login</Button>
+          <Button onClick={() => router.push("/login")}>Login</Button>
           {/* <Button>Signup</Button> */}
         </ButtonGroup>
       </Container>
