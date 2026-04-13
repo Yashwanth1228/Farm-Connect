@@ -33,6 +33,7 @@ export const InputMessage = styled.textarea`
   border: none;
   border-bottom: 2px solid #ccc;
   border-radius: 20px;
+  resize: vertical;
 
   &:hover {
     border-bottom: 2px solid #0d631b;

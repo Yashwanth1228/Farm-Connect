@@ -136,6 +136,7 @@ export default function Hero() {
       <BackgroundWrapper>
         <BackgroundImage
           src={tractor.src}
+          
           alt="Farm field with tractor at sunrise"
         />
         <GradientOverlay />

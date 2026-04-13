@@ -2,7 +2,7 @@
 
 import styled from "@emotion/styled";
 
-export const Button = styled.a`
+export const Button = styled.button`
   width: 100%;
   padding: 10px;
   background: #0d631b;

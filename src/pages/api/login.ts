@@ -22,7 +22,7 @@ export default async function handler(
       return res.status(400).json({ message: "User not found" });
     }
 
-    // check password (simple for now)
+    // check password 
     if (user.password !== password) {
       return res.status(400).json({ message: "Invalid password" });
     }
