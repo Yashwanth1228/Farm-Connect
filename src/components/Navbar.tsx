@@ -111,7 +111,7 @@ export default function Navbar() {
 
         <Nav>
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/equipment">Equipment</NavLink>
+          <NavLink href="/equipments">Equipment</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>
         </Nav>
