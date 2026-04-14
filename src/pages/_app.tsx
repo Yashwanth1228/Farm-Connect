@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
+import { AppContextProvider } from "@/context/Appcontext";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -16,7 +17,12 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       {showNavbar && <Navbar />}
 
+      <AppContextProvider>
+
       <Component {...pageProps} />
+
+      </AppContextProvider>
+
       {showFooter && <Footer />}
     </>
   );

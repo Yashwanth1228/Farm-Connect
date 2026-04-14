@@ -1,8 +1,15 @@
 import styled from "@emotion/styled";
 import { Button } from "./Button";
-import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
+// import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { useContext } from "react";
+import { AppContent } from "@/context/Appcontext";
+import { useRouter } from "next/router";
+import axios from "axios";
+import { FaSearch } from "react-icons/fa";
+
 
 const Header = styled.header`
   position: fixed;
@@ -100,7 +107,67 @@ const SearchContainer = styled.div`
   margin-left: 150px;
 `;
 
+const Logout = styled.button`
+    padding: 8px 16px;
+    background: transparent;
+    
+    cursor: pointer;
+    border: none;
+    &:hover {
+        color: #0d631b;
+      }
+    
+`
+
+const Profileicon = styled.div`
+    width: 50px;
+    height: 45px;
+    border-radius: 50%;
+    background: #0d631b;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    cursor: pointer;
+`
+
+
 export default function Navbar() {
+
+   const {user , setUser} : any= useContext(AppContent);
+
+    console.log("this is user data from app context " , user )
+    
+    const router = useRouter();
+
+    const handlelogout = async () => {
+
+        try {
+
+            let res = await axios.post('/api/logout',{},{withCredentials:true});
+        
+        if(res.data.success) {
+            alert("Logged out successfully");
+            setUser(false);
+            router.push('/');
+        }
+        else {
+            alert("Logout failed");
+        }
+
+
+        }
+        catch(error) {
+            console.log("Logout error " , error);
+            alert("An error occurred during logout");
+        }
+
+        
+
+
+    }
   return (
     <Header>
       <Container>
@@ -120,10 +187,25 @@ export default function Navbar() {
           {/* <SearchInput placeholder="🔎Search Equipment" /> */}
         </SearchContainer>
 
-        <ButtonGroup>
+        {/* <ButtonGroup>
           <Button href="/login">Login</Button>
-          {/* <Button>Signup</Button> */}
-        </ButtonGroup>
+          <Button>Signup</Button>
+        </ButtonGroup> */}
+
+          {user ?  <ButtonGroup>
+
+                {/* <Logo>{user.name[0]}</Logo> */}
+                <Profileicon>{user?.name?.[0]}</Profileicon>
+                <Logout onClick={handlelogout}>Logout</Logout>
+                </ButtonGroup>  
+                :  <ButtonGroup>
+
+                    <Button onClick={() => {router.push('/login')}} >Login</Button>
+
+                    {/* <Login onClick={() => {router.push('/login')}}>Login</Login> */}
+                      {/* <Signup>Signup</Signup> */}
+
+                    </ButtonGroup>}
       </Container>
     </Header>
   );
