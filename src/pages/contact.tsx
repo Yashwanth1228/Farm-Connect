@@ -1,4 +1,4 @@
-/** @jsxImportSource @emotion/react */
+
 import styled from "@emotion/styled";
 import { Input, InputGroup, InputMessage } from "@/components/InputBox";
 import { Button } from "@/components/Button";
