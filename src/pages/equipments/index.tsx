@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import styled from "@emotion/styled";
+import { useState } from "react";
 import { Button } from "@/components/Button";
 
 const Container = styled.div`
@@ -229,6 +230,20 @@ const ActivePage = styled(PageBtn)`
   font-weight: bold;
 `;
 export default function EquipmentPage() {
+  const [price, setPrice] = useState(20000);
+
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+
+  const handleTypeChange = (type: string) => {
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
+  };
+
+  const handleClear = () => {
+    setPrice(20000);
+    setSelectedTypes([]);
+  };
   return (
     <Container>
       {/* Navbar */}
@@ -260,26 +275,53 @@ export default function EquipmentPage() {
 
               <Section>
                 <SectionTitle>Price Range</SectionTitle>
-                <Range type="range" />
+                <Range
+                  type="range"
+                  min={1000}
+                  max={20000}
+                  value={price}
+                  step={400}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                />
                 <RangeText>
                   <span>₹1,000</span>
-                  <span>₹20,000+</span>
+                  <span>₹{price.toLocaleString()}</span>
                 </RangeText>
               </Section>
 
               <Section>
                 <SectionTitle>Equipment Type</SectionTitle>
                 <Label>
-                  <input type="checkbox" /> Tractors
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Tractors")}
+                    onChange={() => handleTypeChange("Tractors")}
+                  />{" "}
+                  Tractors
                 </Label>
                 <Label>
-                  <input type="checkbox" /> Harvesters
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Harvesters")}
+                    onChange={() => handleTypeChange("Harvesters")}
+                  />{" "}
+                  Harvesters
                 </Label>
                 <Label>
-                  <input type="checkbox" /> Ploughs
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Ploughs")}
+                    onChange={() => handleTypeChange("Ploughs")}
+                  />{" "}
+                  Ploughs
                 </Label>
                 <Label>
-                  <input type="checkbox" /> Cultivators
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Cultivators")}
+                    onChange={() => handleTypeChange("Cultivators")}
+                  />{" "}
+                  Cultivators
                 </Label>
               </Section>
 
@@ -293,7 +335,7 @@ export default function EquipmentPage() {
                 </Label>
               </Section>
 
-              <Button>Clear All Filters</Button>
+              <Button onClick={handleClear}>Clear All Filters</Button>
             </FilterBox>
           </Sidebar>
 
