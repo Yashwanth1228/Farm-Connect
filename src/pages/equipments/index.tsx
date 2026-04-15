@@ -3,6 +3,8 @@
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { Button } from "@/components/Button";
+import { useRouter } from "next/router";
+import { equipments, Equipment } from "@/data/equipmentData";
 
 const Container = styled.div`
   font-family: "Work Sans", sans-serif;
@@ -150,12 +152,28 @@ const Card = styled.div`
   background: white;
   border-radius: 24px;
   overflow: hidden;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+
+  transition: transform 0.2s;
+
+  &:hover {
+    // transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transform: scale(1.02);
+  }
 `;
 
 const CardImage = styled.img`
   width: 100%;
   height: 256px;
   object-fit: cover;
+
+  transition: transform 0.2s;
+  &:hover {
+    transform: scale(1.02);
+  }
 `;
 
 const CardBody = styled.div`
@@ -230,9 +248,30 @@ const ActivePage = styled(PageBtn)`
   font-weight: bold;
 `;
 export default function EquipmentPage() {
+  const router = useRouter();
+
+  const handleRoute = (item: Equipment) => {
+    router.push(`/equipments/${Number(item.id)}`);
+  };
   const [price, setPrice] = useState(20000);
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+
+  const [avalibility, setAvalibility] = useState<string>("all");
+
+  const filteredEquipments: Equipment[] = equipments.filter(
+    (item: Equipment) => {
+      const priceMatch = Number(item.price) <= price;
+
+      const typeMatch =
+        selectedTypes.length === 0 || selectedTypes.includes(String(item.type));
+
+      const availabilityMatch =
+        avalibility === "all" || item.available === true;
+
+      return priceMatch && typeMatch && availabilityMatch;
+    },
+  );
 
   const handleTypeChange = (type: string) => {
     setSelectedTypes((prev) =>
@@ -243,6 +282,8 @@ export default function EquipmentPage() {
   const handleClear = () => {
     setPrice(20000);
     setSelectedTypes([]);
+    setAvalibility("all");
+    console.log(avalibility, selectedTypes, price);
   };
   return (
     <Container>
@@ -328,10 +369,22 @@ export default function EquipmentPage() {
               <Section>
                 <SectionTitle>Availability</SectionTitle>
                 <Label>
-                  <input type="radio" name="a" /> Available Now
+                  <input
+                    type="radio"
+                    name="a"
+                    checked={avalibility === "available"}
+                    onChange={() => setAvalibility("available")}
+                  />{" "}
+                  Available Now
                 </Label>
                 <Label>
-                  <input type="radio" name="a" /> All Equipment
+                  <input
+                    type="radio"
+                    name="a"
+                    checked={avalibility === "all"}
+                    onChange={() => setAvalibility("all")}
+                  />{" "}
+                  All Equipment
                 </Label>
               </Section>
 
@@ -346,7 +399,7 @@ export default function EquipmentPage() {
               Browse 42 machines available for rental in your region.
             </Subtitle>
 
-            <Grid>
+            {/* <Grid>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
                 <Card key={item}>
                   <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" />
@@ -358,6 +411,32 @@ export default function EquipmentPage() {
                     <CardFooter>
                       <Price>₹3,500/day</Price>
                       <Button>Rent Now</Button>
+                    </CardFooter>
+                  </CardBody>
+                </Card>
+              ))}
+            </Grid> */}
+
+            <Grid>
+              {filteredEquipments.map((item: Equipment) => (
+                <Card key={Number(item.id)} onClick={() => handleRoute(item)}>
+                  {/* <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" /> */}
+                  <CardImage src={String(item.img)} />
+
+                  <CardBody>
+                    <CardTitle>{String(item.name)}</CardTitle>
+                    <Desc>Type: {String(item.type)}</Desc>
+
+                    <CardFooter>
+                      <Price>₹{Number(item.price)}/day</Price>
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/equipments/${Number(item.id)}`);
+                        }}
+                      >
+                        View Details
+                      </Button>
                     </CardFooter>
                   </CardBody>
                 </Card>

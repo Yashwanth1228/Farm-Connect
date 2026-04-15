@@ -1,4 +1,18 @@
 import styled from "@emotion/styled";
+import { useRouter } from "next/router";
+
+type Props = {
+  product: {
+    id: number;
+    name: string;
+    img: string;
+    type: string;
+    price: number;
+    available: boolean;
+    description: string;
+    enginepower: string;
+  };
+};
 
 /* ================= NAV ================= */
 const Nav = styled.nav`
@@ -208,7 +222,8 @@ const Details = styled.div`
 `;
 
 /* ================= PAGE ================= */
-export default function ProductPage() {
+export default function PDP({ product }: Props) {
+  const router = useRouter();
   return (
     <>
       {/* <Nav>
@@ -223,7 +238,9 @@ export default function ProductPage() {
         <Hero>
           {/* LEFT */}
           <div>
-            <MainImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Qh_nTp8s1ktmhft8jayHfopMKRmI0Byagywq89q-391nkoSqvNu9IZlPukRN7MHg4zVtHPozPooFURROD3ulzfKaePMkVcj2O9YW3pl7Vja-X3figZcz_a2QZfBpb_lRFrF-9uH4K3qlaHbCfE1v0MI6RvQ2kB6zw1y35tu_KNc3q2qSeJ3pDdiXEh07ScxmTKNDbwEeMXDQQqZIA7XVRM29n4xOEBRDX328NVXeuVqKVbR5GfhozGMV6aeVNQosPPnIjazDXYY" />
+            {/* <MainImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Qh_nTp8s1ktmhft8jayHfopMKRmI0Byagywq89q-391nkoSqvNu9IZlPukRN7MHg4zVtHPozPooFURROD3ulzfKaePMkVcj2O9YW3pl7Vja-X3figZcz_a2QZfBpb_lRFrF-9uH4K3qlaHbCfE1v0MI6RvQ2kB6zw1y35tu_KNc3q2qSeJ3pDdiXEh07ScxmTKNDbwEeMXDQQqZIA7XVRM29n4xOEBRDX328NVXeuVqKVbR5GfhozGMV6aeVNQosPPnIjazDXYY" /> */}
+
+            <MainImage src={String(product.img)} alt={String(product.name)} />
 
             <Gallery>
               <Thumb src="https://lh3.googleusercontent.com/aida-public/AB6AXuAeLq2VQVkEf0MxCQto2MGwzqSg4c_kH_ZtjIorVg_PPlGa6L1stfqoeZcTvb6posDBaosUgEkkJJYsB1FbogbzlCa0zh_pPuRQCOr6A9x-9CJ5RumPHtXAz6-OcrlW_igTASqfYuxdkekBki1geV5V7KNiDO9rgQtV7SevtrWmbaWCObXYRg7J-7ZOCiW9KHKaHEDLpyZF6WM9V-v3f6WjBRJeM7t_XV-9pXMZ_f3Bqbs5wnQV_jBeJ3OprbzhTvQT4rzl__SnO-s" />
@@ -235,11 +252,11 @@ export default function ProductPage() {
 
           {/* RIGHT */}
           <RightWrapper>
-            <Title>John Deere 7R 350</Title>
+            <Title>{product.name}</Title>
             <SubInfo>350 HP • 4WD • Diesel</SubInfo>
             <Card>
               <PriceRow>
-                <Price>$450/day</Price>
+                <Price>${Number(product.price)}/day</Price>
                 {/* <Location>📍 Location</Location> */}
               </PriceRow>
 
@@ -260,21 +277,14 @@ export default function ProductPage() {
 
               <ButtonGroup>
                 <PrimaryBtn>Rent Now</PrimaryBtn>
-                <OutlineBtn>Add to Cart</OutlineBtn>
+                <OutlineBtn onClick={() => router.push("/equipments/carts")}>
+                  Add to Cart
+                </OutlineBtn>
               </ButtonGroup>
             </Card>
             <Details>
-              <SectionTitle>Specifications</SectionTitle>
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Expedita mollitia fugiat quibusdam, reprehenderit itaque nemo
-                asperiores. Expedita, eum dolore? Modi mollitia asperiores id
-                cupiditate quibusdam illo vero ipsum quaerat provident. Lorem
-                ipsum dolor sit amet consectetur adipisicing elit. Id obcaecati
-                tempore, officia deserunt fugiat, quis dicta similique porro,
-                incidunt corporis distinctio harum? Consequuntur perspiciatis
-                rerum numquam nihil voluptatibus hic quasi.
-              </p>
+              <SectionTitle>About</SectionTitle>
+              <p>{product.description}</p>
             </Details>
           </RightWrapper>
         </Hero>
@@ -302,7 +312,7 @@ export default function ProductPage() {
 
             <SpecItem>
               <span>Engine Power</span>
-              <span>350 hp</span>
+              <span>{product.enginepower}</span>
             </SpecItem>
 
             <SpecItem>
