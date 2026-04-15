@@ -214,7 +214,7 @@ function about() {
                 />
               </ImgWrapper>
 
-              <ImgWrapper offset>
+              <ImgWrapper $offset>
                 <Image
                   src={farmertractor}
                   alt="Modern tractor in green field"

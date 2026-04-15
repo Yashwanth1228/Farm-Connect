@@ -208,13 +208,13 @@ export const ImageGrid = styled.div`
   }
 `
 
-export const ImgWrapper = styled.div<{ offset?: boolean }>`
+export const ImgWrapper = styled.div<{ $offset?: boolean }>`
   width: 100%;
   height: 320px;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(26, 28, 25, 0.06);
-  margin-top: ${({ offset }) => (offset ? "3rem" : "0")};
+  margin-top: ${({ $offset }) => ($offset ? "3rem" : "0")};
 `
 
 export const TextContent = styled.div`

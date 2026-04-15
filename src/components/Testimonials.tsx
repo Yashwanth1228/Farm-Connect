@@ -51,14 +51,14 @@ const TestimonialsColumn = styled.div`
   gap: 1.5rem;
 `;
 
-const Card = styled.div<{ offset?: boolean }>`
+const Card = styled.div<{ $offset?: boolean }>`
   padding: 2rem;
   background: #f4f4ef;
   border-radius: 1.5rem;
   position: relative;
 
   ${(props) =>
-    props.offset &&
+    props.$offset &&
     `     @media (min-width:1024px){
       margin-left:3rem;
     }
@@ -171,7 +171,7 @@ export default function Testimonials() {
                 </Quote>
               </Card>
 
-              <Card offset>
+              <Card $offset>
                 <UserRow>
                   <Avatar src={farmer2.src} />
                   <div>
