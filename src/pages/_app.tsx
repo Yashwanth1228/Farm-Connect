@@ -8,10 +8,11 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   const noNavbarRoutes = ["/login", "/signup"];
-  const showNavbar = !noNavbarRoutes.includes(router.pathname);
+  const isAdminRoute = router.pathname.startsWith("/admin");
+  const showNavbar = !noNavbarRoutes.includes(router.pathname) && !isAdminRoute;
 
   const noFooterRoutes = ["/login", "/signup"];
-  const showFooter = !noFooterRoutes.includes(router.pathname);
+  const showFooter = !noFooterRoutes.includes(router.pathname) && !isAdminRoute;
   return (
     <>
       {showNavbar && <Navbar />}
