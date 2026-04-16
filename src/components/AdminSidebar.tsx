@@ -1,15 +1,14 @@
-/** @jsxImportSource @emotion/react */
 import React from "react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { MdLogout } from "react-icons/md";
 import {
-  sidebarContainer,
-  logoSection,
-  navList,
-  navItem,
-  userProfile,
+  SidebarContainer,
+  LogoSection,
+  NavList,
+  NavItemLink,
+  UserProfile,
 } from "../styles/AdminSidebarStyles";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -61,7 +60,7 @@ export interface AdminSidebarProps {
 /**
  * AdminSidebar — portable, project-agnostic sidebar.
  *
- * Usage example (paste this in any project):
+ * Usage (paste into any Next.js + Emotion project):
  * ```tsx
  * import { MdDashboard, MdInventory } from "react-icons/md";
  * import AdminSidebar from "@/components/AdminSidebar";
@@ -77,7 +76,7 @@ export interface AdminSidebarProps {
  * />
  * ```
  *
- * Dependencies: @emotion/react, react-icons, next/link, next/router
+ * Dependencies: @emotion/styled, react-icons, next/link, next/router
  */
 const AdminSidebar: React.FC<AdminSidebarProps> = ({
   appName = "Admin Panel",
@@ -90,27 +89,30 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
   const router = useRouter();
 
   return (
-    <div css={sidebarContainer}>
+    <SidebarContainer>
       {/* Brand */}
-      <div css={logoSection}>
+      <LogoSection>
         <h1 className="logo-title">{appName}</h1>
         <p className="logo-subtitle">{appSubtitle}</p>
-      </div>
+      </LogoSection>
 
       {/* Navigation */}
-      <ul css={navList}>
+      <NavList>
         {menuItems.map((item) => (
           <li key={item.path}>
-            <Link href={item.path} css={navItem(router.pathname === item.path)}>
+            <NavItemLink
+              href={item.path}
+              $isActive={router.pathname === item.path}
+            >
               {item.icon}
               <span>{item.label}</span>
-            </Link>
+            </NavItemLink>
           </li>
         ))}
-      </ul>
+      </NavList>
 
       {/* User profile */}
-      <div css={userProfile}>
+      <UserProfile>
         <img src={avatarUrl} alt={userName} className="user-avatar" />
         <div className="user-info">
           <span className="user-name">{userName}</span>
@@ -119,8 +121,8 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             <span>Logout</span>
           </Link>
         </div>
-      </div>
-    </div>
+      </UserProfile>
+    </SidebarContainer>
   );
 };
 

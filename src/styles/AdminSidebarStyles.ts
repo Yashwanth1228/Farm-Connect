@@ -1,9 +1,12 @@
-import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+import Link from "next/link";
 
-// ─── Shared constant — import in AdminLayout too ──────────────────────────────
+// ─── Shared constant — imported by AdminLayout to keep margin in sync ────────
 export const SIDEBAR_WIDTH = 260;
 
-export const sidebarContainer = css`
+// ─── Styled Components ───────────────────────────────────────────────────────
+
+export const SidebarContainer = styled.nav`
   width: ${SIDEBAR_WIDTH}px;
   height: 100vh;
   background: #ffffff;
@@ -18,14 +21,16 @@ export const sidebarContainer = css`
   overflow-y: auto;
 `;
 
-export const logoSection = css`
+export const LogoSection = styled.div`
   margin-bottom: 48px;
+
   .logo-title {
     font-size: 24px;
     font-weight: 800;
     color: #1b5e20;
     margin: 0;
   }
+
   .logo-subtitle {
     font-size: 12px;
     color: #6b7280;
@@ -33,27 +38,29 @@ export const logoSection = css`
   }
 `;
 
-export const navList = css`
+export const NavList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 0;
   flex-grow: 1;
 `;
 
-export const navItem = (isActive: boolean) => css`
+/** Use $isActive (transient prop) to prevent it from being forwarded to <a> */
+export const NavItemLink = styled(Link)<{ $isActive: boolean }>`
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
   margin-bottom: 8px;
   border-radius: 12px;
-  color: ${isActive ? "#1b5e20" : "#4b5563"};
-  background: ${isActive ? "#f1f8e9" : "transparent"};
-  font-weight: ${isActive ? "600" : "500"};
+  color: ${({ $isActive }) => ($isActive ? "#1b5e20" : "#4b5563")};
+  background: ${({ $isActive }) => ($isActive ? "#f1f8e9" : "transparent")};
+  font-weight: ${({ $isActive }) => ($isActive ? "600" : "500")};
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-right: ${isActive ? "4px solid #1b5e20" : "4px solid transparent"};
+  border-right: ${({ $isActive }) =>
+    $isActive ? "4px solid #1b5e20" : "4px solid transparent"};
   text-decoration: none;
 
   &:hover {
@@ -67,7 +74,7 @@ export const navItem = (isActive: boolean) => css`
   }
 `;
 
-export const userProfile = css`
+export const UserProfile = styled.div`
   margin-top: auto;
   padding-top: 24px;
   border-top: 1px solid #f3f4f6;
@@ -86,6 +93,7 @@ export const userProfile = css`
   .user-info {
     flex-grow: 1;
     min-width: 0;
+
     .user-name {
       font-size: 14px;
       font-weight: 600;
@@ -95,6 +103,7 @@ export const userProfile = css`
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .logout-btn {
       font-size: 12px;
       color: #9ca3af;
@@ -103,6 +112,7 @@ export const userProfile = css`
       align-items: center;
       gap: 4px;
       margin-top: 2px;
+
       &:hover {
         color: #ef4444;
       }

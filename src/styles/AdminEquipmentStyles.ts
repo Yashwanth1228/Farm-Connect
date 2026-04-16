@@ -1,6 +1,11 @@
-import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 
-export const headerSection = css`
+// ─── Types (exported so equipment.tsx can import from one place) ─────────────
+export type AvailabilityStatus = "Available" | "Rented" | "Maintenance";
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+
+export const HeaderSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,6 +20,7 @@ export const headerSection = css`
     padding: 8px 20px;
     width: 380px;
     gap: 12px;
+
     input {
       border: none;
       outline: none;
@@ -22,6 +28,7 @@ export const headerSection = css`
       font-size: 14px;
       color: #374151;
     }
+
     svg {
       color: #9ca3af;
     }
@@ -31,11 +38,13 @@ export const headerSection = css`
     display: flex;
     align-items: center;
     gap: 20px;
+
     .icon-btn {
       color: #4b5563;
       cursor: pointer;
       &:hover { color: #1b5e20; }
     }
+
     .admin-panel-btn {
       background: #1b5e20;
       color: white;
@@ -49,7 +58,9 @@ export const headerSection = css`
   }
 `;
 
-export const pageTitle = css`
+// ─── Page Title ───────────────────────────────────────────────────────────────
+
+export const PageTitle = styled.div`
   margin-bottom: 32px;
   display: flex;
   justify-content: space-between;
@@ -57,7 +68,7 @@ export const pageTitle = css`
 
   .title-info {
     h2 { font-size: 32px; font-weight: 800; color: #111827; margin: 0; }
-    p { font-size: 14px; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+    p  { font-size: 14px; color: #6b7280; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
   }
 
   .add-btn {
@@ -75,25 +86,29 @@ export const pageTitle = css`
   }
 `;
 
-export const statsRow = css`
+// ─── Stats ────────────────────────────────────────────────────────────────────
+
+export const StatsRow = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-bottom: 40px;
 `;
 
-export const statCard = (borderColor: string) => css`
+export const StatCard = styled.div<{ $borderColor: string }>`
   background: white;
   padding: 24px;
   border-radius: 16px;
-  border-left: 4px solid ${borderColor};
+  border-left: 4px solid ${({ $borderColor }) => $borderColor};
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 
   .label { font-size: 14px; font-weight: 600; color: #4b5563; margin-bottom: 8px; display: block; }
   .value { font-size: 32px; font-weight: 800; color: #111827; }
 `;
 
-export const inventoryTable = css`
+// ─── Inventory Table ──────────────────────────────────────────────────────────
+
+export const InventoryTable = styled.div`
   background: white;
   border-radius: 20px;
   overflow: hidden;
@@ -103,6 +118,7 @@ export const inventoryTable = css`
   table {
     width: 100%;
     border-collapse: collapse;
+
     th {
       text-align: left;
       padding: 20px 24px;
@@ -112,6 +128,7 @@ export const inventoryTable = css`
       text-transform: uppercase;
       border-bottom: 1px solid #f3f4f6;
     }
+
     td {
       padding: 24px;
       border-bottom: 1px solid #f9fafb;
@@ -123,6 +140,7 @@ export const inventoryTable = css`
     display: flex;
     align-items: center;
     gap: 16px;
+
     img { width: 80px; height: 50px; border-radius: 8px; object-fit: cover; }
     .asset-name { font-size: 16px; font-weight: 700; color: #111827; display: block; }
     .asset-meta { font-size: 12px; color: #9ca3af; }
@@ -131,39 +149,39 @@ export const inventoryTable = css`
   .price-cell { font-size: 18px; font-weight: 800; color: #1b5e20; }
 `;
 
-/**
- * Accepts the AvailabilityStatus values directly:
- * "Available" | "Rented" | "Maintenance"
- */
-export const statusPill = (status: "Available" | "Rented" | "Maintenance") => {
-  const map: Record<string, { bg: string; color: string }> = {
-    Available:   { bg: "#e8f5e9", color: "#2e7d32" },
-    Rented:      { bg: "#fff3e0", color: "#ef6c00" },
-    Maintenance: { bg: "#f3f4f6", color: "#757575" },
-  };
-  const { bg, color } = map[status] ?? { bg: "#f3f4f6", color: "#6b7280" };
+// ─── Status Pill ──────────────────────────────────────────────────────────────
 
-  return css`
-    padding: 6px 14px;
-    border-radius: 99px;
-    font-size: 12px;
-    font-weight: 700;
-    background: ${bg};
-    color: ${color};
-    display: inline-block;
-    white-space: nowrap;
-  `;
+const STATUS_MAP: Record<AvailabilityStatus, { bg: string; color: string }> = {
+  Available:   { bg: "#e8f5e9", color: "#2e7d32" },
+  Rented:      { bg: "#fff3e0", color: "#ef6c00" },
+  Maintenance: { bg: "#f3f4f6", color: "#757575" },
 };
 
-export const paginationSection = css`
+export const StatusPill = styled.div<{ $status: AvailabilityStatus }>`
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  white-space: nowrap;
+  background: ${({ $status }) => STATUS_MAP[$status]?.bg ?? "#f3f4f6"};
+  color: ${({ $status }) => STATUS_MAP[$status]?.color ?? "#6b7280"};
+`;
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+
+export const PaginationSection = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 24px 24px;
+
   .count-info { font-size: 14px; color: #6b7280; }
+
   .nav-btns {
     display: flex;
     gap: 8px;
+
     button {
       padding: 8px 20px;
       border-radius: 8px;
@@ -177,7 +195,9 @@ export const paginationSection = css`
   }
 `;
 
-export const insightsCard = css`
+// ─── Insights Card ────────────────────────────────────────────────────────────
+
+export const InsightsCard = styled.div`
   background: white;
   padding: 32px;
   border-radius: 24px;
@@ -185,19 +205,18 @@ export const insightsCard = css`
   align-items: flex-start;
   gap: 20px;
   margin-bottom: 24px;
+
   .insight-icon {
     padding: 12px;
     background: #e8f5e9;
     border-radius: 12px;
     color: #2e7d32;
+    flex-shrink: 0;
   }
+
   .insight-content {
     h4 { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 12px; }
-    p {
-      font-size: 14px;
-      color: #4b5563;
-      line-height: 1.6;
-    }
+    p  { font-size: 14px; color: #4b5563; line-height: 1.6; }
     .highlight { font-weight: 700; color: #1b5e20; }
     .view-link {
       color: #1b5e20;
@@ -212,8 +231,11 @@ export const insightsCard = css`
   }
 `;
 
-export const saleBanner = css`
-  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1594398044299-591b3b21817e?q=80&w=2070&auto=format&fit=crop');
+// ─── Sale Banner ──────────────────────────────────────────────────────────────
+
+export const SaleBanner = styled.div`
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+    url('https://images.unsplash.com/photo-1594398044299-591b3b21817e?q=80&w=2070&auto=format&fit=crop');
   background-size: cover;
   background-position: center;
   height: 300px;
@@ -223,16 +245,16 @@ export const saleBanner = css`
   justify-content: flex-end;
   padding: 40px;
   color: white;
+
   h3 { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
-  p { font-size: 16px; color: rgba(255,255,255,0.9); max-width: 400px; }
+  p  { font-size: 16px; color: rgba(255,255,255,0.9); max-width: 400px; }
 `;
 
-export const modalOverlay = css`
+// ─── Modal ────────────────────────────────────────────────────────────────────
+
+export const ModalOverlay = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(6px);
   display: flex;
@@ -242,39 +264,39 @@ export const modalOverlay = css`
   padding: 24px;
 `;
 
-export const modalContainer = css`
+const modalAnimation = `
+  @keyframes slideUp {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+`;
+
+/** Full-width two-panel container (Add / Edit) */
+export const ModalContainer = styled.div`
   background: white;
   width: 100%;
   max-width: 800px;
   border-radius: 24px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   overflow: hidden;
-
-  @keyframes slideUp {
-    from { transform: translateY(24px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+  ${modalAnimation}
 `;
 
-/** Narrower single-panel container — used for delete confirmations */
-export const modalContainerSm = css`
+/** Narrower single-panel container (Delete confirmation) */
+export const ModalContainerSm = styled.div`
   background: white;
   width: 100%;
   max-width: 460px;
   border-radius: 24px;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
-  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
-
-  @keyframes slideUp {
-    from { transform: translateY(24px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+  ${modalAnimation}
 `;
 
-export const modalLeftPanel = css`
+/** Green decorative left panel */
+export const ModalLeftPanel = styled.div`
   width: 220px;
   min-width: 220px;
   background: linear-gradient(160deg, #1b5e20 0%, #2e7d32 60%, #388e3c 100%);
@@ -318,7 +340,8 @@ export const modalLeftPanel = css`
   }
 `;
 
-export const modalRightPanel = css`
+/** White scrollable right panel — shared by Add, Edit, and Delete modals */
+export const ModalRightPanel = styled.div`
   flex: 1;
   padding: 36px 36px 32px;
   overflow-y: auto;
@@ -329,17 +352,8 @@ export const modalRightPanel = css`
     margin-bottom: 28px;
     padding-right: 32px;
 
-    h3 {
-      font-size: 22px;
-      font-weight: 800;
-      color: #111827;
-      margin: 0 0 6px;
-    }
-    p {
-      font-size: 13px;
-      color: #6b7280;
-      margin: 0;
-    }
+    h3 { font-size: 22px; font-weight: 800; color: #111827; margin: 0 0 6px; }
+    p  { font-size: 13px; color: #6b7280; margin: 0; }
   }
 
   .close-btn {
@@ -399,15 +413,8 @@ export const modalRightPanel = css`
       }
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    select {
-      cursor: pointer;
-      appearance: auto;
-    }
+    textarea { resize: vertical; min-height: 80px; }
+    select   { cursor: pointer; }
   }
 
   .availability-group {
@@ -426,6 +433,7 @@ export const modalRightPanel = css`
     .status-buttons {
       display: flex;
       gap: 10px;
+      flex-wrap: wrap;
     }
   }
 
@@ -447,64 +455,57 @@ export const modalRightPanel = css`
       transition: all 0.2s;
     }
 
-    .cancel-btn {
-      background: #f3f4f6;
-      color: #4b5563;
-      &:hover { background: #e5e7eb; }
-    }
-
-    .confirm-btn {
-      background: #1b5e20;
-      color: white;
-      &:hover { background: #144316; }
-    }
-
-    .delete-btn {
-      background: #ef4444;
-      color: white;
-      &:hover { background: #dc2626; }
-    }
+    .cancel-btn  { background: #f3f4f6; color: #4b5563; &:hover { background: #e5e7eb; } }
+    .confirm-btn { background: #1b5e20; color: white;   &:hover { background: #144316; } }
+    .delete-btn  { background: #ef4444; color: white;   &:hover { background: #dc2626; } }
   }
 `;
 
-export const statusToggleBtn = (active: boolean, color: string) => css`
+// ─── Availability Toggle Buttons ──────────────────────────────────────────────
+
+export const StatusToggleBtn = styled.button<{ $active: boolean; $color: string }>`
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 9px 16px;
   border-radius: 99px;
-  border: 2px solid ${active ? color : '#e5e7eb'};
-  background: ${active ? color + '18' : 'white'};
-  color: ${active ? color : '#9ca3af'};
+  border: 2px solid ${({ $active, $color }) => ($active ? $color : "#e5e7eb")};
+  background: ${({ $active, $color }) => ($active ? $color + "18" : "white")};
+  color: ${({ $active, $color }) => ($active ? $color : "#9ca3af")};
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
+  font-family: inherit;
 
   .dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: ${active ? color : '#d1d5db'};
+    background: ${({ $active, $color }) => ($active ? $color : "#d1d5db")};
+    flex-shrink: 0;
   }
 
   &:hover {
-    border-color: ${color};
-    color: ${color};
-    background: ${color}18;
+    border-color: ${({ $color }) => $color};
+    color: ${({ $color }) => $color};
+    background: ${({ $color }) => $color + "18"};
   }
 `;
 
-export const imageUploadBox = (hasImage: boolean) => css`
-  border: 2px dashed ${hasImage ? '#2e7d32' : '#e5e7eb'};
+// ─── Image Upload Box ─────────────────────────────────────────────────────────
+
+export const ImageUploadBox = styled.div<{ $hasImage: boolean }>`
+  border: 2px dashed ${({ $hasImage }) => ($hasImage ? "#2e7d32" : "#e5e7eb")};
   border-radius: 14px;
-  background: ${hasImage ? '#f0fdf4' : '#fafafa'};
+  background: ${({ $hasImage }) => ($hasImage ? "#f0fdf4" : "#fafafa")};
   padding: 28px 20px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
   overflow: hidden;
+  min-height: 120px;
 
   &:hover {
     border-color: #2e7d32;
@@ -542,7 +543,7 @@ export const imageUploadBox = (hasImage: boolean) => css`
   .change-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgba(0, 0, 0, 0.45);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -556,5 +557,30 @@ export const imageUploadBox = (hasImage: boolean) => css`
 
   &:hover .change-overlay {
     opacity: 1;
+  }
+`;
+
+// ─── Chat FAB ─────────────────────────────────────────────────────────────────
+
+export const ChatFab = styled.div`
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: #1b5e20;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #155217; }
+
+  img {
+    width: 24px;
+    filter: invert(1);
   }
 `;

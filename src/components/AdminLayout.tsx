@@ -1,6 +1,5 @@
-/** @jsxImportSource @emotion/react */
 import React from "react";
-import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 import {
   MdDashboard,
   MdInventory,
@@ -10,15 +9,16 @@ import {
 import AdminSidebar, { type SidebarMenuItem } from "./AdminSidebar";
 import { SIDEBAR_WIDTH } from "../styles/AdminSidebarStyles";
 
-// ─── Layout styles — derived from shared SIDEBAR_WIDTH constant ───────────────
+// ─── Styled components ────────────────────────────────────────────────────────
 
-const layoutContainer = css`
+const LayoutContainer = styled.div`
   display: flex;
   min-height: 100vh;
   background: #f9fafb;
 `;
 
-const mainContent = css`
+/** Left margin matches sidebar width — single source of truth via SIDEBAR_WIDTH */
+const MainContent = styled.main`
   margin-left: ${SIDEBAR_WIDTH}px;
   flex-grow: 1;
   padding: 40px;
@@ -26,14 +26,14 @@ const mainContent = css`
   min-height: 100vh;
 `;
 
-// ─── Default menu for Farm-Connect admin ─────────────────────────────────────
-// To reuse AdminLayout in another project, either:
-//   (a) pass `menuItems` as a prop, or
-//   (b) replace FARM_CONNECT_MENU with your own items here.
+// ─── Default menu for Farm-Connect ───────────────────────────────────────────
+// To reuse AdminLayout in a different project:
+//   • Replace FARM_CONNECT_MENU with your own items, OR
+//   • Pass `menuItems` prop from _app.tsx / the page itself.
 
 const FARM_CONNECT_MENU: SidebarMenuItem[] = [
   { label: "Dashboard", icon: <MdDashboard />, path: "/admin/dashboard" },
-  { label: "Equipment",  icon: <MdInventory />, path: "/admin/equipment" },
+  { label: "Equipment",  icon: <MdInventory />,  path: "/admin/equipment" },
   { label: "Bookings",   icon: <MdBookOnline />, path: "/admin/bookings" },
   { label: "Users",      icon: <MdPeople />,     path: "/admin/users" },
 ];
@@ -42,7 +42,7 @@ const FARM_CONNECT_MENU: SidebarMenuItem[] = [
 
 interface AdminLayoutProps {
   children: React.ReactNode;
-  /** Override the sidebar menu (useful in storybook / tests / other projects). */
+  /** Override the sidebar menu (useful per-page or in tests). */
   menuItems?: SidebarMenuItem[];
   /** Override the sidebar app name. */
   appName?: string;
@@ -57,11 +57,12 @@ interface AdminLayoutProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 /**
- * AdminLayout — wraps every admin page with the shared sidebar.
+ * AdminLayout — shared shell for all admin pages.
  *
- * Portable: all Farm-Connect-specific values live in FARM_CONNECT_MENU constant
- * above. When copying to a new project, replace that one constant (or pass
- * `menuItems` as a prop) and you're done.
+ * Registered in _app.tsx so every /admin/* page gets the sidebar
+ * automatically — no need to wrap individual pages manually.
+ *
+ * Portable: swap FARM_CONNECT_MENU or pass `menuItems` to adapt to any project.
  */
 const AdminLayout: React.FC<AdminLayoutProps> = ({
   children,
@@ -72,7 +73,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   avatarUrl,
 }) => {
   return (
-    <div css={layoutContainer}>
+    <LayoutContainer>
       <AdminSidebar
         appName={appName}
         appSubtitle={appSubtitle}
@@ -80,8 +81,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
         userName={userName}
         avatarUrl={avatarUrl}
       />
-      <main css={mainContent}>{children}</main>
-    </div>
+      <MainContent>{children}</MainContent>
+    </LayoutContainer>
   );
 };
 

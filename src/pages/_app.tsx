@@ -1,24 +1,30 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { useRouter } from "next/router";
+import AdminLayout from "@/components/AdminLayout";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const noNavbarRoutes = ["/login", "/signup"];
   const isAdminRoute = router.pathname.startsWith("/admin");
-  const showNavbar = !noNavbarRoutes.includes(router.pathname) && !isAdminRoute;
+  const isAuthRoute  = ["/login", "/signup"].includes(router.pathname);
 
-  const noFooterRoutes = ["/login", "/signup"];
-  const showFooter = !noFooterRoutes.includes(router.pathname) && !isAdminRoute;
+  // Admin pages: sidebar layout, no Navbar/Footer
+  if (isAdminRoute) {
+    return (
+      <AdminLayout>
+        <Component {...pageProps} />
+      </AdminLayout>
+    );
+  }
+
   return (
     <>
-      {showNavbar && <Navbar />}
-
+      {!isAuthRoute && <Navbar />}
       <Component {...pageProps} />
-      {showFooter && <Footer />}
+      {!isAuthRoute && <Footer />}
     </>
   );
 }

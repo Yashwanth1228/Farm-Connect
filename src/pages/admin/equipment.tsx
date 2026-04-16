@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import React, { useState, useRef } from "react";
 import Head from "next/head";
 import {
@@ -13,29 +12,28 @@ import {
   FiUploadCloud,
   FiCheckCircle,
 } from "react-icons/fi";
-import AdminLayout from "../../components/AdminLayout";
 import {
-  headerSection,
-  pageTitle,
-  statsRow,
-  statCard,
-  inventoryTable,
-  statusPill,
-  paginationSection,
-  insightsCard,
-  saleBanner,
-  modalOverlay,
-  modalContainer,
-  modalContainerSm,
-  modalLeftPanel,
-  modalRightPanel,
-  statusToggleBtn,
-  imageUploadBox,
+  type AvailabilityStatus,
+  HeaderSection,
+  PageTitle,
+  StatsRow,
+  StatCard,
+  InventoryTable,
+  StatusPill,
+  PaginationSection,
+  InsightsCard,
+  SaleBanner,
+  ModalOverlay,
+  ModalContainer,
+  ModalContainerSm,
+  ModalLeftPanel,
+  ModalRightPanel,
+  StatusToggleBtn,
+  ImageUploadBox,
+  ChatFab,
 } from "../../styles/AdminEquipmentStyles";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-type AvailabilityStatus = "Available" | "Rented" | "Maintenance";
 
 interface EquipmentItem {
   id: string;
@@ -193,7 +191,7 @@ const AdminEquipment = () => {
     reader.readAsDataURL(file);
   };
 
-  // ── CRUD ─────────────────────────────────────────────────────────────────────
+  // ── CRUD ──────────────────────────────────────────────────────────────────────
 
   const handleAdd = () => {
     if (!form.name.trim()) return;
@@ -236,7 +234,6 @@ const AdminEquipment = () => {
     closeModal();
   };
 
-  // Inline rate edit directly from the table row
   const handleRateChange = (id: string, newRate: string) => {
     const rate = parseInt(newRate.replace(/[^0-9]/g, ""));
     if (!isNaN(rate)) {
@@ -254,10 +251,10 @@ const AdminEquipment = () => {
       item.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const rentedCount = equipment.filter((e) => e.availability === "Rented").length;
+  const rentedCount      = equipment.filter((e) => e.availability === "Rented").length;
   const maintenanceCount = equipment.filter((e) => e.availability === "Maintenance").length;
 
-  // ── Shared form (used by both Add and Edit modals) ────────────────────────────
+  // ── Shared modal form (Add & Edit) ────────────────────────────────────────────
 
   const renderEquipmentForm = (isEdit: boolean) => (
     <>
@@ -297,7 +294,7 @@ const AdminEquipment = () => {
         />
       </div>
 
-      {/* Price + Type (side by side) */}
+      {/* Price + Type side-by-side */}
       <div className="form-row">
         <div className="form-group" style={{ margin: 0 }}>
           <label htmlFor="eq-rate">Price Per Day (₹)</label>
@@ -318,9 +315,7 @@ const AdminEquipment = () => {
             onChange={(e) => handleFormChange("category", e.target.value)}
           >
             {EQUIPMENT_CATEGORIES.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
+              <option key={cat} value={cat}>{cat}</option>
             ))}
           </select>
         </div>
@@ -331,15 +326,16 @@ const AdminEquipment = () => {
         <label>Availability Status</label>
         <div className="status-buttons">
           {AVAILABILITY_OPTIONS.map((opt) => (
-            <button
+            <StatusToggleBtn
               key={opt.value}
               type="button"
-              css={statusToggleBtn(form.availability === opt.value, opt.color)}
+              $active={form.availability === opt.value}
+              $color={opt.color}
               onClick={() => handleFormChange("availability", opt.value)}
             >
               <span className="dot" />
               {opt.label}
-            </button>
+            </StatusToggleBtn>
           ))}
         </div>
       </div>
@@ -347,8 +343,8 @@ const AdminEquipment = () => {
       {/* Image upload */}
       <div className="form-group" style={{ marginTop: "20px" }}>
         <label>Equipment Image</label>
-        <div
-          css={imageUploadBox(!!form.imageUrl)}
+        <ImageUploadBox
+          $hasImage={!!form.imageUrl}
           onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
@@ -364,14 +360,12 @@ const AdminEquipment = () => {
             </>
           ) : (
             <>
-              <div className="upload-icon">
-                <FiUploadCloud size={28} />
-              </div>
+              <div className="upload-icon"><FiUploadCloud size={28} /></div>
               <p className="upload-text">Click to upload equipment photo</p>
               <p className="upload-hint">PNG, JPG or WEBP — max 5 MB</p>
             </>
           )}
-        </div>
+        </ImageUploadBox>
         <input
           ref={fileInputRef}
           type="file"
@@ -385,16 +379,12 @@ const AdminEquipment = () => {
         />
       </div>
 
-      {/* Action buttons */}
+      {/* Actions */}
       <div className="modal-actions">
         <button className="cancel-btn" type="button" onClick={closeModal}>
           Discard Changes
         </button>
-        <button
-          className="confirm-btn"
-          type="button"
-          onClick={isEdit ? handleEdit : handleAdd}
-        >
+        <button className="confirm-btn" type="button" onClick={isEdit ? handleEdit : handleAdd}>
           <FiCheckCircle style={{ marginRight: 6, verticalAlign: "middle" }} />
           {isEdit ? "Save Equipment Profile" : "Add Equipment"}
         </button>
@@ -403,16 +393,17 @@ const AdminEquipment = () => {
   );
 
   // ── Render ────────────────────────────────────────────────────────────────────
+  // Note: <AdminLayout> is NOT needed here — _app.tsx wraps all /admin/* routes automatically.
 
   return (
-    <AdminLayout>
+    <>
       <Head>
         <title>Inventory Management | The Agrarian</title>
         <meta name="description" content="Manage farm equipment fleet — add, edit, and track availability." />
       </Head>
 
-      {/* ── Top Header ── */}
-      <div css={headerSection}>
+      {/* Header */}
+      <HeaderSection>
         <div className="search-bar">
           <FiSearch />
           <input
@@ -427,10 +418,10 @@ const AdminEquipment = () => {
           <FiSettings className="icon-btn" size={20} />
           <button className="admin-panel-btn">Admin Panel</button>
         </div>
-      </div>
+      </HeaderSection>
 
-      {/* ── Page Title ── */}
-      <div css={pageTitle}>
+      {/* Page title */}
+      <PageTitle>
         <div className="title-info">
           <p>Inventory Management</p>
           <h2>Equipment Fleet</h2>
@@ -439,26 +430,26 @@ const AdminEquipment = () => {
           <FiPlus size={20} />
           <span>Add Equipment</span>
         </button>
-      </div>
+      </PageTitle>
 
-      {/* ── Stats ── */}
-      <div css={statsRow}>
-        <div css={statCard("#1b5e20")}>
+      {/* Stats */}
+      <StatsRow>
+        <StatCard $borderColor="#1b5e20">
           <span className="label">Total Units</span>
           <span className="value">{equipment.length}</span>
-        </div>
-        <div css={statCard("#f57c00")}>
+        </StatCard>
+        <StatCard $borderColor="#f57c00">
           <span className="label">Active Rentals</span>
           <span className="value">{rentedCount}</span>
-        </div>
-        <div css={statCard("#757575")}>
+        </StatCard>
+        <StatCard $borderColor="#757575">
           <span className="label">Maintenance</span>
           <span className="value">{maintenanceCount}</span>
-        </div>
-      </div>
+        </StatCard>
+      </StatsRow>
 
-      {/* ── Inventory Table ── */}
-      <div css={inventoryTable}>
+      {/* Table */}
+      <InventoryTable>
         <table>
           <thead>
             <tr>
@@ -486,10 +477,9 @@ const AdminEquipment = () => {
                   </div>
                 </td>
                 <td>
-                  {/* statusPill now accepts the AvailabilityStatus value directly */}
-                  <div css={statusPill(item.availability)}>
+                  <StatusPill $status={item.availability}>
                     {item.availability}
-                  </div>
+                  </StatusPill>
                 </td>
                 <td>
                   <div className="price-cell">
@@ -530,8 +520,7 @@ const AdminEquipment = () => {
           </tbody>
         </table>
 
-        {/* Pagination */}
-        <div css={paginationSection}>
+        <PaginationSection>
           <span className="count-info">
             Showing {filteredEquipment.length} of {equipment.length} units
           </span>
@@ -539,11 +528,11 @@ const AdminEquipment = () => {
             <button>Prev</button>
             <button className="active">Next</button>
           </div>
-        </div>
-      </div>
+        </PaginationSection>
+      </InventoryTable>
 
-      {/* ── Insights ── */}
-      <div css={insightsCard}>
+      {/* Insights */}
+      <InsightsCard>
         <div className="insight-icon">
           <FiTrendingUp size={24} />
         </div>
@@ -551,57 +540,40 @@ const AdminEquipment = () => {
           <h4>Inventory Insights</h4>
           <p>
             Your most profitable asset this month is the{" "}
-            <strong className="highlight">John Deere 8R</strong>, with a utilization rate of 94%.
-            Consider expanding the heavy-duty tractor fleet.
+            <strong className="highlight">John Deere 8R</strong>, with a
+            utilization rate of 94%. Consider expanding the heavy-duty tractor fleet.
           </p>
           <a href="#" className="view-link">
             View Full Report <FiArrowRight />
           </a>
         </div>
-      </div>
+      </InsightsCard>
 
-      {/* ── Banner ── */}
-      <div css={saleBanner}>
+      {/* Banner */}
+      <SaleBanner>
         <h3>Fleet Expansion Sale</h3>
         <p>
           New irrigation units are arriving next week. Update listing rates for
           the monsoon season.
         </p>
-      </div>
+      </SaleBanner>
 
-      {/* ── Chat FAB ── */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: "32px",
-          right: "32px",
-          background: "#1b5e20",
-          width: "56px",
-          height: "56px",
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
-          cursor: "pointer",
-        }}
-      >
+      {/* Chat FAB */}
+      <ChatFab>
         <img
           src="https://cdn-icons-png.flaticon.com/512/134/134914.png"
           alt="Chat"
-          style={{ width: "24px", filter: "invert(1)" }}
         />
-      </div>
+      </ChatFab>
 
       {/* ══ MODALS ══════════════════════════════════════════════════════════════ */}
       {modalType && (
-        <div css={modalOverlay} onClick={closeModal}>
+        <ModalOverlay onClick={closeModal}>
 
-          {/* ── Add / Edit — two-panel layout ── */}
+          {/* Add / Edit — two-panel */}
           {(modalType === "add" || modalType === "edit") && (
-            <div css={modalContainer} onClick={(e) => e.stopPropagation()}>
-              {/* Left decorative panel */}
-              <div css={modalLeftPanel}>
+            <ModalContainer onClick={(e) => e.stopPropagation()}>
+              <ModalLeftPanel>
                 <div>
                   <div className="panel-icon">
                     <FiCheckCircle size={22} color="white" />
@@ -615,45 +587,40 @@ const AdminEquipment = () => {
                 <p className="panel-footer">
                   All fields are reflected in the public equipment listing.
                 </p>
-              </div>
+              </ModalLeftPanel>
 
-              {/* Right form panel */}
-              <div css={modalRightPanel}>
+              <ModalRightPanel>
                 {renderEquipmentForm(modalType === "edit")}
-              </div>
-            </div>
+              </ModalRightPanel>
+            </ModalContainer>
           )}
 
-          {/* ── Delete — single narrow panel ── */}
+          {/* Delete — narrow single panel */}
           {modalType === "delete" && selectedItem && (
-            <div css={modalContainerSm} onClick={(e) => e.stopPropagation()}>
-              <div css={modalRightPanel}>
+            <ModalContainerSm onClick={(e) => e.stopPropagation()}>
+              <ModalRightPanel>
                 <div className="modal-header">
                   <h3 style={{ color: "#ef4444" }}>Decommission Asset?</h3>
                   <p>
                     Are you sure you want to remove{" "}
                     <strong>{selectedItem.name}</strong> from the active fleet?
-                    This action is permanent and cannot be undone.
+                    This action is permanent.
                   </p>
                 </div>
                 <button className="close-btn" onClick={closeModal} type="button" aria-label="Close">
                   ×
                 </button>
                 <div className="modal-actions">
-                  <button className="cancel-btn" onClick={closeModal}>
-                    Keep Asset
-                  </button>
-                  <button className="delete-btn" onClick={handleDelete}>
-                    Confirm Deletion
-                  </button>
+                  <button className="cancel-btn" onClick={closeModal}>Keep Asset</button>
+                  <button className="delete-btn" onClick={handleDelete}>Confirm Deletion</button>
                 </div>
-              </div>
-            </div>
+              </ModalRightPanel>
+            </ModalContainerSm>
           )}
 
-        </div>
+        </ModalOverlay>
       )}
-    </AdminLayout>
+    </>
   );
 };
 
