@@ -173,6 +173,7 @@ export default function Login() {
 
       if (res.ok) {
         alert("Login Successfully");
+        localStorage.setItem("user", JSON.stringify(data.user));
         router.push("/");
       } else {
         alert(data.message);

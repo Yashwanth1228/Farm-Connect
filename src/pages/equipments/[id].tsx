@@ -7,7 +7,7 @@ const EquipmentDetails = () => {
   const { id } = router.query;
 
   // ✅ WAIT until router is ready
-  if (!router.isReady) {
+  if (!id) {
     return <h2>Loading...</h2>;
   }
 

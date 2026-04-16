@@ -1,9 +1,11 @@
 import styled from "@emotion/styled";
-import { Button } from "./Button";
+import { Button, BtnLogout } from "./Button";
 import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect, useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 const Header = styled.header`
   position: fixed;
@@ -103,6 +105,22 @@ const SearchContainer = styled.div`
 
 export default function Navbar() {
   const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const { cart } = useContext(CartContext);
+  const totalItems = cart.length;
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    router.push("/");
+  };
   return (
     <Header>
       <Container>
@@ -123,7 +141,46 @@ export default function Navbar() {
         </SearchContainer>
 
         <ButtonGroup>
-          <Button onClick={() => router.push("/login")}>Login</Button>
+          {!user ? (
+            <Button onClick={() => router.push("/login")}>Login</Button>
+          ) : (
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "center",
+                marginRight: "10px",
+              }}
+            >
+              {/* Cart */}
+              <div onClick={() => router.push("/equipments/carts")}>
+                🛒
+                {totalItems > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "20px",
+                      // right: "-10px",
+                      background: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      padding: "2px 6px",
+                      fontSize: "12px",
+                    }}
+                  >
+                    {totalItems}
+                  </span>
+                )}
+              </div>
+
+              {/* Profile */}
+              <div onClick={() => router.push("/profile")}>👤</div>
+
+              {/* Logout */}
+              <BtnLogout onClick={handleLogout}>Logout</BtnLogout>
+            </div>
+          )}
+
           {/* <Button>Signup</Button> */}
         </ButtonGroup>
       </Container>

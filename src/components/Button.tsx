@@ -20,3 +20,22 @@ export const Button = styled.button`
     background: #094d14;
   }
 `;
+
+export const BtnLogout = styled.button`
+  width: 100%;
+  padding: 10px;
+  background: grey;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  padding: 15px 20px;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background: grey;
+  }
+`;
