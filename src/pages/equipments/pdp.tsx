@@ -14,10 +14,10 @@ type Props = {
     description: string;
     enginepower: string;
 
-    startDate: string;
-    endDate: string;
-    days: number;
-    totalPrice: number;
+    // startDate: string;
+    // endDate: string;
+    // days: number;
+    // totalPrice: number;
   };
 };
 
