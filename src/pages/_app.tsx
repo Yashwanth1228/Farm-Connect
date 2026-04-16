@@ -7,10 +7,10 @@ import { useRouter } from "next/router";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const noNavbarRoutes = ["/login", "/signup"];
+  const noNavbarRoutes = ["/login", "/signup","/user"];
   const showNavbar = !noNavbarRoutes.includes(router.pathname);
 
-  const noFooterRoutes = ["/login", "/signup"];
+  const noFooterRoutes = ["/login", "/signup","/user"];
   const showFooter = !noFooterRoutes.includes(router.pathname);
   return (
     <>
