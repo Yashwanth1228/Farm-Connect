@@ -4,8 +4,10 @@ import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "@/context/CartContext";
+import { UserContext } from "@/context/UserContext";
+import Avatar from "@/components/Avatar";
 
 const Header = styled.header`
   position: fixed;
@@ -30,12 +32,6 @@ const Container = styled.div`
   padding: 0 20px;
 `;
 
-// const Logo = styled.div`
-//   font-size: 24px;
-//   font-weight: 800;
-//   color: #0d631b;
-// `;
-
 const Nav = styled.nav`
   display: flex;
   gap: 30px;
@@ -45,14 +41,7 @@ const Nav = styled.nav`
 const NavLink = styled(Link)`
   font-weight: 500;
   color: #555;
-  cursor: pointer;
   font-size: 22px;
-  margin-top: 5px;
-
-  &:active {
-    color: #0d631b;
-    border-bottom: 2px solid #0d631b;
-  }
 
   &:hover {
     color: #0d631b;
@@ -63,21 +52,6 @@ const ButtonGroup = styled.div`
   display: flex;
   gap: 10px;
 `;
-
-// const Login = styled.button`
-//   padding: 8px 16px;
-//   background: transparent;
-//   border-radius: 6px;
-//   cursor: pointer;
-// `;
-
-// const Signup = styled.button`
-//   padding: 10px 18px;
-//   background: #0d631b;
-//   color: white;
-//   border-radius: 30px;
-//   font-weight: bold;
-// `;
 
 const SearchInput = styled.input`
   width: 170px;
@@ -103,30 +77,67 @@ const SearchContainer = styled.div`
   margin-left: 150px;
 `;
 
+export const ProfileWrapper = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const ProfileImg = styled.img`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #0d631b;
+`;
+
+export const ProfileFallback = styled.div`
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #0d631b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+`;
+
 export default function Navbar() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+
   const { cart } = useContext(CartContext);
+  const { user, setUser, loading, mounted } = useContext(UserContext);
+
   const totalItems = cart.length;
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    console.log("USER DATA:", user);
+  }, [user]);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
     router.push("/");
   };
+
+  if (!mounted) {
+    return (
+      <Header>
+        <Container />
+      </Header>
+    );
+  }
+
   return (
     <Header>
       <Container>
-        {/* <Logo>Farm Connect</Logo> */}
+        {/* Logo */}
         <Image src="/images/logos.png" alt="logo" width={130} height={60} />
 
+        {/* Navigation */}
         <Nav>
           <NavLink href="/">Home</NavLink>
           <NavLink href="/equipments">Equipment</NavLink>
@@ -134,12 +145,13 @@ export default function Navbar() {
           <NavLink href="/contact">Contact</NavLink>
         </Nav>
 
+        {/* Search */}
         <SearchContainer>
           <SearchIcon />
           <SearchInput placeholder="Search Equipment" />
-          {/* <SearchInput placeholder="🔎Search Equipment" /> */}
         </SearchContainer>
 
+        {/* Buttons */}
         <ButtonGroup>
           {!user ? (
             <Button onClick={() => router.push("/login")}>Login</Button>
@@ -153,14 +165,17 @@ export default function Navbar() {
               }}
             >
               {/* Cart */}
-              <div onClick={() => router.push("/equipments/carts")}>
+              <div
+                onClick={() => router.push("/equipments/carts")}
+                style={{ position: "relative", cursor: "pointer" }}
+              >
                 🛒
                 {totalItems > 0 && (
                   <span
                     style={{
                       position: "absolute",
-                      top: "20px",
-                      // right: "-10px",
+                      top: "-5px",
+                      right: "-10px",
                       background: "red",
                       color: "white",
                       borderRadius: "50%",
@@ -172,16 +187,14 @@ export default function Navbar() {
                   </span>
                 )}
               </div>
-
               {/* Profile */}
-              <div onClick={() => router.push("/profile")}>👤</div>
-
+              <ProfileWrapper onClick={() => router.push("/profile")}>
+                <Avatar user={user} />
+              </ProfileWrapper>
               {/* Logout */}
               <BtnLogout onClick={handleLogout}>Logout</BtnLogout>
             </div>
           )}
-
-          {/* <Button>Signup</Button> */}
         </ButtonGroup>
       </Container>
     </Header>

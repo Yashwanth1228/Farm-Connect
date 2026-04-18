@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 
 import styled from "@emotion/styled";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 
 export default function CartPage() {
+  const router = useRouter();
   const { cart, setCart } = useContext(CartContext);
 
   const subtotal = cart.reduce(
@@ -79,7 +80,9 @@ export default function CartPage() {
                 <strong>₹{grandTotal.toFixed(2)}</strong>
               </Total>
 
-              <CheckoutBtn>Proceed to Checkout</CheckoutBtn>
+              <CheckoutBtn onClick={() => router.push("/checkout")}>
+                Proceed to Checkout
+              </CheckoutBtn>
             </SummaryBox>
           </Right>
         </Grid>
