@@ -7,9 +7,10 @@ import Testimonials from "../components/Testimonials";
 import CTA from "../components/CTA";
 
 const Home: NextPage = () => {
+  
   return (
     <>
-      <Navbar />
+      
       <Hero />
       <Features />
       <Equipment />

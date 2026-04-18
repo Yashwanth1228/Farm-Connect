@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import tractor from "../assets/tractor.jpg";
+import { Router, useRouter } from "next/router";
 
 const Section = styled.section`
   position: relative;
@@ -131,6 +132,7 @@ const SecondaryButton = styled.button`
 `;
 
 export default function Hero() {
+  const router = useRouter();
   return (
     <Section>
       <BackgroundWrapper>
@@ -156,7 +158,7 @@ export default function Hero() {
           </Description>
 
           <ButtonGroup>
-            <PrimaryButton>Explore Equipment</PrimaryButton>
+            <PrimaryButton onClick={() => {router.push("/equipments")}} >Explore Equipment</PrimaryButton>
             <SecondaryButton>Get Started</SecondaryButton>
           </ButtonGroup>
         </Content>

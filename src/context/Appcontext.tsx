@@ -9,6 +9,8 @@ export const AppContent = createContext({} as AppContextType)
 export const AppContextProvider = (props: any) => {
 
     const [user, setUser] = useState( null) ;
+    
+    
 
     useEffect( () => {
 
@@ -39,6 +41,8 @@ export const AppContextProvider = (props: any) => {
     const value : any = {
         user,
         setUser,
+        
+        
 
     }
  
