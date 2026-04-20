@@ -265,8 +265,8 @@ type Equipment = {
 
 
 export default function EquipmentPage() {
-  const { data, error, isLoading } =  useGetEquipmentsQuery()
-  const [GetEquipments] = useLazyGetEquipmentsQuery();
+  // const { data, error, isLoading } =  useGetEquipmentsQuery()
+  const [GetEquipments, {isLoading}] = useLazyGetEquipmentsQuery();
 
     useEffect(() => {
         const fetchallequipment = async () => {
@@ -286,7 +286,7 @@ export default function EquipmentPage() {
 
 
         
-    },[data])
+    },[])
 
   const [fetchedequipment , setFetchedequipment] = useState<Equipment[]>([]) ;
 
@@ -466,7 +466,10 @@ export default function EquipmentPage() {
                 console.log("the item id is ", item._id) ,
                 <Card key={Number(item.id)}>
                   {/* <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" /> */}
-                  <CardImage src={String(item.images[0])} />
+                  <CardImage onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/equipments/detail?id=${item._id}`);
+                        }} src={String(item.images[0])} />
 
                   <CardBody>
                     <CardTitle>{String(item.name)}</CardTitle>
@@ -474,14 +477,14 @@ export default function EquipmentPage() {
 
                     <CardFooter>
                       <Price>₹{Number(item.price)}/day</Price>
-                      <Button
+                      {/* <Button
                         onClick={(e) => {
                           e.stopPropagation();
                           router.push(`/equipments/detail?id=${item._id}`);
                         }}
                       >
                         View Details
-                      </Button>
+                      </Button> */}
                     </CardFooter>
                   </CardBody>
                 </Card>

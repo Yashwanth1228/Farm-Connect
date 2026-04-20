@@ -18,10 +18,10 @@ export default async function POST(
     return res.status(401).json({ message: "no data recieved" });
   }
 
-  try {
+  try { 
 
     const bookings = await BookingModel.create(data);
-    
+
 
     res.json({ success : true, message: "bookings added succesfully" });
 

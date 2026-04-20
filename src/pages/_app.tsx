@@ -10,7 +10,7 @@ import { store } from "@/store/store";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const noNavbarRoutes = ["/login", "/signup", "/admin/add_equipment" , "/admin/adminlogin"];
+  const noNavbarRoutes = ["/login", "/signup", "/admin/add_equipment" , "/admin/adminlogin","/searchs","/search"];
   const showNavbar = !noNavbarRoutes.includes(router.pathname);
 
   const noFooterRoutes = [
@@ -18,7 +18,9 @@ export default function App({ Component, pageProps }: AppProps) {
     "/signup",
     "/equipment",
     "/admin/add_equipment",
-    "/admin/adminlogin"
+    "/admin/adminlogin",
+    "/searchs",
+    "/search"
   ];
   const showFooter = !noFooterRoutes.includes(router.pathname);
   return (
