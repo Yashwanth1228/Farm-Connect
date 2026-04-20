@@ -1,5 +1,3 @@
-
-
 import ProfileEmpty from "@/components/ProfileEmpty";
 import ProfileLoading from "@/components/ProfileLoading";
 
@@ -14,13 +12,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
-//   const { user, setUser, loading: userLoading } = useContext(AppContent);
+  //   const { user, setUser, loading: userLoading } = useContext(AppContent);
 
-  const {user , setUser  } : any= useContext(AppContent);
-
-
-
-
+  const { user, setUser }: any = useContext(AppContent);
 
   // =========================
   // IMAGE UPLOAD
@@ -75,7 +69,7 @@ export default function ProfilePage() {
 
         const res = await fetch(`/api/bookings/my`);
         const data = await res.json();
-        console.log("booking data" , data) 
+        console.log("booking data", data);
 
         setBookings(data.data || []);
       } catch (err) {
@@ -96,17 +90,15 @@ export default function ProfilePage() {
     return <ProfileLoading />;
   }
 
-  console.log("bookings from the booking state" , bookings)
-  console.log("usser afer booking" , user)
+  console.log("bookings from the booking state", bookings);
+  console.log("usser afer booking", user);
 
   // =========================
   // EMPTY STATE
   // =========================
-  if (!loading && bookings.length === 0) {
-    return <ProfileEmpty />;
-  }
-
-  
+  // if (!loading && bookings.length === 0) {
+  //   return <ProfileEmpty />;
+  // }
 
   return (
     <Page>
@@ -166,47 +158,43 @@ export default function ProfilePage() {
             <p>Manage your active and upcoming rentals</p>
           </SectionHeader>
 
-        
+          {bookings.map((item) => {
+            const today = new Date();
 
-          {
-            bookings.map((item) => {
-                const today = new Date();
-
-                const status =
+            const status =
               new Date(item.end_date) < today ? "Completed" : "Upcoming";
-                return(
-                    
-                    <BookingCard>
-                        
-            <Image>
-              <img src={item.images} alt="Tractor" />
-            </Image>
+            return (
+              <BookingCard>
+                <Image>
+                  <img src={item.images} alt="Tractor" />
+                </Image>
 
-            <Content>
-              <Top>
-                <div>
-                  <Badge>{status}</Badge>
-                  <Title>{item.name}</Title>
-                  <Dates>{new Date(item.start_date).toDateString()} →{" "} - {new Date(item.end_date).toDateString()} • {item.days} Days</Dates>
-                </div>
+                <Content>
+                  <Top>
+                    <div>
+                      <Badge>{status}</Badge>
+                      <Title>{item.name}</Title>
+                      <Dates>
+                        {new Date(item.start_date).toDateString()} → -{" "}
+                        {new Date(item.end_date).toDateString()} • {item.days}{" "}
+                        Days
+                      </Dates>
+                    </div>
 
-                <Price>
-                  <small>Total</small>
-                  <h3>{item.totalprice}</h3>
-                </Price>
-              </Top>
+                    <Price>
+                      <small>Total</small>
+                      <h3>{item.totalprice}</h3>
+                    </Price>
+                  </Top>
 
-              <Actions>
-                <Btn>Details</Btn>
-                <Btn>Contact Owner</Btn>
-              </Actions>
-            </Content>
-                    </BookingCard>
-                )
-            })
-
-
-          }
+                  <Actions>
+                    <Btn>Details</Btn>
+                    <Btn>Contact Owner</Btn>
+                  </Actions>
+                </Content>
+              </BookingCard>
+            );
+          })}
 
           {/* <BookingCard>
             <Image>

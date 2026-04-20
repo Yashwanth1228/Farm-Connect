@@ -10,7 +10,6 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 
-
 const Header = styled.header`
   position: fixed;
   top: 0;
@@ -108,30 +107,29 @@ const SearchContainer = styled.div`
 `;
 
 const Logout = styled.button`
-    padding: 8px 16px;
-    background: transparent;
-    
-    cursor: pointer;
-    border: none;
-    &:hover {
-        color: #0d631b;
-      }
-    
-`
+  padding: 8px 16px;
+  background: transparent;
+
+  cursor: pointer;
+  border: none;
+  &:hover {
+    color: #0d631b;
+  }
+`;
 
 const Profileicon = styled.img`
-    width: 50px;
-    height: 45px;
-    border-radius: 50%;
-    background: #0d631b;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    font-weight: bold;
-    cursor: pointer;
-`
+  width: 50px;
+  height: 45px;
+  border-radius: 50%;
+  background: #0d631b;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+`;
 
 const CartIcon = styled.div`
   width: 40px;
@@ -150,61 +148,48 @@ const CartIcon = styled.div`
 `;
 
 export default function Navbar() {
-
-   const {user , setUser} : any= useContext(AppContent);
-   const [query, setQuery] = useState("");
+  const { user, setUser }: any = useContext(AppContent);
+  const [query, setQuery] = useState("");
   //  const [results, setResults] = useState<any[]>([]);
 
-    console.log("this is user data from app context " , user )
+  console.log("this is user data from app context ", user);
 
-    const handleSearch = async () => {
-      if (!query) return;
-  
-      // const res = await axios.get(`/api/search?query=${query}`);
-      // console.log("the search results are ", res.data) ;
-      // setResults(res.data);
-      router.push(`/search?query=${query}`);
-      
-    };
-  
-    // 🔥 Auto search
-    useEffect(() => {
-      const delay = setTimeout(() => {
-        handleSearch();
-      }, 500);
-  
-      return () => clearTimeout(delay);
-    }, [query]);
-  
-    
-    const router = useRouter();
+  const handleSearch = async () => {
+    if (!query) return;
 
-    const handlelogout = async () => {
+    // const res = await axios.get(`/api/search?query=${query}`);
+    // console.log("the search results are ", res.data) ;
+    // setResults(res.data);
+    router.push(`/search?query=${query}`);
+  };
 
-        try {
+  // 🔥 Auto search
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      handleSearch();
+    }, 500);
 
-            let res = await axios.post('/api/logout',{},{withCredentials:true});
-        
-        if(res.data.success) {
-            alert("Logged out successfully");
-            setUser(false);
-            router.push('/');
-        }
-        else {
-            alert("Logout failed");
-        }
+    return () => clearTimeout(delay);
+  }, [query]);
 
+  const router = useRouter();
 
-        }
-        catch(error) {
-            console.log("Logout error " , error);
-            alert("An error occurred during logout");
-        }
+  const handlelogout = async () => {
+    try {
+      let res = await axios.post("/api/logout", {}, { withCredentials: true });
 
-        
-
-
+      if (res.data.success) {
+        alert("Logged out successfully");
+        setUser(false);
+        router.push("/");
+      } else {
+        alert("Logout failed");
+      }
+    } catch (error) {
+      console.log("Logout error ", error);
+      alert("An error occurred during logout");
     }
+  };
   return (
     <Header>
       <Container>
@@ -220,7 +205,10 @@ export default function Navbar() {
 
         <SearchContainer>
           <SearchIcon />
-          <SearchInput placeholder="Search Equipment" onChange={(e) => setQuery(e.target.value)} />
+          <SearchInput
+            placeholder="Search Equipment"
+            onChange={(e) => setQuery(e.target.value)}
+          />
           {/* <SearchInput placeholder="🔎Search Equipment" /> */}
         </SearchContainer>
 
@@ -229,24 +217,42 @@ export default function Navbar() {
           <Button>Signup</Button>
         </ButtonGroup> */}
 
-          {user ?  <ButtonGroup>
+        {user ? (
+          <ButtonGroup>
+            {/* <Logo>{user.name[0]}</Logo> */}
+            {/* <Profileicon onClick={() => { router.push("/profile")}}>{user?.name?.[0]}</Profileicon> */}
+            <Profileicon
+              src={user?.profilePic}
+              onClick={() => {
+                router.push("/profile");
+              }}
+            ></Profileicon>
+            <CartIcon>
+              <span
+                onClick={() => {
+                  router.push("/equipments/carts");
+                }}
+                className="material-symbols-outlined"
+              >
+                shopping_cart
+              </span>
+            </CartIcon>
+            <Logout onClick={handlelogout}>Logout</Logout>
+          </ButtonGroup>
+        ) : (
+          <ButtonGroup>
+            <Button
+              onClick={() => {
+                router.push("/login");
+              }}
+            >
+              Login
+            </Button>
 
-                {/* <Logo>{user.name[0]}</Logo> */}
-                {/* <Profileicon onClick={() => { router.push("/profile")}}>{user?.name?.[0]}</Profileicon> */}
-                <Profileicon src={user?.profilePic} onClick={() => { router.push("/profile")}}></Profileicon>
-                <CartIcon>
-                  <span onClick={() => { router.push("/equipments/carts")}} className="material-symbols-outlined">shopping_cart</span>
-                </CartIcon>
-                <Logout onClick={handlelogout}>Logout</Logout>
-                </ButtonGroup>  
-                :  <ButtonGroup>
-
-                    <Button onClick={() => {router.push('/login')}} >Login</Button>
-
-                    {/* <Login onClick={() => {router.push('/login')}}>Login</Login> */}
-                      {/* <Signup>Signup</Signup> */}
-
-                    </ButtonGroup>}
+            {/* <Login onClick={() => {router.push('/login')}}>Login</Login> */}
+            {/* <Signup>Signup</Signup> */}
+          </ButtonGroup>
+        )}
       </Container>
     </Header>
   );
