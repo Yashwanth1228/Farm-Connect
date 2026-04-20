@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import { useContext, useState } from "react";
+import { CartContext } from "@/context/CartContext";
 
 type Props = {
   product: {
@@ -11,6 +13,11 @@ type Props = {
     available: boolean;
     description: string;
     enginepower: string;
+
+    // startDate: string;
+    // endDate: string;
+    // days: number;
+    // totalPrice: number;
   };
 };
 
@@ -223,7 +230,54 @@ const Details = styled.div`
 
 /* ================= PAGE ================= */
 export default function PDP({ product }: Props) {
+  const { cart, setCart } = useContext(CartContext);
   const router = useRouter();
+
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  const calculateDays = () => {
+    if (!startDate || !endDate) return 0;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const diff = end.getTime() - start.getTime();
+
+    return diff > 0 ? diff / (1000 * 60 * 60 * 24) : 0;
+  };
+
+  const days = calculateDays();
+
+  const isInvalid = !startDate || !endDate || days <= 0;
+  const today = new Date().toISOString().split("T")[0];
+
+  const totalPrice = days * product.price;
+
+  const handleAddToCart = () => {
+    if (!startDate || !endDate || days <= 0) {
+      alert("Please select valid dates");
+      return;
+    }
+
+    const exists = cart.find((item: any) => item.id === product.id);
+
+    if (exists) {
+      alert("Already added to cart ");
+      return;
+    }
+
+    setCart([
+      ...cart,
+      {
+        ...product,
+        startDate,
+        endDate,
+        days,
+        totalPrice,
+      },
+    ]);
+  };
   return (
     <>
       {/* <Nav>
@@ -262,23 +316,44 @@ export default function PDP({ product }: Props) {
 
               <InputGroup>
                 <label>Start Date</label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  value={startDate}
+                  min={today}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
               </InputGroup>
 
               <InputGroup>
                 <label>End Date</label>
-                <Input type="date" />
+                <Input
+                  type="date"
+                  value={endDate}
+                  min={startDate || today}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
               </InputGroup>
 
-              <InputGroup>
-                <label>Quantity</label>
-                <Input type="number" defaultValue={1} />
-              </InputGroup>
+              <p>Days: {days}</p>
+              <p>Total Price: ₹{totalPrice}</p>
+
+              {days === 0 && (
+                <p style={{ color: "red" }}>
+                  Please select valid start and end dates
+                </p>
+              )}
 
               <ButtonGroup>
                 <PrimaryBtn>Rent Now</PrimaryBtn>
-                <OutlineBtn onClick={() => router.push("/equipments/carts")}>
-                  Add to Cart
+                <OutlineBtn
+                  // onClick={() => router.push("/equipments/carts")}
+                  onClick={() => {
+                    handleAddToCart();
+                    router.push("/equipments/carts");
+                  }}
+                  disabled={isInvalid}
+                >
+                  {isInvalid ? "Select Dates" : "Add to Cart"}
                 </OutlineBtn>
               </ButtonGroup>
             </Card>

@@ -1,8 +1,7 @@
 // /** @jsxImportSource @emotion/react */
 
 import styled from "@emotion/styled";
-import { useState } from "react";
-import { Heading, Text } from "../components/Text";
+import { Heading, Text } from "@/components/Text";
 import { useRouter } from "next/navigation";
 import { Input, InputGroup } from "@/components/InputBox";
 import { Button } from "@/components/Button";
@@ -20,6 +19,7 @@ const Main = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   max-width: 1100px; /* ✅ SAME AS SIGNUP */
+  height: 500px;
   display: flex;
   border-radius: 20px;
   overflow: hidden;
@@ -142,55 +142,16 @@ const SubText = styled.p`
 /* COMPONENT */
 export default function Login() {
   const router = useRouter();
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    if (!form.email || !form.password) {
-      alert("Please fill all the details");
-      return;
-    }
-    try {
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("Login Successfully");
-        localStorage.setItem("user", JSON.stringify(data.user));
-        router.push("/");
-      } else {
-        alert(data.message);
-      }
-    } catch (error) {
-      alert("Something went wrong");
-    }
-
-    console.log(form);
-  };
 
   return (
     <Main>
       <Wrapper>
         {/* LEFT SIDE */}
         <Left>
-          <BgImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuANv63kFRCgRylBKFRdB4xrMEToUfwVSjMpZfrvbXmQf0WKgyH_Z34YVTKPPlAowNMovQumITym8nRSFnCMkhdy3F2izESHCO91sRpsuZ-uSWK752CYMhH7ilz0yfmstOABtnYXeUUg3cSBFVPQQvo7WK3cMNNNt71I3cKh2ieiknZNNY-erZSCKNT2ijNBLAUlPqbVlaL51FCWY8Ld8w5j5L10bbPgUsSynAUeFxCthyfUAvcCxqN_U0E_-U6yVgr1k92eXjKiVB0" />
+          <BgImage
+            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef"
+            alt="img"
+          />
           <Overlay />
 
           <LeftContent>
@@ -211,23 +172,13 @@ export default function Login() {
           <Heading>Welcome Back</Heading>
           <Text>Login to continue your journey.</Text>
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <InputGroup>
-              <Input
-                type="email"
-                name="email"
-                placeholder="Email"
-                onChange={handleChange}
-              />
+              <Input type="email" name="email" placeholder="Email" />
             </InputGroup>
 
             <InputGroup>
-              <Input
-                type="password"
-                name="password"
-                placeholder="Password"
-                onChange={handleChange}
-              />
+              <Input type="password" name="password" placeholder="Password" />
             </InputGroup>
 
             <Button type="submit">Login</Button>

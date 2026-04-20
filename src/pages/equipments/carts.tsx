@@ -1,9 +1,24 @@
 /** @jsxImportSource @emotion/react */
 
 import styled from "@emotion/styled";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 export default function CartPage() {
+  const router = useRouter();
+  const { cart, setCart } = useContext(CartContext);
+
+  const subtotal = cart.reduce(
+    (acc: number, item: any) => acc + item.totalPrice,
+    0,
+  );
+
+  const totalDays = cart.reduce((acc: number, item: any) => acc + item.days, 0);
+
+  const tax = subtotal * 0.08;
+  const grandTotal = subtotal + tax;
+
   return (
     <Page>
       {/* MAIN */}
@@ -17,19 +32,21 @@ export default function CartPage() {
         <Grid>
           {/* LEFT SIDE */}
           <Left>
-            <CartItem
-              title="John Deere 8R 370"
-              price="$450"
-              total="$1,350"
-              img="https://lh3.googleusercontent.com/aida-public/AB6AXuArKernXUCpsW2jcShlelE-sGSdvL3dIBnTpdc1QSd2NXo-hItzbX_eivGV6HsNaLLZWDT8sGwjCcdejk6abJOO-9p8959hwkIxAvvJt3fduSGtCAAxbabWc6L0HStxeBFKmtZd0VKI4_g_GDb3gDr8UF4C4IAzfhg4X5NWbfgHMJc4x__mqvXjarMxdglnXnDlgYegKD4RxaDugoJ-h_8CIXWFPy8ki27F9oJ5kdG15euSbFgWqADulB7vhZaIPhLhAsnnJstseVM"
-            />
-
-            <CartItem
-              title="Heavy Duty Soil Cultivator"
-              price="$120"
-              total="$360"
-              img="https://lh3.googleusercontent.com/aida-public/AB6AXuD0FYMcajAWeMGKUhuKQXXJ0k-J_rCsRKVd52bv1_QSqDRs7BQFx3NJxTZSFM-Ncm1Z3rryHQ-ZRjKOcwTTjp3z92eW77IHIWUw7ASqBnPhzflvvsBAVaWITbof7Ptg82uiPpDrRXiRpx1vZsXbrh4QCBI1U2JjNksof89ZPw2VC4t8gNdDLnjAwawnDkgE3zPdHw2bwxG7zwKZtpv5bAHFMKgxPXPvBBf-TjwBal5bnm7EhOWY-nT4cQhAF_90t71yoiW5-DB2jvI"
-            />
+            {cart.map((item: any) => (
+              <CartItem
+                key={item.id}
+                title={item.name}
+                price={`₹${item.price}`}
+                total={`₹${item.totalPrice}`}
+                startDate={item.startDate}
+                endDate={item.endDate}
+                days={item.days}
+                img={item.img}
+                item={item}
+                cart={cart}
+                setCart={setCart}
+              />
+            ))}
 
             <Continue onClick={() => Router.push("/equipments")}>
               ← Continue Browsing Equipment
@@ -43,27 +60,29 @@ export default function CartPage() {
 
               <Row>
                 <span>Subtotal</span>
-                <span>$1,710</span>
+                <span>₹{subtotal}</span>
               </Row>
 
               <Row>
                 <span>Total Duration</span>
-                <span>3 Days</span>
+                <span>{totalDays} Days</span>
               </Row>
 
               <Row>
                 <span>Taxes</span>
-                <span>$136.80</span>
+                <span>₹{tax.toFixed(2)}</span>
               </Row>
 
               <Divider />
 
               <Total>
                 <span>Grand Total</span>
-                <strong>$1,846.80</strong>
+                <strong>₹{grandTotal.toFixed(2)}</strong>
               </Total>
 
-              <CheckoutBtn>Proceed to Checkout</CheckoutBtn>
+              <CheckoutBtn onClick={() => router.push("/checkout")}>
+                Proceed to Checkout
+              </CheckoutBtn>
             </SummaryBox>
           </Right>
         </Grid>
@@ -74,7 +93,24 @@ export default function CartPage() {
 
 /* ================= COMPONENT ================= */
 
-function CartItem({ title, price, total, img }: any) {
+function CartItem({
+  title,
+  price,
+  total,
+  img,
+  startDate,
+  endDate,
+  days,
+  item,
+  cart,
+  setCart,
+}: any) {
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   return (
     <Card>
       <Img src={img} />
@@ -83,7 +119,9 @@ function CartItem({ title, price, total, img }: any) {
         <Top>
           <div>
             <h3>{title}</h3>
-            <p>Oct 12 - Oct 15 • 3 days</p>
+            <p>
+              {formatDate(startDate)} - {formatDate(endDate)} • {days} days
+            </p>
           </div>
         </Top>
 
@@ -93,13 +131,15 @@ function CartItem({ title, price, total, img }: any) {
             <strong>{price}/day</strong>
           </div>
 
-          <Qty>
-            <button>-</button>
-            <span>1</span>
-            <button>+</button>
-          </Qty>
-
           <TotalPrice>{total}</TotalPrice>
+          <button
+            onClick={() => {
+              const updated = cart.filter((c: any) => c.id !== item.id);
+              setCart(updated);
+            }}
+          >
+            Remove
+          </button>
         </Bottom>
       </Content>
     </Card>
