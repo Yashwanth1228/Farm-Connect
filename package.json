@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@elastic/react-search-ui": "^1.24.2",
+    "@elastic/react-search-ui-views": "^1.24.2",
+    "@elastic/search-ui": "^1.24.2",
+    "@elastic/search-ui-elasticsearch-connector": "^1.24.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@reduxjs/toolkit": "^2.11.2",
