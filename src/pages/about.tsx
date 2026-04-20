@@ -130,7 +130,7 @@ import Footer from "@/components/Footer";
 function about() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
 
       {/* hero section */}
 

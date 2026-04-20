@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Heading , Text  } from "@/components/Text";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useLoginMutation } from "@/store/api/apiSlice";
 
 /* MAIN LAYOUT */
 const Main = styled.div`
@@ -139,6 +140,7 @@ gap: 5px;
 /* COMPONENT */
 export default function Login() {
 const router = useRouter(); 
+const [Login] = useLoginMutation();
 const [form, setForm] = useState({
 email: "",
 password: "",
@@ -168,21 +170,29 @@ try {
 
     // const data = await res.json();
 
-    const res = await axios.post("/api/login", form , {withCredentials : true} );
-    console.log("the response in login " , res)
+    // const res = await axios.post("/api/login", form , {withCredentials : true} );
+    // console.log("the response in login " , res)
 
-    if(res.data.success){
-        alert("login successfull");
-        router.push('/');
-        setTimeout(() => {
-            router.refresh();
+
+    // if(res.data.success){
+    //     alert("login successfull");
+    //     router.push('/');
+    //     setTimeout(() => {
+    //         router.refresh();
             
-        }, 1000);
+    //     }, 1000);
         
-    }
-    else {
-        alert("would not login ");
-    }
+    // }
+    // else {
+    //     alert("would not login ");
+    // }
+
+    const response = await Login({email: form.email,password : form.password})
+    console.log("response from Login function", response)
+
+
+
+
 
 
 } catch (error) {
@@ -193,6 +203,7 @@ console.log(form);
 };
 
 return (
+
 <Main>
     <Wrapper>
     {/* LEFT SIDE */}

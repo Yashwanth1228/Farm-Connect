@@ -4,7 +4,7 @@ import { Button } from "./Button";
 // import { FaSearch } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContent } from "@/context/Appcontext";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -119,7 +119,7 @@ const Logout = styled.button`
     
 `
 
-const Profileicon = styled.div`
+const Profileicon = styled.img`
     width: 50px;
     height: 45px;
     border-radius: 50%;
@@ -133,12 +133,49 @@ const Profileicon = styled.div`
     cursor: pointer;
 `
 
+const CartIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f4f4ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  span {
+    font-size: 20px;
+    color: #0d631b;
+  }
+`;
 
 export default function Navbar() {
 
    const {user , setUser} : any= useContext(AppContent);
+   const [query, setQuery] = useState("");
+  //  const [results, setResults] = useState<any[]>([]);
 
     console.log("this is user data from app context " , user )
+
+    const handleSearch = async () => {
+      if (!query) return;
+  
+      // const res = await axios.get(`/api/search?query=${query}`);
+      // console.log("the search results are ", res.data) ;
+      // setResults(res.data);
+      router.push(`/search?query=${query}`);
+      
+    };
+  
+    // 🔥 Auto search
+    useEffect(() => {
+      const delay = setTimeout(() => {
+        handleSearch();
+      }, 500);
+  
+      return () => clearTimeout(delay);
+    }, [query]);
+  
     
     const router = useRouter();
 
@@ -176,14 +213,14 @@ export default function Navbar() {
 
         <Nav>
           <NavLink href="/">Home</NavLink>
-          <NavLink href="/equipment">Equipment</NavLink>
+          <NavLink href="/equipments">Equipment</NavLink>
           <NavLink href="/about">About</NavLink>
           <NavLink href="/contact">Contact</NavLink>
         </Nav>
 
         <SearchContainer>
           <SearchIcon />
-          <SearchInput placeholder="Search Equipment" />
+          <SearchInput placeholder="Search Equipment" onChange={(e) => setQuery(e.target.value)} />
           {/* <SearchInput placeholder="🔎Search Equipment" /> */}
         </SearchContainer>
 
@@ -195,7 +232,11 @@ export default function Navbar() {
           {user ?  <ButtonGroup>
 
                 {/* <Logo>{user.name[0]}</Logo> */}
-                <Profileicon>{user?.name?.[0]}</Profileicon>
+                {/* <Profileicon onClick={() => { router.push("/profile")}}>{user?.name?.[0]}</Profileicon> */}
+                <Profileicon src={user?.profilePic} onClick={() => { router.push("/profile")}}></Profileicon>
+                <CartIcon>
+                  <span onClick={() => { router.push("/equipments/carts")}} className="material-symbols-outlined">shopping_cart</span>
+                </CartIcon>
                 <Logout onClick={handlelogout}>Logout</Logout>
                 </ButtonGroup>  
                 :  <ButtonGroup>

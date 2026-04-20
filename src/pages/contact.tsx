@@ -2,6 +2,7 @@
 import styled from "@emotion/styled";
 import { Input, InputGroup, InputMessage } from "@/components/InputBox";
 import { Button } from "@/components/Button";
+import { useState } from "react";
 
 // ---------------- NAVBAR ----------------
 const Navbar = styled.nav`
@@ -163,6 +164,47 @@ const CTA = styled.div`
 
 // ---------------- COMPONENT ----------------
 export default function Contact() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e: any) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert("Message sent successfully ");
+        setForm({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Something went wrong. Please try again.");
+    }
+  };
   return (
     <>
       <Page>
@@ -180,28 +222,46 @@ export default function Contact() {
           {/* FORM */}
           <FormCard>
             <FormHeading>Send a Message</FormHeading>
+            <form onSubmit={handleSubmit}>
+              <InputGroup>
+                <FormLabel>Full Name</FormLabel>
+                <Input
+                  placeholder="Enter your full name"
+                  name="name"
+                  onChange={handleChange}
+                />
+              </InputGroup>
 
-            <InputGroup>
-              <FormLabel>Full Name</FormLabel>
-              <Input placeholder="Julian Rivers" />
-            </InputGroup>
+              <InputGroup>
+                <FormLabel>Email</FormLabel>
+                <Input
+                  placeholder="Enter your email"
+                  name="email"
+                  onChange={handleChange}
+                />
+              </InputGroup>
 
-            <InputGroup>
-              <FormLabel>Email</FormLabel>
-              <Input placeholder="julian@example.com" />
-            </InputGroup>
+              <InputGroup>
+                <FormLabel>Subject</FormLabel>
+                <Input
+                  placeholder="Your Subject Here"
+                  name="subject"
+                  onChange={handleChange}
+                />
+              </InputGroup>
 
-            <InputGroup>
-              <FormLabel>Subject</FormLabel>
-              <Input placeholder="Your Subject Here" />
-            </InputGroup>
+              <InputGroup>
+                <FormLabel>Message</FormLabel>
+                <InputMessage
+                  rows={4}
+                  placeholder="Enter your message"
+                  name="message"
+                  onChange={handleChange}
+                />
+              </InputGroup>
 
-            <InputGroup>
-              <FormLabel>Message</FormLabel>
-              <InputMessage rows={4} />
-            </InputGroup>
-
-            <Button>Send Message</Button>
+              <Button>Send Message</Button>
+            </form>
           </FormCard>
 
           {/* RIGHT SIDE */}

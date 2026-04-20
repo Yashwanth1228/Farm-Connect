@@ -172,7 +172,7 @@ export default function FeaturedEquipment() {
             </Subtitle>
           </div>
 
-          <ViewEquipment href="/equipment">
+          <ViewEquipment href="/equipments">
             View All
             <span>arrow_forward</span>
           </ViewEquipment>

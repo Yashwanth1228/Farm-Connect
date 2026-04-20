@@ -32,6 +32,7 @@ export default async function GET(
             userdata: {
                 name : user.name,
                 email: user.email,
+                profilePic : user.profilePic,
             },
         })
 
