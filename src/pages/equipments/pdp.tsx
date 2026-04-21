@@ -1,5 +1,31 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
+import {
+  Container,
+  Hero,
+  MainImage,
+  Gallery,
+  Thumb,
+  RightWrapper,
+  Title,
+  SubInfo,
+  Card,
+  Price,
+  PriceRow,
+  InputGroup,
+  Input,
+  ButtonGroup,
+  PrimaryBtn,
+  OutlineBtn,
+  Details,
+  Section,
+  SectionTitle,
+  SpecItem,
+  SpecWrapper,
+  Text,
+  FeatureGrid,
+  FeatureCard,
+} from "@/pages/equipments/style/pdp";
 
 type Props = {
   product: {
@@ -15,211 +41,6 @@ type Props = {
 };
 
 /* ================= NAV ================= */
-const Nav = styled.nav`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 70px;
-  background: #fafaf5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  z-index: 100;
-`;
-
-const Logo = styled.h1`
-  font-weight: 800;
-  font-size: 22px;
-  color: #0d631b;
-`;
-
-const NavButtons = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const Btn = styled.button`
-  padding: 10px 18px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-`;
-
-const PrimaryBtn = styled(Btn)`
-  background: #0d631b;
-  color: white;
-`;
-
-/* ================= LAYOUT ================= */
-const Container = styled.div`
-  max-width: 1200px;
-  margin: auto;
-  padding: 120px 20px 40px;
-`;
-
-/* ================= HERO ================= */
-const Hero = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 7fr 5fr;
-    align-items: start;
-  }
-`;
-
-const MainImage = styled.img`
-  width: 100%;
-  border-radius: 12px;
-`;
-
-const Gallery = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-`;
-
-const Thumb = styled.img`
-  width: 100%;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-/* ================= RIGHT SIDE ================= */
-const RightWrapper = styled.div`
-  position: sticky;
-  top: 100px;
-`;
-
-const Title = styled.h1`
-  font-size: 40px;
-  font-weight: 800;
-  margin-bottom: 10px;
-`;
-
-const SubInfo = styled.div`
-  color: #666;
-  margin-bottom: 20px;
-`;
-
-const Card = styled.div`
-  background: #f4f4ef;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-`;
-
-const PriceRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Price = styled.div`
-  font-size: 32px;
-  font-weight: 800;
-  color: #0d631b;
-`;
-
-const Location = styled.div`
-  font-size: 14px;
-  color: #555;
-`;
-
-const InputGroup = styled.div`
-  margin-bottom: 15px;
-
-  label {
-    font-size: 12px;
-    font-weight: 600;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 8px;
-  border: none;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-`;
-
-const OutlineBtn = styled.button`
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid #0d631b;
-  background: transparent;
-  color: #0d631b;
-  font-weight: 600;
-  cursor: pointer;
-`;
-
-/* ================= FEATURES ================= */
-const Section = styled.div`
-  display: grid;
-  gap: 40px;
-  margin-top: 80px;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 7fr 5fr;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 20px;
-`;
-
-const Text = styled.p`
-  color: #555;
-  line-height: 1.7;
-`;
-
-const FeatureGrid = styled.div`
-  display: grid;
-  gap: 15px;
-  margin-top: 20px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-`;
-
-const FeatureCard = styled.div`
-  background: #f4f4ef;
-  padding: 15px;
-  border-radius: 10px;
-`;
-
-/* ================= SPEC ================= */
-const SpecWrapper = styled.div`
-  align-self: start;
-`;
-
-const SpecItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #ddd;
-  padding: 12px 0;
-`;
-
-const Details = styled.div`
-  margin-top: 20px;
-  background: #f4f4ef;
-  padding: 20px;
-`;
 
 /* ================= PAGE ================= */
 export default function PDP({ product }: Props) {
