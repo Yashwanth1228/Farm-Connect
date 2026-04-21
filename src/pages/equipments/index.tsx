@@ -79,8 +79,11 @@ export default function EquipmentPage() {
   const [price, setPrice] = useState(20000);
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<string>("all");
 
   const [avalibility, setAvalibility] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 6;
 
   const filteredEquipments: Equipment[] = fetchedequipment.filter(
     (item: Equipment) => {
@@ -92,11 +95,38 @@ export default function EquipmentPage() {
       const availabilityMatch =
         avalibility === "all" || item.available === true;
 
-      return priceMatch && typeMatch && availabilityMatch;
+      const priceRangeMatch = (() => {
+        if (priceRange === "0-5000") return item.price <= 5000;
+        if (priceRange === "6000-10000")
+          return item.price > 5000 && item.price <= 10000;
+        if (priceRange === "10000-20000")
+          return item.price > 10000 && item.price <= 20000;
+        return true;
+      })();
+
+      return priceMatch && typeMatch && availabilityMatch && priceRangeMatch;
     },
   );
 
   console.log("the filtered equipments are ", filteredEquipments);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = filteredEquipments.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
+
+  const totalPages = Math.ceil(filteredEquipments.length / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [price, selectedTypes, avalibility, priceRange]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   const handleTypeChange = (type: string) => {
     setSelectedTypes((prev) =>
@@ -108,7 +138,8 @@ export default function EquipmentPage() {
     setPrice(20000);
     setSelectedTypes([]);
     setAvalibility("all");
-    console.log(avalibility, selectedTypes, price);
+    setPriceRange("all");
+    console.log(avalibility, selectedTypes, price, priceRange);
   };
   return (
     <Container>
@@ -135,6 +166,56 @@ export default function EquipmentPage() {
                   <span>₹{price.toLocaleString()}</span>
                 </RangeText>
               </Section>
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                  marginBottom: "20px",
+                }}
+              >
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "all"}
+                    onChange={() => setPriceRange("all")}
+                  />
+                  All Prices
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "0-5000"}
+                    onChange={() => setPriceRange("0-5000")}
+                  />
+                  ₹0 - ₹5,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "6000-10000"}
+                    onChange={() => setPriceRange("6000-10000")}
+                  />
+                  ₹6,000 - ₹10,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "10000-20000"}
+                    onChange={() => setPriceRange("10000-20000")}
+                  />
+                  ₹10,000 - ₹20,000
+                </Label>
+              </div>
 
               <Section>
                 <SectionTitle>Equipment Type</SectionTitle>
@@ -205,31 +286,12 @@ export default function EquipmentPage() {
               Browse 42 machines available for rental in your region.
             </Subtitle>
 
-            {/* <Grid>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                <Card key={item}>
-                  <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" />
-
-                  <CardBody>
-                    <CardTitle>Equipment Name</CardTitle>
-                    <Desc>Details here</Desc>
-
-                    <CardFooter>
-                      <Price>₹3,500/day</Price>
-                      <Button>Rent Now</Button>
-                    </CardFooter>
-                  </CardBody>
-                </Card>
-              ))}
-            </Grid> */}
-
             <Grid>
-              {filteredEquipments.map(
+              {currentItems.map(
                 (item: Equipment) => (
                   console.log("the item id is ", item._id),
                   (
-                    <Card key={Number(item.id)}>
-                      {/* <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" /> */}
+                    <Card key={Number(item._id)}>
                       <CardImage
                         onClick={(e) => {
                           e.stopPropagation();
@@ -259,16 +321,36 @@ export default function EquipmentPage() {
                 ),
               )}
             </Grid>
-
-            <Pagination>
-              <PageBtn>‹</PageBtn>
-              <ActivePage>1</ActivePage>
-              <PageBtn>2</PageBtn>
-              <PageBtn>3</PageBtn>
-              <PageBtn>›</PageBtn>
-            </Pagination>
           </Content>
         </Layout>
+        <Pagination>
+          {/* PREVIOUS BUTTON */}
+          <PageBtn
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+          >
+            ‹
+          </PageBtn>
+
+          {/* PAGE NUMBERS */}
+          {Array.from({ length: totalPages }, (_, i) =>
+            currentPage === i + 1 ? (
+              <ActivePage key={i}>{i + 1}</ActivePage>
+            ) : (
+              <PageBtn key={i} onClick={() => setCurrentPage(i + 1)}>
+                {i + 1}
+              </PageBtn>
+            ),
+          )}
+
+          {/* NEXT BUTTON */}
+          <PageBtn
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPages}
+          >
+            ›
+          </PageBtn>
+        </Pagination>
       </Main>
     </Container>
   );

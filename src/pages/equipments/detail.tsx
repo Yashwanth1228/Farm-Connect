@@ -214,14 +214,6 @@ export default function detail() {
 
   return (
     <>
-      {/* <Nav>
-        <Logo>Farm Connect</Logo>
-        <NavButtons>
-          <Btn>Sign In</Btn>
-          <PrimaryBtn>Rent Now</PrimaryBtn>
-        </NavButtons>
-      </Nav> */}
-
       <Container>
         <Hero>
           {/* LEFT */}

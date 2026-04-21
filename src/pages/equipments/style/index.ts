@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 export const Container = styled.div`
   font-family: "Work Sans", sans-serif;
+  
 `;
 
 export const Main = styled.main`
@@ -14,10 +15,15 @@ export const Main = styled.main`
 export const Layout = styled.div`
   display: flex;
   gap: 48px;
+  align-items: flex-start;
 `;
 
 export const Sidebar = styled.aside`
   width: 288px;
+
+  position: sticky;
+  top: 100px; /* adjust based on navbar height */
+  height: fit-content;
 `;
 
 export const FilterBox = styled.div`
@@ -63,6 +69,8 @@ export const Label = styled.label`
 
 export const Content = styled.section`
   flex: 1;
+  height: 120vh;
+overflow-y: auto;
 `;
 
 export const Title = styled.h1`
