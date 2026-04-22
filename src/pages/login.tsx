@@ -4,6 +4,7 @@ import { Heading, Text } from "@/components/Text";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useLoginMutation } from "@/store/api/apiSlice";
+import toast from "react-hot-toast";
 import {
   Main,
   Wrapper,
@@ -39,9 +40,11 @@ export default function Login() {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if (!form.email || !form.password) {
-      alert("Please fill all the details");
+      toast("Please fill all the details");
       return;
     }
+
+    const toastId = toast.loading("Logging in...");
     try {
       // const res = await fetch("/api/login", {
       // method: "POST",
@@ -62,13 +65,16 @@ export default function Login() {
       console.log("the response in login ", res);
 
       if (res.data.success) {
-        alert("login successfull");
+        toast.success("Login successful ✅", { id: toastId });
         router.push("/");
         setTimeout(() => {
           router.refresh();
         }, 1000);
       } else {
-        alert("would not login ");
+        toast.error(
+          res.data.message || "Login failed check Username or Password ❌",
+          { id: toastId },
+        );
       }
 
       //   const response = await Login({
@@ -77,7 +83,7 @@ export default function Login() {
       //   });
       //   console.log("response from Login function", response);
     } catch (error) {
-      alert("Something went wrong");
+      toast.error("Login failed ❌", { id: toastId });
     }
 
     console.log(form);

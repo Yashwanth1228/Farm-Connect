@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AppContent } from "@/context/Appcontext";
+import toast from "react-hot-toast";
 import {
   Container,
   Hero,
@@ -51,6 +53,7 @@ type Props = {
 export default function detail() {
   const router = useRouter();
   //   const [productdetail , setProductdetail] = useState(product[]>([]));
+  const { user } = useContext(AppContent);
   const [product, setProduct] = useState<any>([]);
   const { id } = router.query;
   console.log("the product id is", id);
@@ -142,8 +145,9 @@ export default function detail() {
   const totalPrice = days * (product?.price || 0);
 
   const handlesubmit = async () => {
+    const toastId = toast.loading("Processing your request...");
     if (!form.start_date || !form.end_date || days <= 0) {
-      alert("Please select valid dates");
+      toast.error("Please select valid dates", { id: toastId });
       return;
     }
 
@@ -154,7 +158,7 @@ export default function detail() {
       form.start_date != "" &&
       form.end_date != ""
     ) {
-      alert("we can go to next route that is cart");
+      toast.success("we can go to next route that is cart", { id: toastId });
       const data = {
         productid: id,
         name: product?.name,
@@ -178,20 +182,21 @@ export default function detail() {
           console.log("response from the api ", res);
           if (res.data.success) {
             setCartId(res.data.data.id);
-            alert("successfully added to cart");
+            toast.success("Successfully added to cart!", { id: toastId });
           }
           console.log("cart id fro inserting of data ", cartId);
         } catch (error) {
-          alert("would not add to cart ");
+          toast.error("Failed to add to cart.", { id: toastId });
         }
       } else {
         try {
           const res = await axios.delete(`/api/cart/${cartId}`);
           console.log("response from the delete api ", res);
           if (res.data.success) {
-            alert("deleted from the cart");
+            toast.success("Successfully removed from cart!", { id: toastId });
           }
         } catch (error) {
+          toast.error("Failed to remove from cart.", { id: toastId });
           console.log("error in the deletion api", error);
         }
       }
@@ -209,6 +214,130 @@ export default function detail() {
       // router.push("/equipments/carts")
     } else {
       setError("please select the quantity lesser than the available quantity");
+    }
+  };
+
+  // payment gateway hamdler
+
+  const handlePayment = async () => {
+    if (!totalPrice || totalPrice <= 0) {
+      toast.error("Invalid amount");
+      return;
+    }
+
+    const toastId = toast.loading("Processing payment...");
+
+    try {
+      // 1️⃣ Create order from backend
+      const res = await fetch("/api/payment/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: totalPrice }),
+      });
+
+      // ✅ IMPORTANT CHECK
+      if (!res.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const order = await res.json();
+
+      // 2️⃣ Razorpay options
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "Farm Connect",
+        description: product?.name || "Equipment Rental",
+        order_id: order.id,
+
+        method: {
+          card: true,
+          netbanking: true,
+          wallet: true,
+          upi: true,
+        },
+
+        prefill: {
+          name: "Test User",
+          email: "test@farmconnect.com",
+          contact: "9999999999",
+        },
+
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(response),
+            });
+
+            const data = await verifyRes.json();
+
+            if (data.success) {
+              toast.success("Payment successful ✅", { id: toastId });
+
+              // ✅ STEP 3: SAVE BOOKING HERE
+              const bookingData = {
+                name: product?.name,
+                images: product?.images[0],
+                start_date: form.start_date,
+                end_date: form.end_date,
+                price: product?.price,
+                days: days,
+                totalprice: totalPrice,
+              };
+
+              console.log("SENDING USER ID:", user?._id);
+              if (!user?._id) {
+                console.log("User not loaded yet ❌");
+                return;
+              }
+              const bookingRes = await fetch("/api/bookings/create", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-user-id": user?._id, // ✅ THIS IS THE KEY FIX
+                },
+                body: JSON.stringify(bookingData),
+              });
+
+              const bookingResult = await bookingRes.json();
+
+              if (bookingRes.ok) {
+                console.log("Booking saved:", bookingResult);
+              } else {
+                console.error("Booking failed:", bookingResult);
+              }
+            } else {
+              toast.error("Payment verification failed ❌", { id: toastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Verification error ⚠️", { id: toastId });
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            toast.error("Payment cancelled ❌", { id: toastId });
+          },
+        },
+
+        theme: {
+          color: "#0d631b",
+        },
+      };
+
+      // 3️⃣ Open Razorpay
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment failed ❌", { id: toastId });
     }
   };
 
@@ -319,13 +448,13 @@ export default function detail() {
               <span>{error}</span>
 
               <ButtonGroup>
-                <PrimaryBtn>Rent Now</PrimaryBtn>
+                <PrimaryBtn onClick={handlePayment}>Rent Now</PrimaryBtn>
                 {/* <OutlineBtn onClick={() => router.push("/equipments/carts")}>
                   Add to Cart
                 </OutlineBtn> */}
 
                 <OutlineBtn onClick={handlesubmit}>
-                  {togglecart ? "Added to cart " : "add to cart"}
+                  {togglecart ? "Remove from cart" : "Add to cart"}
                 </OutlineBtn>
               </ButtonGroup>
             </Card>

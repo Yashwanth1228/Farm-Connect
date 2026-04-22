@@ -67,10 +67,17 @@ export const Label = styled.label`
   cursor: pointer;
 `;
 
-export const Content = styled.section`
+export const Content = styled.div<{ scrolled: boolean }>`
   flex: 1;
-  height: 120vh;
-overflow-y: auto;
+  height: 80vh;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+
+  ${({ scrolled }) =>
+    scrolled &&
+    `
+    box-shadow: inset 0 10px 10px -10px rgba(0,0,0,0.2);
+  `}
 `;
 
 export const Title = styled.h1`

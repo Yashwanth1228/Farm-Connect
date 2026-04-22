@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Heading, Text } from "@/components/Text";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 import {
   Main,
   Wrapper,
@@ -41,12 +42,13 @@ export default function Signup() {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.password) {
-      alert("Please fill all the details");
+      toast("Please fill all the details");
       return;
     }
+    const toastId = toast.loading("Creating account...");
 
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match", { id: toastId });
       return;
     }
 
@@ -68,10 +70,10 @@ export default function Signup() {
       console.log("response", res);
 
       if (res.data.success) {
-        alert("Account created successfully");
+        toast.success("Account created successfully ✅", { id: toastId });
         router.push("/login");
       } else {
-        alert("Failed to create account");
+        toast.error("Failed to create account ❌", { id: toastId });
       }
 
       // const data = await res.json();
@@ -85,7 +87,7 @@ export default function Signup() {
       // }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong");
+      toast.error("Something went wrong ❌", { id: toastId });
     }
 
     // console.log(form);
@@ -159,7 +161,7 @@ export default function Signup() {
             <Button type="submit">Create Account</Button>
           </form>
 
-          <SubText style={{ marginTop: "20px" }}>
+          <SubText>
             Already have an account? <Anc href="/login">Login</Anc>
           </SubText>
         </Right>

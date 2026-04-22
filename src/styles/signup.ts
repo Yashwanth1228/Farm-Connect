@@ -80,6 +80,7 @@ margin-bottom: 20px;
 display: flex;
 justify-content: center;
 gap: 5px;
+margin-top: 20px;
 `;
 
 export const InputGroup = styled.div`

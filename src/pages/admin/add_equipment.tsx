@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
+import toast from "react-hot-toast";
 import {
   Wrapper,
   Modal,
@@ -42,6 +43,7 @@ export default function AdminPage() {
 
   const handleSubmit = async () => {
     const formData = new FormData();
+    const toastId = toast.loading("Uploading images...");
 
     if (files) {
       for (let i = 0; i < files.length; i++) {
@@ -71,7 +73,7 @@ export default function AdminPage() {
       images: imageUrls,
     });
 
-    alert("Uploaded successfully");
+    toast.success("Equipment added successfully!", { id: toastId });
   };
 
   return (

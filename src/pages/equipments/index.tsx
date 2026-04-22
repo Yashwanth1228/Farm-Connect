@@ -80,6 +80,7 @@ export default function EquipmentPage() {
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<string>("all");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const [avalibility, setAvalibility] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -280,7 +281,13 @@ export default function EquipmentPage() {
           </Sidebar>
 
           {/* Content */}
-          <Content>
+          <Content
+            scrolled={isScrolled}
+            onScroll={(e) => {
+              const scrollTop = (e.target as HTMLDivElement).scrollTop;
+              setIsScrolled(scrollTop > 10);
+            }}
+          >
             <Title>Premium Equipment</Title>
             <Subtitle>
               Browse 42 machines available for rental in your region.

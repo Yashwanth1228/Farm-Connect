@@ -4,6 +4,8 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { Button } from "@/components/Button";
 import {
   Page,
   Main,
@@ -35,7 +37,7 @@ export default function CartPage() {
         console.log("respnse from the cart api ", res.data.data);
         setCart(res.data.data);
       } catch (error) {
-        alert("world not fetch the data");
+        toast.error("Failed to fetch cart data.");
         console.log("error in the cart api ", error);
       }
     };
@@ -88,9 +90,9 @@ export default function CartPage() {
               />
             ))}
 
-            <Continue onClick={() => Router.push("/equipments")}>
+            <Button onClick={() => Router.push("/equipments")}>
               ← Continue Browsing Equipment
-            </Continue>
+            </Button>
           </Left>
 
           {/* RIGHT SIDE */}
@@ -120,7 +122,7 @@ export default function CartPage() {
                 <strong>₹{grandTotal.toFixed(2)}</strong>
               </Total>
 
-              <CheckoutBtn>Proceed to Checkout</CheckoutBtn>
+              <Button>Proceed to Checkout</Button>
             </SummaryBox>
           </Right>
         </Grid>

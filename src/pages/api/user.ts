@@ -11,7 +11,7 @@ export default async function GET(
 
     try{
 
-        const userId = req.headers['x-user-id'] as string | undefined;
+        const userId = req.headers['x-user-id'] as string;
 
         console.log("this is userId from middleware", userId);
 

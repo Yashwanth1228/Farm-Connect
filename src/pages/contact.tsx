@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Input, InputGroup, InputMessage } from "@/components/InputBox";
 import { Button } from "@/components/Button";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FormHeading,
   FormLabel,
@@ -32,6 +33,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const toastId = toast.loading("Sending message...");
 
     try {
       const res = await fetch("/api/contact", {
@@ -45,7 +47,7 @@ export default function Contact() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Message sent successfully ");
+        toast.success("Message sent successfully!", { id: toastId });
         setForm({
           name: "",
           email: "",
@@ -53,11 +55,11 @@ export default function Contact() {
           message: "",
         });
       } else {
-        alert(data.message);
+        toast.error(data.message, { id: toastId });
       }
     } catch (error) {
       console.log(error);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.", { id: toastId });
     }
   };
   return (

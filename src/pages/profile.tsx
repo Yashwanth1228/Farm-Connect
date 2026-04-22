@@ -95,9 +95,16 @@ export default function ProfilePage() {
       try {
         setLoading(true);
 
-        const res = await fetch(`/api/bookings/my`);
+        console.log("USER ID:", user?._id);
+
+        const res = await fetch(`/api/bookings/my`, {
+          headers: {
+            "x-user-id": user?._id,
+          },
+        });
+
         const data = await res.json();
-        console.log("booking data", data);
+        console.log("BOOKINGS API RESPONSE:", data);
 
         setBookings(data.data || []);
       } catch (err) {

@@ -1,55 +1,43 @@
 import axios from "axios";
-import { AppContextType } from "next/dist/shared/lib/utils";
 import { createContext, useEffect, useState } from "react";
 
+type AppContextType = {
+  user: any;
+  setUser: (user: any) => void;
+};
 
-
-export const AppContent = createContext({} as AppContextType)
+export const AppContent = createContext<AppContextType>({
+  user: null,
+  setUser: () => {},
+});
 
 export const AppContextProvider = (props: any) => {
+  const [user, setUser] = useState<any>(null);
 
-    const [user, setUser] = useState( null) ;
-    
-    
+  useEffect(() => {
+    const userauth = async () => {
+      try {
+        let res = await axios.get("/api/user", { withCredentials: true });
 
-    useEffect( () => {
+        console.log("User from API:", res.data);
 
-        const userauth = async () =>{
-
-            try {
-                let res = await axios.get("/api/user", {withCredentials: true})
-            console.log("this is response from api/users from app context", res.data);
-            if(res.data.success){
-                setUser(res.data.userdata);
-            }
-            else{
-                setUser(null);
-                console.log("User authentication failed, no user data found");
-            }
-            }
-            catch(error) {
-                console.log("Error during user authentication", error);
-                setUser(null);
-            }
+        if (res.data.success) {
+          setUser(res.data.userdata);
+        } else {
+          setUser(null);
         }
+      } catch (error) {
+        console.log("Auth error:", error);
+        setUser(null);
+      }
+    };
 
-        userauth()
+    userauth();
+  }, []);
 
-    },[])
-
-
-    const value : any = {
-        user,
-        setUser,
-        
-        
-
-    }
- 
-    return (
-        <AppContent.Provider value ={value} >
-            {props.children}
-        </AppContent.Provider>
-
-    )
-}
+  return (
+    <AppContent.Provider value={{ user, setUser }}>
+      {props.children}
+    </AppContent.Provider>
+  );
+};

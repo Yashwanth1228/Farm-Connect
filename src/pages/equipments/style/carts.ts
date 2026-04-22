@@ -36,6 +36,7 @@ export const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  margin-bottom: 40px;
 `;
 
 export const Right = styled.div``;
@@ -108,6 +109,7 @@ export const Total = styled.div`
   justify-content: space-between;
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 15px;
 `;
 
 export const CheckoutBtn = styled.button`
