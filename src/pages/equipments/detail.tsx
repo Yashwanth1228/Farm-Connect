@@ -53,7 +53,11 @@ type Props = {
 export default function detail() {
   const router = useRouter();
   //   const [productdetail , setProductdetail] = useState(product[]>([]));
-  const { user } = useContext(AppContent);
+  const { user, loading } = useContext(AppContent);
+
+  if (loading) {
+    return <p>Loading user...</p>;
+  }
   const [product, setProduct] = useState<any>([]);
   const { id } = router.query;
   console.log("the product id is", id);
@@ -217,9 +221,21 @@ export default function detail() {
     }
   };
 
-  // payment gateway hamdler
+  // payment gateway handler
 
   const handlePayment = async () => {
+    if (loading) {
+      toast.error("Please wait, user loading...");
+      return;
+    }
+
+    if (!user?._id) {
+      toast.error("User not logged in");
+      return;
+    }
+
+    const userId = user._id; // safe now ✅
+
     if (!totalPrice || totalPrice <= 0) {
       toast.error("Invalid amount");
       return;
@@ -281,6 +297,8 @@ export default function detail() {
             if (data.success) {
               toast.success("Payment successful ✅", { id: toastId });
 
+              console.log("USING STORED USER ID:", userId);
+
               // ✅ STEP 3: SAVE BOOKING HERE
               const bookingData = {
                 name: product?.name,
@@ -292,16 +310,11 @@ export default function detail() {
                 totalprice: totalPrice,
               };
 
-              console.log("SENDING USER ID:", user?._id);
-              if (!user?._id) {
-                console.log("User not loaded yet ❌");
-                return;
-              }
               const bookingRes = await fetch("/api/bookings/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  "x-user-id": user?._id, // ✅ THIS IS THE KEY FIX
+                  "x-user-id": userId, // ✅ THIS IS THE KEY FIX
                 },
                 body: JSON.stringify(bookingData),
               });
@@ -448,7 +461,9 @@ export default function detail() {
               <span>{error}</span>
 
               <ButtonGroup>
-                <PrimaryBtn onClick={handlePayment}>Rent Now</PrimaryBtn>
+                <PrimaryBtn onClick={handlePayment} disabled={!user}>
+                  Rent Now
+                </PrimaryBtn>
                 {/* <OutlineBtn onClick={() => router.push("/equipments/carts")}>
                   Add to Cart
                 </OutlineBtn> */}
