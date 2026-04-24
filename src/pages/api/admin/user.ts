@@ -30,13 +30,14 @@ export default async function GET(
             return res.json({ success: false, message: "user not found" });
         }
 
-        if (user.role === "admin") {
-            return res.json({
-                success: false,
-                message: "Access denied, Admin only"
-            });
+        if(user.role === "user") {
+            return res.json({success : false , message : "Access denied , Admin only"})
+            console.log("the user role from api/admin/user" ,)
+
         }
 
+        
+    
         res.json({ 
             success : true,
             userdata: {
@@ -48,6 +49,7 @@ export default async function GET(
         })
 
     } catch(error) {
+        console.log("error in /api/admin/user", error)
         res.json({success: false, message: error})
     }
 

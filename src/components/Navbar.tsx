@@ -151,6 +151,7 @@ export default function Navbar() {
   const { user, setUser }: any = useContext(AppContent);
   const [query, setQuery] = useState("");
   //  const [results, setResults] = useState<any[]>([]);
+  // const [searchdata , setSearchdata] = useState();
 
   console.log("this is user data from app context ", user);
 
@@ -160,14 +161,14 @@ export default function Navbar() {
     // const res = await axios.get(`/api/search?query=${query}`);
     // console.log("the search results are ", res.data) ;
     // setResults(res.data);
-    router.push(`/search?query=${query}`);
+    router.push(`/search?q=${query}`);
   };
 
   // 🔥 Auto search
   useEffect(() => {
     const delay = setTimeout(() => {
       handleSearch();
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(delay);
   }, [query]);

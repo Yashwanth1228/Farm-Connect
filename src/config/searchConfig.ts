@@ -1,9 +1,11 @@
-import APIConnector from '@/services/APIConnector'
+import APIConnector from "@/services/APIConnector";
 
-const connector = new APIConnector()
+const connector = new APIConnector();
 
 export const searchConfig = {
   apiConnector: connector,
+
+  resultsPerPage: 3,
 
   searchQuery: {
     search_fields: {
@@ -12,24 +14,23 @@ export const searchConfig = {
     },
 
     result_fields: {
-        name: { raw: {} },
-        description: { raw: {} },
-        type: { raw: {} },
-        category: { raw: {} },
-        price: { raw: {} },
-        images: { raw: {} },
-      },
+      name: { raw: {} },
+      description: { raw: {} },
+      type: { raw: {} },
+      category: { raw: {} },
+      price: { raw: {} },
+      images: { raw: {} },
+    },
 
     facets: {
-        type: { type: 'value', size: 10 },
       price: {
-        type: 'range',
+        type: "range",
         ranges: [
-          { from: 0, to: 100 },
-          { from: 100, to: 500 },
-          { from: 500 },
+          { from: 0, to: 5000 },
+          { from: 5000, to: 10000 },
+          { from: 10000, to: 20000 },
         ],
       },
     },
   },
-}
+};

@@ -12,17 +12,34 @@ export const useNextRouting = (config: any, basePathUrl: string) => {
 
   const routingOptions = {
     readUrl: () => {
-      return getSearchParamsFromUrl(asPath);
+      const params = new URLSearchParams(
+        getSearchParamsFromUrl(asPath)
+      );
+    
+      // 🔥 FIX: map page → current
+      if (params.get("page")) {
+        params.set("current", params.get("page")!);
+        params.delete("page");
+      }
+    
+      return params.toString();
     },
+    
     writeUrl: (url: string, { replaceUrl }: any) => {
       const method = router[replaceUrl ? "replace" : "push"];
-
-      const params = Object.fromEntries(
-        new URLSearchParams(url).entries()
-      );
-
+    
+      const params = new URLSearchParams(url);
+    
+      // 🔥 FIX: map current → page
+      if (params.get("current")) {
+        params.set("page", params.get("current")!);
+        params.delete("current");
+      }
+    
+      const finalParams = Object.fromEntries(params.entries());
+    
       method(
-        { query: { ...router.query, ...params } },
+        { pathname: basePathUrl, query: finalParams },
         undefined,
         { shallow: true }
       );
