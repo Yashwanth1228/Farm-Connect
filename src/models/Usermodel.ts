@@ -7,9 +7,17 @@ const userschema = new mongoose.Schema({
     profilePic: { type: String, default: "" },
     role : { type: String , default : 'user'},
 
-})
+},
 
-const Usermodel = mongoose.models.user || mongoose.model("user", userschema);
+{
+    timestamps: true,
+    collection: "users",
+  }
+
+)
+
+
+const Usermodel = mongoose.models.users || mongoose.model("users", userschema);
 
 
 export default Usermodel;

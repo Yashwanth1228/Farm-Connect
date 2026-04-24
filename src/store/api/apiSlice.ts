@@ -18,7 +18,7 @@ export const apiSlice = createApi({
     baseUrl: 'http://localhost:3000/api',
     credentials: 'include', // for session/cookies
   }),
-  tagTypes: ['User','equipment'],
+  tagTypes: ['User','equipment','booking',"user",],
 
 
   endpoints: (builder) => ({
@@ -39,6 +39,30 @@ export const apiSlice = createApi({
       invalidatesTags: ['User'],
     }),
 
+
+    // GET equipment
+    deleteEquipments: builder.mutation<object, string | number>({
+      // => `/equipment/delete/${id}`,
+      query: (id) => ({
+        url: `/equipment/delete/${id}`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['equipment'],
+    }),
+
+
+    getBookings: builder.query<any,void>({
+      query: () => '/bookings/all',
+      providesTags: ['booking'],
+    }),
+
+    getUsers: builder.query<any,void>({
+      query: () => '/users/all',
+      providesTags: ['user'],
+    }),
+    
+    
+
   }),
 })
 
@@ -47,4 +71,7 @@ export const {
   useGetEquipmentsQuery,
   useLazyGetEquipmentsQuery,
   useLoginMutation,
+  useDeleteEquipmentsMutation,
+  useGetBookingsQuery,
+  useGetUsersQuery,
 } = apiSlice

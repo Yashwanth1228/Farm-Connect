@@ -5,10 +5,14 @@ import connectDB from "@/lib/db";
 
 
 
-export default async function POST(
+export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
+
+    if(req.method !=="POST"){
+        res.status(405).json({message:"Method not allowed"})
+      }
 
     await connectDB();
 
@@ -26,8 +30,8 @@ export default async function POST(
 
         const hashedPassword = await bcrypt.hash(password,10);
 
-        const user = new Usermodel({name,email,password:hashedPassword})
-        await user.save();
+        const user = await Usermodel.create({name,email,password:hashedPassword})
+        
 
         // const token = jwt.sign({id : user._id}, process.env.jwt_SECRET, { expiresIn : "7d",});
 

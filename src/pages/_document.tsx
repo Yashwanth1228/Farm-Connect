@@ -9,6 +9,7 @@ export default function Document() {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
         />
+        {/* <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;700;800&display=swap" rel="stylesheet" /> */}
         <Main />
         <NextScript />
       </body>

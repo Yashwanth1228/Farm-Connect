@@ -3,25 +3,53 @@ import { Heading, Text } from "@/components/Text";
 import { useRouter } from "next/navigation";
 import { Input, InputGroup } from "@/components/InputBox";
 import { Button } from "@/components/Button";
-import {
-  Main,
-  Wrapper,
-  Left,
-  BgImage,
-  Overlay,
-  LeftContent,
-  Logo,
-  QuoteBox,
-  Right,
-  Anc,
-  SubText,
-} from "@/pages/admin/style/adminlogin";
+import { useState } from "react";
+import axios from "axios";
+import { Anc, BgImage, Left, LeftContent, Logo, Main, Overlay, QuoteBox, Right, SubText, Wrapper } from "./style/adminlogin";
 
 /* MAIN LAYOUT */
 
 /* COMPONENT */
 export default function Login() {
   const router = useRouter();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: any) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (!form.email || !form.password) {
+      alert("Please fill all the details");
+      return;
+    }
+    try {
+      const res = await axios.post("/api/admin/login", form, {
+        withCredentials: true,
+      });
+      console.log("the response in login ", res);
+
+      if (res.data.success) {
+        alert("login successfull");
+        router.push("/admin/dashboard");
+        setTimeout(() => {
+          router.refresh();
+        }, 1000);
+      } else {
+        alert("would not login ");
+      }
+
+    } catch (error) {
+      alert("Something went wrong");
+    }
+
+    
+  };
+
 
   return (
     <Main>
@@ -52,13 +80,13 @@ export default function Login() {
           <Heading>Welcome Back</Heading>
           <Text>Login to continue your journey.</Text>
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <InputGroup>
-              <Input type="email" name="email" placeholder="Email" />
+              <Input type="email" name="email"  onChange={handleChange} placeholder="Email" />
             </InputGroup>
 
             <InputGroup>
-              <Input type="password" name="password" placeholder="Password" />
+              <Input type="password" name="password" onChange={handleChange} placeholder="Password" />
             </InputGroup>
 
             <Button type="submit">Login</Button>
