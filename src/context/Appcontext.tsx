@@ -1,15 +1,26 @@
 import axios from "axios";
-import { AppContextType } from "next/dist/shared/lib/utils";
 import { createContext, useEffect, useState } from "react";
 
+type AppContextType = {
+  user: any;
+  setUser: (user: any) => void;
+  loading: boolean;
+};
 
 
-export const AppContent = createContext({} as AppContextType)
+
+export const AppContent = createContext<AppContextType>({
+  user: null,
+  setUser: () => {},
+  loading: true,
+});
 
 export const AppContextProvider = (props: any) => {
 
     const [user, setUser] = useState( null) ;
     const [admin, setAdmin] = useState( null) ;
+    const [loading, setLoading] = useState<boolean>(true);
+
     
     
 
@@ -63,6 +74,7 @@ export const AppContextProvider = (props: any) => {
         setUser,
         admin,
         setAdmin,
+        loading,
         
         
 

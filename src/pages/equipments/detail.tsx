@@ -1,7 +1,38 @@
 import styled from "@emotion/styled";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { AppContent } from "@/context/Appcontext";
+import toast from "react-hot-toast";
+import {
+  Container,
+  Hero,
+  MainImage,
+  Gallery,
+  InfoRow,
+  Highlight,
+  Thumb,
+  RightWrapper,
+  Title,
+  SubInfo,
+  Card,
+  PriceRow,
+  Price,
+  Location,
+  InputGroup,
+  Input,
+  ButtonGroup,
+  OutlineBtn,
+  Section,
+  SectionTitle,
+  Text,
+  FeatureGrid,
+  FeatureCard,
+  SpecWrapper,
+  SpecItem,
+  Details,
+  PrimaryBtn,
+} from "@/pages/equipments/style/details";
 
 type Props = {
   product: {
@@ -17,301 +48,87 @@ type Props = {
 };
 
 /* ================= NAV ================= */
-const Nav = styled.nav`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 70px;
-  background: #fafaf5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  z-index: 100;
-`;
-
-const Logo = styled.h1`
-  font-weight: 800;
-  font-size: 22px;
-  color: #0d631b;
-`;
-
-const NavButtons = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const Btn = styled.button`
-  padding: 10px 18px;
-  border-radius: 20px;
-  border: none;
-  cursor: pointer;
-`;
-
-const PrimaryBtn = styled(Btn)`
-  background: #0d631b;
-  color: white;
-`;
-
-/* ================= LAYOUT ================= */
-const Container = styled.div`
-  max-width: 1200px;
-  margin: auto;
-  padding: 120px 20px 40px;
-`;
-
-/* ================= HERO ================= */
-const Hero = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 7fr 5fr;
-    align-items: start;
-  }
-`;
-
-const MainImage = styled.img`
-  width: 100%;
-  border-radius: 12px;
-`;
-
-const Gallery = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  margin-top: 10px;
-`;
-
-// const Gallery = styled.div`
-//     display : flex;
-//     width : 200px;
-
-// `
-
-const InfoRow = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  flex-wrap: wrap; /* helps on small screens */
-`;
-
-const Highlight = styled.span`
-  font-weight: 600;
-  color: #0d631b;
-`;
-
-const Thumb = styled.img`
-  width: 100%;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
-/* ================= RIGHT SIDE ================= */
-const RightWrapper = styled.div`
-  position: sticky;
-  top: 100px;
-`;
-
-const Title = styled.h1`
-  font-size: 40px;
-  font-weight: 800;
-  margin-bottom: 10px;
-`;
-
-const SubInfo = styled.div`
-  color: #666;
-  margin-bottom: 20px;
-`;
-
-const Card = styled.div`
-  background: #f4f4ef;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-`;
-
-const PriceRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Price = styled.div`
-  font-size: 32px;
-  font-weight: 800;
-  color: #0d631b;
-`;
-
-const Location = styled.div`
-  font-size: 14px;
-  color: #555;
-`;
-
-const InputGroup = styled.div`
-  margin-bottom: 15px;
-
-  label {
-    font-size: 12px;
-    font-weight: 600;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 8px;
-  border: none;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-`;
-
-const OutlineBtn = styled.button`
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid #0d631b;
-  background: transparent;
-  color: #0d631b;
-  font-weight: 600;
-  cursor: pointer;
-`;
-
-/* ================= FEATURES ================= */
-const Section = styled.div`
-  display: grid;
-  gap: 40px;
-  margin-top: 80px;
-
-  @media (min-width: 1024px) {
-    grid-template-columns: 7fr 5fr;
-  }
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 30px;
-  font-weight: 800;
-  margin-bottom: 20px;
-`;
-
-const Text = styled.p`
-  color: #555;
-  line-height: 1.7;
-`;
-
-const FeatureGrid = styled.div`
-  display: grid;
-  gap: 15px;
-  margin-top: 20px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-`;
-
-const FeatureCard = styled.div`
-  background: #f4f4ef;
-  padding: 15px;
-  border-radius: 10px;
-`;
-
-/* ================= SPEC ================= */
-const SpecWrapper = styled.div`
-  align-self: start;
-`;
-
-const SpecItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #ddd;
-  padding: 12px 0;
-`;
-
-const Details = styled.div`
-  margin-top: 20px;
-  background: #f4f4ef;
-  padding: 20px;
-`;
 
 /* ================= PAGE ================= */
 export default function detail() {
   const router = useRouter();
-//   const [productdetail , setProductdetail] = useState(product[]>([]));
+  //   const [productdetail , setProductdetail] = useState(product[]>([]));
+  const { user, loading } = useContext(AppContent);
+
+  if (loading) {
+    return <p>Loading user...</p>;
+  }
   const [product, setProduct] = useState<any>([]);
   const { id } = router.query;
   console.log("the product id is", id);
 
-  const [error , setError] = useState("");
-  const [form , setForm] = useState({
-    start_date : "",
-    end_date : "",
-    quantity : ""
+  const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    start_date: "",
+    end_date: "",
+    quantity: "",
   });
 
-  const [togglecart , setTogglecart] = useState(false)
+  const [togglecart, setTogglecart] = useState(false);
   const [cartId, setCartId] = useState<string | null>(null);
 
-console.log("the form data is ", form)
+  console.log("the form data is ", form);
 
   useEffect(() => {
-
     if (!id) return;
 
     const fetchproductdetail = async () => {
-        try{
-            const res = await axios.post(`/api/equipment/${id}`)
-            console.log("the product details are ", res.data.data);
-            setProduct(res.data.data);
+      try {
+        const res = await axios.post(`/api/equipment/${id}`);
+        console.log("the product details are ", res.data.data);
+        setProduct(res.data.data);
 
-            const cartres = await axios.get('/api/cart/all');
+        const cartres = await axios.get("/api/cart/all");
 
-const isincart = cartres.data.data.filter(
-  (items: any) => items.productid === String(id)
-);
+        const isincart = cartres.data.data.filter(
+          (items: any) => items.productid === String(id),
+        );
 
-console.log("the is  in cart " , isincart)
+        console.log("the is  in cart ", isincart);
 
-if (isincart.length > 0) {
-  const item = isincart[0];
+        if (isincart.length > 0) {
+          const item = isincart[0];
 
-  setTogglecart(true);
-  setCartId(item._id);
-  console.log("this is the cartid  " , cartId)
-  console.log("cart id setting after fetching from the cart api of data " , cartId)
-  const re_start_date = new  Date(item.start_date)
-  const formateddate = re_start_date.toISOString().split('T')[0];
+          setTogglecart(true);
+          setCartId(item._id);
+          console.log("this is the cartid  ", cartId);
+          console.log(
+            "cart id setting after fetching from the cart api of data ",
+            cartId,
+          );
+          const re_start_date = new Date(item.start_date);
+          const formateddate = re_start_date.toISOString().split("T")[0];
 
-  const re_end_date = new  Date(item.end_date)
-  const formatedenddate = re_end_date.toISOString().split('T')[0];
+          const re_end_date = new Date(item.end_date);
+          const formatedenddate = re_end_date.toISOString().split("T")[0];
 
-  setForm({
-    start_date: formateddate,
-    end_date: formatedenddate,
-    quantity: item.quantity,
-  });
-}
+          setForm({
+            start_date: formateddate,
+            end_date: formatedenddate,
+            quantity: item.quantity,
+          });
         }
-        catch(error) {
-            console.error("Error fetching product details:", error);
-        }
-    }
+      } catch (error) {
+        console.error("Error fetching product details:", error);
+      }
+    };
 
     fetchproductdetail();
-  },[id])
+  }, [id]);
 
-  console.log("cart id setting after useeffect from the cart api of data " , cartId)
-  console.log(" the image is ", product?.images) ;
+  console.log(
+    "cart id setting after useeffect from the cart api of data ",
+    cartId,
+  );
+  console.log(" the image is ", product?.images);
 
   const { images } = product || {};
-  console.log("the first image is ", images) ;
+  console.log("the first image is ", images);
 
   const calculateDays = () => {
     if (!form.start_date || !form.end_date) return 0;
@@ -331,65 +148,60 @@ if (isincart.length > 0) {
 
   const totalPrice = days * (product?.price || 0);
 
-
-
-
-
   const handlesubmit = async () => {
-
+    const toastId = toast.loading("Processing your request...");
     if (!form.start_date || !form.end_date || days <= 0) {
-      alert("Please select valid dates");
+      toast.error("Please select valid dates", { id: toastId });
       return;
     }
 
-    console.log("farm data from handle submit" , form)
+    console.log("farm data from handle submit", form);
 
-    if (Number(form.quantity) <= product?.quantity && form.start_date != "" && form.end_date != "" ){
-      alert("we can go to next route that is cart")
+    if (
+      Number(form.quantity) <= product?.quantity &&
+      form.start_date != "" &&
+      form.end_date != ""
+    ) {
+      toast.success("we can go to next route that is cart", { id: toastId });
       const data = {
-        productid  : id ,
-        name : product?.name,
-        image : product?.images[0],
-        price : product?.price,
-        totalprice : Number(totalPrice),
-        days : Number(days),
+        productid: id,
+        name: product?.name,
+        image: product?.images[0],
+        price: product?.price,
+        totalprice: Number(totalPrice),
+        days: Number(days),
         ...form,
-      }
-      console.log("the data is ", data)
+      };
+      console.log("the data is ", data);
 
       const newvalue = !togglecart;
 
-      console.log("the new value " , newvalue)
+      console.log("the new value ", newvalue);
 
-      setTogglecart(newvalue)
+      setTogglecart(newvalue);
 
-      if(newvalue) { 
-
-        try{
-          const res = await axios.post("/api/cart/add",{data})
-          console.log("response from the api " , res)
-          if(res.data.success){
-            setCartId(res.data.data.id); 
-            alert("successfully added to cart")
-
+      if (newvalue) {
+        try {
+          const res = await axios.post("/api/cart/add", { data });
+          console.log("response from the api ", res);
+          if (res.data.success) {
+            setCartId(res.data.data.id);
+            toast.success("Successfully added to cart!", { id: toastId });
           }
-          console.log("cart id fro inserting of data " , cartId)
-  
+          console.log("cart id fro inserting of data ", cartId);
+        } catch (error) {
+          toast.error("Failed to add to cart.", { id: toastId });
         }
-        catch(error){
-          alert("would not add to cart ")
-        }
-      }
-      else {
-        try{
-          const res = await axios.delete(`/api/cart/${cartId}`)
-          console.log("response from the delete api " , res)
-          if(res.data.success) {
-            alert("deleted from the cart");
+      } else {
+        try {
+          const res = await axios.delete(`/api/cart/${cartId}`);
+          console.log("response from the delete api ", res);
+          if (res.data.success) {
+            toast.success("Successfully removed from cart!", { id: toastId });
           }
-        }
-        catch(error) {
-          console.log("error in the deletion api" , error)
+        } catch (error) {
+          toast.error("Failed to remove from cart.", { id: toastId });
+          console.log("error in the deletion api", error);
         }
       }
 
@@ -404,24 +216,146 @@ if (isincart.length > 0) {
       //   alert("would not add to cart ")
       // }
       // router.push("/equipments/carts")
-      
+    } else {
+      setError("please select the quantity lesser than the available quantity");
     }
-    else {
-      setError("please select the quantity lesser than the available quantity")
+  };
+
+  // payment gateway handler
+
+  const handlePayment = async () => {
+    if (loading) {
+      toast.error("Please wait, user loading...");
+      return;
     }
 
-  }
+    if (!user?._id) {
+      toast.error("User not logged in");
+      return;
+    }
+
+    const userId = user._id; // safe now ✅
+
+    if (!totalPrice || totalPrice <= 0) {
+      toast.error("Invalid amount");
+      return;
+    }
+
+    const toastId = toast.loading("Processing payment...");
+
+    try {
+      // 1️⃣ Create order from backend
+      const res = await fetch("/api/payment/create-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount: totalPrice }),
+      });
+
+      // ✅ IMPORTANT CHECK
+      if (!res.ok) {
+        throw new Error("Failed to create order");
+      }
+
+      const order = await res.json();
+
+      // 2️⃣ Razorpay options
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: "INR",
+        name: "Farm Connect",
+        description: product?.name || "Equipment Rental",
+        order_id: order.id,
+
+        method: {
+          card: true,
+          netbanking: true,
+          wallet: true,
+          upi: true,
+        },
+
+        prefill: {
+          name: "Test User",
+          email: "test@farmconnect.com",
+          contact: "9999999999",
+        },
+
+        handler: async function (response: any) {
+          try {
+            const verifyRes = await fetch("/api/payment/verify", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(response),
+            });
+
+            const data = await verifyRes.json();
+
+            if (data.success) {
+              toast.success("Payment successful ✅", { id: toastId });
+
+              console.log("USING STORED USER ID:", userId);
+
+              // ✅ STEP 3: SAVE BOOKING HERE
+              const bookingData = {
+                name: product?.name,
+                images: product?.images[0],
+                start_date: form.start_date,
+                end_date: form.end_date,
+                price: product?.price,
+                days: days,
+                totalprice: totalPrice,
+              };
+
+              const bookingRes = await fetch("/api/bookings/create", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "x-user-id": userId, // ✅ THIS IS THE KEY FIX
+                },
+                body: JSON.stringify(bookingData),
+              });
+
+              const bookingResult = await bookingRes.json();
+
+              if (bookingRes.ok) {
+                console.log("Booking saved:", bookingResult);
+              } else {
+                console.error("Booking failed:", bookingResult);
+              }
+            } else {
+              toast.error("Payment verification failed ❌", { id: toastId });
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error("Verification error ⚠️", { id: toastId });
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            toast.error("Payment cancelled ❌", { id: toastId });
+          },
+        },
+
+        theme: {
+          color: "#0d631b",
+        },
+      };
+
+      // 3️⃣ Open Razorpay
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast.error("Payment failed ❌", { id: toastId });
+    }
+  };
 
   return (
     <>
-      {/* <Nav>
-        <Logo>Farm Connect</Logo>
-        <NavButtons>
-          <Btn>Sign In</Btn>
-          <PrimaryBtn>Rent Now</PrimaryBtn>
-        </NavButtons>
-      </Nav> */}
-
       <Container>
         <Hero>
           {/* LEFT */}
@@ -429,18 +363,18 @@ if (isincart.length > 0) {
             {/* <MainImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5Qh_nTp8s1ktmhft8jayHfopMKRmI0Byagywq89q-391nkoSqvNu9IZlPukRN7MHg4zVtHPozPooFURROD3ulzfKaePMkVcj2O9YW3pl7Vja-X3figZcz_a2QZfBpb_lRFrF-9uH4K3qlaHbCfE1v0MI6RvQ2kB6zw1y35tu_KNc3q2qSeJ3pDdiXEh07ScxmTKNDbwEeMXDQQqZIA7XVRM29n4xOEBRDX328NVXeuVqKVbR5GfhozGMV6aeVNQosPPnIjazDXYY" /> */}
 
             <div>
-                  {/* MAIN IMAGE */}
-                  {images && images.length > 0 && (
-                  <MainImage src={images[0]} alt={product?.name} />
-                  )}
+              {/* MAIN IMAGE */}
+              {images && images.length > 0 && (
+                <MainImage src={images[0]} alt={product?.name} />
+              )}
 
-                {/* THUMBNAILS */}
+              {/* THUMBNAILS */}
               <Gallery>
-              {images?.slice(1).map((img: string, index: number) => (
-                <Thumb key={index} src={img} />
-              ))}
+                {images?.slice(1).map((img: string, index: number) => (
+                  <Thumb key={index} src={img} />
+                ))}
               </Gallery>
-          </div>
+            </div>
 
             {/* <MainImage src={product?.images[0]}  /> */}
             {/* {images?.map((img : any ,index : number) => {
@@ -466,21 +400,20 @@ if (isincart.length > 0) {
 
           {/* RIGHT */}
 
-          
-          
           <RightWrapper>
             <Title>{product?.name}</Title>
             <InfoRow>
-                <SubInfo>
-                      {product?.enginepower} • {product?.wheels} • {product?.fuel_type}
-                </SubInfo>
+              <SubInfo>
+                {product?.enginepower} • {product?.wheels} •{" "}
+                {product?.fuel_type}
+              </SubInfo>
 
-                <SubInfo>
-                    Available: <Highlight>{product?.quantity}</Highlight>
-                </SubInfo>
+              <SubInfo>
+                Available: <Highlight>{product?.quantity}</Highlight>
+              </SubInfo>
             </InfoRow>
             {/* <SubInfo>Available : {product?.quantity}</SubInfo> */}
-            
+
             <Card>
               <PriceRow>
                 <Price>₹{Number(product?.price)}/day</Price>
@@ -489,28 +422,54 @@ if (isincart.length > 0) {
 
               <InputGroup>
                 <label>Start Date</label>
-                <Input type="date" value={form.start_date} min={today} onChange={(e) => {setForm({...form , start_date : e.target.value as any})}} required/>
+                <Input
+                  type="date"
+                  value={form.start_date}
+                  min={today}
+                  onChange={(e) => {
+                    setForm({ ...form, start_date: e.target.value as any });
+                  }}
+                  required
+                />
               </InputGroup>
 
               <InputGroup>
                 <label>End Date</label>
-                <Input type="date" value={form.end_date} min={today} onChange={(e) => {setForm({...form , end_date : e.target.value})}} required/>
+                <Input
+                  type="date"
+                  value={form.end_date}
+                  min={today}
+                  onChange={(e) => {
+                    setForm({ ...form, end_date: e.target.value });
+                  }}
+                  required
+                />
               </InputGroup>
 
               <InputGroup>
                 <label>Quantity</label>
-                <Input type="number" value={form.quantity} defaultValue={1} onChange={(e) => {setForm({...form , quantity : e.target.value})}} required/>
+                <Input
+                  type="number"
+                  value={form.quantity}
+                  defaultValue={1}
+                  onChange={(e) => {
+                    setForm({ ...form, quantity: e.target.value });
+                  }}
+                  required
+                />
               </InputGroup>
               <span>{error}</span>
 
               <ButtonGroup>
-                <PrimaryBtn>Rent Now</PrimaryBtn>
+                <PrimaryBtn onClick={handlePayment} disabled={!user}>
+                  Rent Now
+                </PrimaryBtn>
                 {/* <OutlineBtn onClick={() => router.push("/equipments/carts")}>
                   Add to Cart
                 </OutlineBtn> */}
 
                 <OutlineBtn onClick={handlesubmit}>
-                  {togglecart ? "Added to cart " : "add to cart"}
+                  {togglecart ? "Remove from cart" : "Add to cart"}
                 </OutlineBtn>
               </ButtonGroup>
             </Card>

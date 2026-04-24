@@ -4,40 +4,53 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
-
+import toast from "react-hot-toast";
+import { Button } from "@/components/Button";
+import {
+  Page,
+  Main,
+  Header,
+  Title,
+  Subtitle,
+  Grid,
+  Left,
+  Continue,
+  Right,
+  SummaryBox,
+  Row,
+  Divider,
+  Total,
+  CheckoutBtn,
+  Card,
+  Img,
+  Content,
+  Top,
+  Bottom,
+  TotalPrice,
+} from "@/pages/equipments/style/carts";
 
 export default function CartPage() {
-
-  
-
   useEffect(() => {
     const fetchcart = async () => {
-      try{
-      const res = await axios.get("/api/cart/all")
-      console.log("respnse from the cart api ", res.data.data)
-      setCart(res.data.data);
+      try {
+        const res = await axios.get("/api/cart/all");
+        console.log("respnse from the cart api ", res.data.data);
+        setCart(res.data.data);
+      } catch (error) {
+        toast.error("Failed to fetch cart data.");
+        console.log("error in the cart api ", error);
       }
-      catch(error) {
-        alert("world not fetch the data")
-        console.log("error in the cart api ",error)
-      }
-      
-
-    }
+    };
     fetchcart();
-    
+  }, []);
 
-  },[])
-
-
-
-  const [ cart, setCart ] = useState<any>([]);
-  console.log("cart.totalprice" , cart.totalprice);
-  console.log("cart data" , cart)
+  const [cart, setCart] = useState<any>([]);
+  console.log("cart.totalprice", cart.totalprice);
+  console.log("cart data", cart);
 
   const subtotal = cart.reduce(
-    (acc: number, item: any) => acc + item.totalprice,0,
-    
+    (acc: number, item: any) => acc + item.totalprice,
+    0,
   );
 
   console.log("sub total", subtotal);
@@ -77,9 +90,9 @@ export default function CartPage() {
               />
             ))}
 
-            <Continue onClick={() => Router.push("/equipments")}>
+            <Button onClick={() => Router.push("/equipments")}>
               ← Continue Browsing Equipment
-            </Continue>
+            </Button>
           </Left>
 
           {/* RIGHT SIDE */}
@@ -109,7 +122,7 @@ export default function CartPage() {
                 <strong>₹{grandTotal.toFixed(2)}</strong>
               </Total>
 
-              <CheckoutBtn>Proceed to Checkout</CheckoutBtn>
+              <Button>Proceed to Checkout</Button>
             </SummaryBox>
           </Right>
         </Grid>
@@ -140,10 +153,14 @@ function CartItem({
       year: "numeric",
     });
   return (
-
     // `/equipments/detail?id=${item._id}
     <Card>
-      <Img src={img} onClick={()=> { Router.push(`/equipments/detail?id=${pid}`)}} />
+      <Img
+        src={img}
+        onClick={() => {
+          Router.push(`/equipments/detail?id=${pid}`);
+        }}
+      />
 
       <Content>
         <Top>
@@ -156,7 +173,7 @@ function CartItem({
         </Top>
 
         <Bottom>
-          <div style={{display: "flex" , gap: "30px"}}>
+          <div style={{ display: "flex", gap: "30px" }}>
             <small>Daily Rate</small>
             <strong>{price}/day</strong>
           </div>
@@ -177,177 +194,3 @@ function CartItem({
 }
 
 /* ================= STYLES ================= */
-
-const Page = styled.div`
-  background: #fafaf5;
-  font-family: "Work Sans", sans-serif;
-`;
-
-const Navbar = styled.nav`
-  position: fixed;
-  width: 100%;
-  top: 0;
-  background: #fafaf5;
-  z-index: 50;
-`;
-
-const NavInner = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-`;
-
-const Logo = styled.div`
-  font-weight: 800;
-  font-size: 22px;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const NavRight = styled.div`
-  display: flex;
-  gap: 10px;
-  align-items: center;
-`;
-
-const ListBtn = styled.button`
-  background: #0d631b;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 20px;
-`;
-
-const Icon = styled.div`
-  font-size: 20px;
-`;
-
-const Main = styled.main`
-  padding-top: 120px;
-  max-width: 1200px;
-  margin: auto;
-`;
-
-const Header = styled.div`
-  margin-bottom: 40px;
-`;
-
-const Title = styled.h1`
-  font-size: 42px;
-  font-weight: 800;
-`;
-
-const Subtitle = styled.p`
-  color: #666;
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 40px;
-`;
-
-const Left = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const Right = styled.div``;
-
-const Card = styled.div`
-  display: flex;
-  gap: 20px;
-  padding: 20px;
-  background: white;
-  border-radius: 20px;
-`;
-
-const Img = styled.img`
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 12px;
-`;
-
-const Content = styled.div`
-  flex: 1;
-`;
-
-const Top = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Bottom = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-`;
-
-const Qty = styled.div`
-  display: flex;
-  gap: 10px;
-`;
-
-const TotalPrice = styled.div`
-  font-weight: bold;
-  color: #0d631b;
-`;
-
-const Continue = styled.button`
-  margin-top: 20px;
-  color: #0d631b;
-  cursor: pointer;
-`;
-
-const SummaryBox = styled.div`
-  background: #eeeee9;
-  padding: 20px;
-  border-radius: 20px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-`;
-
-const Divider = styled.hr`
-  margin: 20px 0;
-`;
-
-const Total = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const CheckoutBtn = styled.button`
-  width: 100%;
-  margin-top: 20px;
-  padding: 14px;
-  background: linear-gradient(to right, #0d631b, #2e7d32);
-  color: white;
-  border-radius: 12px;
-`;
-
-const Footer = styled.footer`
-  margin-top: 80px;
-  padding: 40px;
-  background: #eee;
-`;
-
-const FooterInner = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const FooterLinks = styled.div`
-  display: flex;
-  gap: 20px;
-`;

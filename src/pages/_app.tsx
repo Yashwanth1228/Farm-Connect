@@ -6,15 +6,14 @@ import { useRouter } from "next/router";
 import { AppContextProvider } from "@/context/Appcontext";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
-import { AdminContextProvider } from "@/context/Admincontext";
 import Sidebar from "@/components/admin/Sidebar";
 import { ToastContainer } from "react-toastify";
-
+import { Toaster } from "react-hot-toast";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const noNavbarRoutes = ["/login", "/signup", "/admin/add_equipment" , "/admin/adminlogin" , "/admin/user","/admin/dashboard" , "/admin/equipment" , "/admin/bookings"];
+  const noNavbarRoutes = ["/login", "/signup", "/admin/add_equipment" , "/admin/adminlogin","/searchs","/search"];
   const showNavbar = !noNavbarRoutes.includes(router.pathname);
 
   const noFooterRoutes = [
@@ -23,12 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
     "/equipment",
     "/admin/add_equipment",
     "/admin/adminlogin",
-    "/admin/user",
-    "/admin/dashboard",
-    "/admin/equipment",
-    "/admin/bookings",
-    
-    
+    "/searchs",
+    "/search"
   ];
   const showFooter = !noFooterRoutes.includes(router.pathname);
 
@@ -81,7 +76,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
           
         </AppContextProvider>
+        <Toaster position="top-center" reverseOrder={false} />
       </Provider>
+      <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     </>
   );
 }

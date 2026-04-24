@@ -1,305 +1,90 @@
-
-
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/Button";
 import { useRouter } from "next/router";
 // import { equipments, Equipment } from "@/data/equipmentData";
 import axios from "axios";
-import { useGetEquipmentsQuery , useLazyGetEquipmentsQuery } from "@/store/api/apiSlice";
+import {
+  useGetEquipmentsQuery,
+  useLazyGetEquipmentsQuery,
+} from "@/store/api/apiSlice";
 
-
-const Container = styled.div`
-  font-family: "Work Sans", sans-serif;
-`;
-
-const Navbar = styled.nav`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #fafaf5;
-  backdrop-filter: blur(10px);
-  z-index: 50;
-`;
-
-const NavInner = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1280px;
-  margin: auto;
-  padding: 0 24px;
-  height: 80px;
-`;
-
-const Logo = styled.div`
-  font-size: 24px;
-  font-weight: 800;
-`;
-
-const NavLinks = styled.div`
-  display: flex;
-  gap: 32px;
-`;
-
-const ActiveLink = styled.a`
-  color: #0d631b;
-  font-weight: 600;
-  border-bottom: 2px solid #0d631b;
-  padding-bottom: 4px;
-`;
-
-const NavButtons = styled.div`
-  display: flex;
-  gap: 16px;
-`;
-
-const LoginBtn = styled.button`
-  color: #0d631b;
-`;
-
-const SignupBtn = styled.button`
-  background: linear-gradient(to right, #0d631b, #2e7d32);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 30px;
-`;
-
-const Main = styled.main`
-  padding-top: 112px;
-  padding-bottom: 80px;
-  padding-left: 24px;
-  padding-right: 24px;
-`;
-
-const Layout = styled.div`
-  display: flex;
-  gap: 48px;
-`;
-
-const Sidebar = styled.aside`
-  width: 288px;
-`;
-
-const FilterBox = styled.div`
-  background: #eeeee9;
-  padding: 32px;
-  border-radius: 24px;
-  position: sticky;
-  top: 112px;
-`;
-
-const FilterTitle = styled.h2`
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 24px;
-`;
-
-const Section = styled.div`
-  margin-bottom: 32px;
-`;
-
-const SectionTitle = styled.h3`
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-`;
-
-const Range = styled.input`
-  width: 100%;
-`;
-
-const RangeText = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-`;
-
-const Label = styled.label`
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  cursor: pointer;
-`;
-
-const ClearBtn = styled.button`
-  width: 100%;
-  margin-top: 20px;
-  padding: 12px;
-  background: black;
-  color: white;
-  border-radius: 16px;
-`;
-
-const Content = styled.section`
-  flex: 1;
-`;
-
-const Title = styled.h1`
-  font-size: 36px;
-  font-weight: 800;
-`;
-
-const Subtitle = styled.p`
-  color: #666;
-  margin-bottom: 24px;
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-`;
-
-const Card = styled.div`
-  background: white;
-  border-radius: 24px;
-  overflow: hidden;
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-
-  transition: transform 0.2s;
-
-  &:hover {
-    // transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-    transform: scale(1.02);
-  }
-`;
-
-const CardImage = styled.img`
-  width: 100%;
-  height: 256px;
-  object-fit: cover;
-
-  transition: transform 0.2s;
-  &:hover {
-    transform: scale(1.02);
-  }
-`;
-
-const CardBody = styled.div`
-  padding: 24px;
-`;
-
-const CardTitle = styled.h3`
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const Desc = styled.p`
-  font-size: 14px;
-  color: #666;
-`;
-
-const CardFooter = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-`;
-
-const Price = styled.span`
-  font-size: 20px;
-  font-weight: bold;
-`;
-
-const RentBtn = styled.button`
-  background: linear-gradient(to right, #0d631b, #2e7d32);
-  color: white;
-  padding: 10px 16px;
-  border-radius: 16px;
-`;
-
-const ImageWrapper = styled.div`
-  position: relative;
-  height: 256px;
-  overflow: hidden;
-`;
-
-const Badge = styled.span`
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  background: #b9ad3a;
-  color: #464000;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: bold;
-`;
-
-const Pagination = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-top: 64px;
-`;
-
-const PageBtn = styled.button`
-  width: 48px;
-  height: 48px;
-  border-radius: 16px;
-  border: 1px solid #ccc;
-  background: white;
-`;
-
-const ActivePage = styled(PageBtn)`
-  background: #0d631b;
-  color: white;
-  font-weight: bold;
-`;
+import {
+  Container,
+  Main,
+  Layout,
+  Sidebar,
+  FilterBox,
+  FilterTitle,
+  Section,
+  SectionTitle,
+  Range,
+  RangeText,
+  Label,
+  Content,
+  Title,
+  Subtitle,
+  Grid,
+  Card,
+  CardBody,
+  CardFooter,
+  CardImage,
+  CardTitle,
+  Price,
+  Pagination,
+  PageBtn,
+  ActivePage,
+  Desc,
+} from "@/pages/equipments/style/index";
 
 type Equipment = {
-    id: number;
-    _id: string;
-    name: string;
-    type: string;
-    price: number;
-    images: string;
-    available: boolean;
-    description: string;
-    enginepower:string;
-  }
-
+  id: number;
+  _id: string;
+  name: string;
+  type: string;
+  price: number;
+  images: string;
+  available: boolean;
+  description: string;
+  enginepower: string;
+};
 
 export default function EquipmentPage() {
   // const { data, error, isLoading } =  useGetEquipmentsQuery()
-  const [GetEquipments, {isLoading}] = useLazyGetEquipmentsQuery();
+  const [GetEquipments, { isLoading }] = useLazyGetEquipmentsQuery();
 
-    useEffect(() => {
-        const fetchallequipment = async () => {
-            // const res = await axios.get('/api/equipment/all')
-            // console.log("the equipments are ", res.data.data)
-            // setFetchedequipment(res.data.data)
+  useEffect(() => {
+    const fetchallequipment = async () => {
+      // const res = await axios.get('/api/equipment/all')
+      // console.log("the equipments are ", res.data.data)
+      // setFetchedequipment(res.data.data)
 
-            const response = await GetEquipments()
-            console.log("response from lazy function" , response)
-            setFetchedequipment(response.data.data)
+      const response = await GetEquipments();
+      console.log("response from lazy function", response);
+      setFetchedequipment(response.data.data);
+    };
+    fetchallequipment();
 
-        }
-        fetchallequipment()
+    // console.log("data from redux",data)
+    // setFetchedequipment(data.data);
+  }, []);
 
-        // console.log("data from redux",data)
-        // setFetchedequipment(data.data);
-
-
-        
-    },[])
-
-  const [fetchedequipment , setFetchedequipment] = useState<Equipment[]>([]) ;
+  const [fetchedequipment, setFetchedequipment] = useState<Equipment[]>([]);
 
   const router = useRouter();
 
-//   const handleRoute = (item: Equipment) => {
-//     router.push(`/equipments/${Number(item.id)}`);
-//   };
+  //   const handleRoute = (item: Equipment) => {
+  //     router.push(`/equipments/${Number(item.id)}`);
+  //   };
   const [price, setPrice] = useState(20000);
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [priceRange, setPriceRange] = useState<string>("all");
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const [avalibility, setAvalibility] = useState<string>("all");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 6;
 
   const filteredEquipments: Equipment[] = fetchedequipment.filter(
     (item: Equipment) => {
@@ -311,11 +96,38 @@ export default function EquipmentPage() {
       const availabilityMatch =
         avalibility === "all" || item.available === true;
 
-      return priceMatch && typeMatch && availabilityMatch;
+      const priceRangeMatch = (() => {
+        if (priceRange === "0-5000") return item.price <= 5000;
+        if (priceRange === "6000-10000")
+          return item.price > 5000 && item.price <= 10000;
+        if (priceRange === "10000-20000")
+          return item.price > 10000 && item.price <= 20000;
+        return true;
+      })();
+
+      return priceMatch && typeMatch && availabilityMatch && priceRangeMatch;
     },
   );
 
-  console.log("the filtered equipments are ", filteredEquipments) ;
+  console.log("the filtered equipments are ", filteredEquipments);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = filteredEquipments.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
+
+  const totalPages = Math.ceil(filteredEquipments.length / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [price, selectedTypes, avalibility, priceRange]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [currentPage]);
 
   const handleTypeChange = (type: string) => {
     setSelectedTypes((prev) =>
@@ -327,29 +139,11 @@ export default function EquipmentPage() {
     setPrice(20000);
     setSelectedTypes([]);
     setAvalibility("all");
-    console.log(avalibility, selectedTypes, price);
+    setPriceRange("all");
+    console.log(avalibility, selectedTypes, price, priceRange);
   };
   return (
     <Container>
-      {/* Navbar */}
-      {/* <Navbar>
-        <NavInner>
-          <Logo>Farm Connect</Logo>
-
-          <NavLinks>
-            <a>Home</a>
-            <ActiveLink>Equipment</ActiveLink>
-            <a>About Us</a>
-            <a>Contact Us</a>
-          </NavLinks>
-
-          <NavButtons>
-            <LoginBtn>Login</LoginBtn>
-            <SignupBtn>Signup</SignupBtn>
-          </NavButtons>
-        </NavInner>
-      </Navbar> */}
-
       {/* Main */}
       <Main>
         <Layout>
@@ -373,6 +167,56 @@ export default function EquipmentPage() {
                   <span>₹{price.toLocaleString()}</span>
                 </RangeText>
               </Section>
+
+              <div
+                style={{
+                  marginTop: "10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                  marginBottom: "20px",
+                }}
+              >
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "all"}
+                    onChange={() => setPriceRange("all")}
+                  />
+                  All Prices
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "0-5000"}
+                    onChange={() => setPriceRange("0-5000")}
+                  />
+                  ₹0 - ₹5,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "6000-10000"}
+                    onChange={() => setPriceRange("6000-10000")}
+                  />
+                  ₹6,000 - ₹10,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={priceRange === "10000-20000"}
+                    onChange={() => setPriceRange("10000-20000")}
+                  />
+                  ₹10,000 - ₹20,000
+                </Label>
+              </div>
 
               <Section>
                 <SectionTitle>Equipment Type</SectionTitle>
@@ -437,47 +281,39 @@ export default function EquipmentPage() {
           </Sidebar>
 
           {/* Content */}
-          <Content>
+          <Content
+            scrolled={isScrolled}
+            onScroll={(e) => {
+              const scrollTop = (e.target as HTMLDivElement).scrollTop;
+              setIsScrolled(scrollTop > 10);
+            }}
+          >
             <Title>Premium Equipment</Title>
             <Subtitle>
               Browse 42 machines available for rental in your region.
             </Subtitle>
 
-            {/* <Grid>
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((item) => (
-                <Card key={item}>
-                  <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" />
-
-                  <CardBody>
-                    <CardTitle>Equipment Name</CardTitle>
-                    <Desc>Details here</Desc>
-
-                    <CardFooter>
-                      <Price>₹3,500/day</Price>
-                      <Button>Rent Now</Button>
-                    </CardFooter>
-                  </CardBody>
-                </Card>
-              ))}
-            </Grid> */}
-
             <Grid>
-              {filteredEquipments.map((item: Equipment) => (
-                console.log("the item id is ", item._id) ,
-                <Card key={Number(item.id)}>
-                  {/* <CardImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57hfn4Ahq_W_1LqXo-yOLp7d6oLiiMK-7CFsMcmVb0S7SXUwVCKe1xanxe3aEWKr1psDV4ATLB2NQtyPloF8YEYhx8weIgnwuRsj58eg9oLrY5QhpTAdmfKHa4LK-RSdIEupWqHdXgMQ-mFKGil0bC1b5EwSbj1smxA03VSZDk4s3LZjqWdLxPHAyvlmxbuqM6CUfetMzs9hvb7MCdr6glsV73txnBCpoisunY7dhmTmY-5sgYmtI-T0k9gNFYiBku3M-dcaIqcw" /> */}
-                  <CardImage onClick={(e) => {
+              {currentItems.map(
+                (item: Equipment) => (
+                  console.log("the item id is ", item._id),
+                  (
+                    <Card key={Number(item._id)}>
+                      <CardImage
+                        onClick={(e) => {
                           e.stopPropagation();
                           router.push(`/equipments/detail?id=${item._id}`);
-                        }} src={String(item.images[0])} />
+                        }}
+                        src={String(item.images[0])}
+                      />
 
-                  <CardBody>
-                    <CardTitle>{String(item.name)}</CardTitle>
-                    <Desc>Type: {String(item.type)}</Desc>
+                      <CardBody>
+                        <CardTitle>{String(item.name)}</CardTitle>
+                        <Desc>Type: {String(item.type)}</Desc>
 
-                    <CardFooter>
-                      <Price>₹{Number(item.price)}/day</Price>
-                      {/* <Button
+                        <CardFooter>
+                          <Price>₹{Number(item.price)}/day</Price>
+                          {/* <Button
                         onClick={(e) => {
                           e.stopPropagation();
                           router.push(`/equipments/detail?id=${item._id}`);
@@ -485,21 +321,43 @@ export default function EquipmentPage() {
                       >
                         View Details
                       </Button> */}
-                    </CardFooter>
-                  </CardBody>
-                </Card>
-              ))}
+                        </CardFooter>
+                      </CardBody>
+                    </Card>
+                  )
+                ),
+              )}
             </Grid>
-
-            <Pagination>
-              <PageBtn>‹</PageBtn>
-              <ActivePage>1</ActivePage>
-              <PageBtn>2</PageBtn>
-              <PageBtn>3</PageBtn>
-              <PageBtn>›</PageBtn>
-            </Pagination>
           </Content>
         </Layout>
+        <Pagination>
+          {/* PREVIOUS BUTTON */}
+          <PageBtn
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            disabled={currentPage === 1}
+          >
+            ‹
+          </PageBtn>
+
+          {/* PAGE NUMBERS */}
+          {Array.from({ length: totalPages }, (_, i) =>
+            currentPage === i + 1 ? (
+              <ActivePage key={i}>{i + 1}</ActivePage>
+            ) : (
+              <PageBtn key={i} onClick={() => setCurrentPage(i + 1)}>
+                {i + 1}
+              </PageBtn>
+            ),
+          )}
+
+          {/* NEXT BUTTON */}
+          <PageBtn
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            disabled={currentPage === totalPages}
+          >
+            ›
+          </PageBtn>
+        </Pagination>
       </Main>
     </Container>
   );

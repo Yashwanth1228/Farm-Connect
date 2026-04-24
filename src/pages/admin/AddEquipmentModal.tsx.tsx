@@ -15,9 +15,8 @@ const Page = styled.div`
 
 const RightPanel = styled.div`
   width: 65%;
+  background: white;
   padding: 40px;
-  max-height: 90vh;
-  overflow-y: auto;
 `;
 
 /* ================= HEADER ================= */
@@ -113,66 +112,33 @@ const Wrapper = styled.div`
   min-height: 100vh;
   background: #fafaf5;
   display: flex;
-  justify-content: end;
-  align-items: center;
-  padding: 40px;
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(6px);
-
-  display: flex;
   justify-content: center;
   align-items: center;
-
-  z-index: 999;
-
-  animation: fadeIn 0.2s ease;
-
-  @keyframes fadeIn {
-    from { opacity: 0 }
-    to { opacity: 1 }
-  }
+  padding: 40px;
 `;
 
 const Modal = styled.div`
   width: 100%;
   max-width: 1100px;
   display: flex;
-
-  border-radius: 24px;
+  border-radius: 32px;
   overflow: hidden;
-
-  background: white;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-
-  animation: slideUp 0.25s ease;
-
-  @keyframes slideUp {
-    from {
-      transform: translateY(40px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 `;
 
 const LeftPanel = styled.div`
   width: 35%;
-  background: linear-gradient(135deg, #0d631b, #2e7d32);
+  background: #2e7d32;
   color: #cbffc2;
-
   padding: 40px;
-
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const PanelTitle = styled.h3`
@@ -204,32 +170,9 @@ const BlurCircle = styled.div`
   opacity: 0.4;
 `;
 
-const CloseBtn = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 20px;
-
-  background: white;
-  border: none;
-  border-radius: 50%;
-
-  width: 36px;
-  height: 36px;
-
-  cursor: pointer;
-  font-weight: bold;
-`;
-
 /* ================= PAGE ================= */
 
-
-type Props = {
-  onClose: () => void;
-};
-
-export default function AddEquipmentModal({ onClose }: Props) {
-
-
+export default function AdminPage() {
   const [files, setFiles] = useState<FileList | null>(null);
 
   const [name, setName] = useState("");
@@ -246,8 +189,6 @@ export default function AddEquipmentModal({ onClose }: Props) {
   const [Transmission, setTransmission] = useState("");
   const [HydraulicFlow, setHydraulicFlow] = useState("");
   const [weight, setWeight] = useState("");
-
-  
 
   const handleSubmit = async () => {
     
@@ -287,136 +228,11 @@ export default function AddEquipmentModal({ onClose }: Props) {
   return (
     <>
 
-   <Overlay onClick={onClose}>
 
-   <Modal onClick={(e) => e.stopPropagation()}>
-   <CloseBtn onClick={onClose}>✕</CloseBtn>
-      <LeftPanel>
-          <div>
-          <PanelTitle>Curate Your Fleet</PanelTitle>
-            <PanelText>
-            Ensure every technical detail is captured to provide a premium experience.
-          </PanelText>
-          </div>
-
-          <FooterText>Harvest Ledger © 2024</FooterText>
-        </LeftPanel>
-
-        <RightPanel>
-        <Title>Add Equipment</Title>
-        <Subtitle>Fill all details for listing equipment</Subtitle>
-
-        <Form>
-          <FullRow>
-            <Label>Equipment Name</Label>
-            <Input onChange={(e) => setName(e.target.value)} />
-          </FullRow>
-
-          <FullRow>
-            <Label>Upload Images</Label>
-            <UploadBox>
-              <input
-                type="file"
-                multiple
-                onChange={(e) => setFiles(e.target.files)}
-              />
-            </UploadBox>
-          </FullRow>
-
-          <Row>
-            <div>
-              <Label>Type</Label>
-              <Input onChange={(e) => setType(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Availability</Label>
-              <Select onChange={(e) => { setAvalability(e.target.value) }}>
-                <option value="">Select</option>
-                <option value="true">Available</option>
-                <option value="Maintenance">Maintenance</option>
-                <option value="Rented">Rented</option>
-              </Select>
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Quantity</Label>
-              <Input type="number" onChange={(e) => setQuantity(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Price</Label>
-              <Input type="number" onChange={(e) => setPrice(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Location</Label>
-              <Input onChange={(e) => setLocation(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Engine Power</Label>
-              <Input onChange={(e) => setEnginepower(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Wheels</Label>
-              <Input onChange={(e) => setWheels(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Fuel Type</Label>
-              <Input onChange={(e) => setFluelType(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Transmission</Label>
-              <Input onChange={(e) => setTransmission(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Hydraulic Flow</Label>
-              <Input onChange={(e) => setHydraulicFlow(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Weight</Label>
-              <Input onChange={(e) => setWeight(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Description</Label>
-              <Input onChange={(e) => setDescription(e.target.value)} />
-            </div>
-          </Row>
-
-          <Button onClick={handleSubmit}>
-            Save Equipment Profile
-          </Button>
-        </Form>
-      </RightPanel>
-
-      </Modal>
-
-
-
-    </Overlay>
-
-
-{/* <Wrapper>
+<Wrapper>
     <Modal>
 
-      LEFT DECORATIVE PANEL
+      {/* LEFT DECORATIVE PANEL */}
       <LeftPanel>
         <div>
           <PanelTitle>Curate Your Fleet</PanelTitle>
@@ -430,7 +246,7 @@ export default function AddEquipmentModal({ onClose }: Props) {
         <BlurCircle />
       </LeftPanel>
 
-      RIGHT FORM PANEL
+      {/* RIGHT FORM PANEL */}
       <RightPanel>
         <Title>Add Equipment</Title>
         <Subtitle>Fill all details for listing equipment</Subtitle>
@@ -536,7 +352,7 @@ export default function AddEquipmentModal({ onClose }: Props) {
       </RightPanel>
 
     </Modal>
-  </Wrapper> */}
+  </Wrapper>
 
 
 
