@@ -13,7 +13,18 @@ import { Toaster } from "react-hot-toast";
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const noNavbarRoutes = ["/login", "/signup", "/admin/add_equipment" , "/admin/adminlogin","/searchs","/search"];
+  const noNavbarRoutes = [
+    "/login",
+    "/signup",
+    "/admin/add_equipment",
+    "/admin/adminlogin",
+    "/searchs",
+    "/search",
+    "/admin/dashboard",
+    "/admin/user",
+    "/admin/equipment",
+    "/admin/bookings",
+  ];
   const showNavbar = !noNavbarRoutes.includes(router.pathname);
 
   const noFooterRoutes = [
@@ -23,7 +34,11 @@ export default function App({ Component, pageProps }: AppProps) {
     "/admin/add_equipment",
     "/admin/adminlogin",
     "/searchs",
-    "/search"
+    "/search",
+    "/admin/dashboard",
+    "/admin/user",
+    "/admin/equipment",
+    "/admin/bookings",
   ];
   const showFooter = !noFooterRoutes.includes(router.pathname);
 
@@ -34,15 +49,13 @@ export default function App({ Component, pageProps }: AppProps) {
     "/admin/equipment",
     "/admin/bookings",
   ];
-  
+
   const showSidebar = sidebarRoutes.includes(router.pathname);
 
-  
   return (
     <>
       <Provider store={store}>
         <AppContextProvider>
-          
           {/* <AdminContextProvider> */}
 
           {showNavbar && <Navbar />}
@@ -51,30 +64,27 @@ export default function App({ Component, pageProps }: AppProps) {
 
           <Component {...pageProps} />
           <ToastContainer
-  position="top-right"
-  autoClose={2500}
-  newestOnTop
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="colored"
-  toastStyle={{
-    borderRadius: "10px",
-    fontSize: "14px",
-    padding: "12px 14px",
-    fontWeight: 500,
-    boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-  }}
-/>
-          
+            position="top-right"
+            autoClose={2500}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            toastStyle={{
+              borderRadius: "10px",
+              fontSize: "14px",
+              padding: "12px 14px",
+              fontWeight: 500,
+              boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+            }}
+          />
 
           {showFooter && <Footer />}
 
           {/* </AdminContextProvider> */}
-
-          
         </AppContextProvider>
         <Toaster position="top-center" reverseOrder={false} />
       </Provider>
