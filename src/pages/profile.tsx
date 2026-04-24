@@ -269,7 +269,6 @@ export default function ProfilePage() {
                     <Btn onClick={() => router.push(`/bookings/${item._id}`)}>
                       Details
                     </Btn>
-                    <Btn>Contact Owner</Btn>
 
                     {/* ✅ FIXED HERE */}
                     <Btn
