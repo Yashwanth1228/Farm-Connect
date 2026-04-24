@@ -48,17 +48,13 @@ export default function ProfilePage() {
   // FETCH BOOKINGS
   // =========================
   useEffect(() => {
-    if (!user?._id) return;
+      
 
     const fetchBookings = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch(`/api/bookings/my`, {
-          headers: {
-            "x-user-id": user._id,
-          },
-        });
+        const res = await fetch(`/api/bookings/my`,);
 
         const data = await res.json();
         setBookings(data.data || []);

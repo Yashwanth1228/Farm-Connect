@@ -8,24 +8,30 @@ import jwt from "jsonwebtoken";
 export default async function GET(req: NextApiRequest, res: NextApiResponse) {
   await connectDB();
 
-  try {
-    const token = req.cookies.token; // ✅ get token from cookies
+  try{
 
-    if (!token) {
-      return res.json({ success: false, message: "No token" });
-    }
+      const userId = req.headers['x-user-id'] as string | undefined;
 
-    const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
+      console.log("this is userId from middleware", userId);
 
-    const userId = decoded.id;
+      if (!userId) {
+          return res.json({ success: false, message: "user ID is missing" });
+      }
 
-    console.log("User ID from token:", userId);
+      const user = await Usermodel.findById(userId);
 
-    const user = await Usermodel.findById(userId);
+      console.log("user name found of id ", user.name)
 
-    if (!user) {
-      return res.json({ success: false, message: "user not found" });
-    }
+      if (!user) {
+          return res.json({ success: false, message: "user not found" });
+      }
+
+      if (user.role === "admin") {
+          return res.json({
+              success: false,
+              message: "Access denied, Admin only"
+          });
+      }
 
     res.json({
       success: true,

@@ -15,10 +15,10 @@ const Page = styled.div`
 
 const RightPanel = styled.div`
   width: 65%;
-  background: white;
   padding: 40px;
+  max-height: 90vh;
+  overflow-y: auto;
 `;
-
 /* ================= HEADER ================= */
 
 const Title = styled.h2`
@@ -117,28 +117,61 @@ const Wrapper = styled.div`
   padding: 40px;
 `;
 
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 100;
+`;
+
 const Modal = styled.div`
   width: 100%;
   max-width: 1100px;
   display: flex;
-  border-radius: 32px;
+
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+
+  background: white;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
 `;
 
 const LeftPanel = styled.div`
   width: 35%;
-  background: #2e7d32;
+  background: linear-gradient(135deg, #0d631b, #2e7d32);
   color: #cbffc2;
+
   padding: 40px;
-  position: relative;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`;
 
-  @media (max-width: 768px) {
-    display: none;
-  }
+const CloseBtn = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: white;
+  border: none;
+  border-radius: 50%;
+
+  width: 36px;
+  height: 36px;
+
+  cursor: pointer;
+  font-weight: bold;
 `;
 
 const PanelTitle = styled.h3`
@@ -172,7 +205,7 @@ const BlurCircle = styled.div`
 
 /* ================= PAGE ================= */
 
-export default function AdminPage() {
+export default function AddEquipmentModal({ onClose }: any) {
   const [files, setFiles] = useState<FileList | null>(null);
 
   const [name, setName] = useState("");
@@ -229,9 +262,10 @@ export default function AdminPage() {
     <>
 
 
-<Wrapper>
+<Overlay>
     <Modal>
 
+    <CloseBtn onClick={onClose}>✕</CloseBtn>
       {/* LEFT DECORATIVE PANEL */}
       <LeftPanel>
         <div>
@@ -352,7 +386,9 @@ export default function AdminPage() {
       </RightPanel>
 
     </Modal>
-  </Wrapper>
+  </Overlay>
+
+  
 
 
 
