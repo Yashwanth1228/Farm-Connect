@@ -3,8 +3,12 @@ import PDFDocument from "pdfkit";
 import Bookingmodel from "@/models/Bookingmodel";
 import Usermodel from "@/models/Usermodel";
 import dbConnect from "@/lib/db";
+import path from "path";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   await dbConnect();
 
   if (req.method !== "GET") {
@@ -14,9 +18,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { bookingId } = req.query;
 
-    // =========================
-    // FETCH DATA
-    // =========================
     const booking = await Bookingmodel.findById(bookingId);
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
@@ -27,20 +28,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // =========================
     // CALCULATIONS
     // =========================
-    const subtotal = booking.price * booking.days;
-    const tax = Math.round(subtotal * 0.18); // 18% GST
-    const total = subtotal + tax;
+    const subtotal = booking.subtotal;
+    const tax = booking.tax;
+    const total = booking.totalprice;
 
     const invoiceNumber = `FC-${new Date().getFullYear()}-${booking._id
       .toString()
       .slice(-5)}`;
 
-    const fileName = `Invoice_FarmConnect_${invoiceNumber}.pdf`;
+    const fileName = `Invoice_${invoiceNumber}.pdf`;
 
     // =========================
     // PDF SETUP
     // =========================
-    const doc = new PDFDocument({ margin: 50 });
+    const doc = new PDFDocument({ size: "A4", margin: 40 });
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
@@ -48,151 +49,132 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     doc.pipe(res);
 
     // =========================
-    // HEADER (LOGO + BRAND)
+    // HEADER
     // =========================
-    // 👉 If you have logo, use:
-    // doc.image("public/logo.png", 50, 45, { width: 120 });
+    const logoPath = path.join(process.cwd(), "public", "images", "logos.png");
+    try {
+      doc.image(logoPath, 40, 30, { width: 120 });
+    } catch (err) {
+      console.log("Logo not found");
+    }
 
-    doc
-      .fontSize(26)
-      .fillColor("#1b5e20")
-      .text("Farm Connect", 50, 50);
+    // doc
+    //   .fontSize(10)
+    //   .fillColor("#666")
+    //   .text("Equipment Rental Platform", 40, 90);
+
+    doc.fontSize(16).fillColor("#000").text("INVOICE", 400, 40);
 
     doc
       .fontSize(10)
-      .fillColor("#666")
-      .text("Equipment Rental Platform", 50, 80);
-
-    doc
-      .fontSize(18)
-      .fillColor("#000")
-      .text("INVOICE", 400, 50);
-
-    doc
-      .fontSize(10)
-      .text(`Invoice No: ${invoiceNumber}`, 400, 80)
-      .text(`Date: ${new Date().toDateString()}`, 400, 95);
-
-    doc.moveDown(3);
+      .text(`Invoice: ${invoiceNumber}`, 400, 65)
+      .text(`Date: ${new Date().toDateString()}`, 400, 80);
 
     // =========================
-    // BILL TO SECTION
+    // USER INFO
     // =========================
-    doc
-      .fontSize(12)
-      .fillColor("#000")
-      .text("Bill To:", 50, doc.y);
+    let y = 120;
 
-    doc.moveDown(0.5);
+    doc.fontSize(12).fillColor("#000").text("Bill To:", 40, y);
+
+    y += 20;
 
     doc
       .fontSize(11)
-      .text(user?.name || "N/A")
-      .text(user?.email || "N/A");
-
-    doc.moveDown(2);
+      .text(user?.name || "N/A", 40, y)
+      .text(user?.email || "N/A", 40, y + 15);
 
     // =========================
-    // BOOKING INFO BOX
+    // BOOKING BOX
     // =========================
-    doc
-      .rect(50, doc.y, 500, 80)
-      .stroke("#cccccc");
+    y += 50;
+
+    doc.rect(40, y, 520, 60).stroke("#ddd");
 
     doc
       .fontSize(11)
-      .text(`Equipment: ${booking.name}`, 60, doc.y + 10)
+      .text(`Equipment: ${booking.name}`, 50, y + 10)
       .text(
         `Duration: ${new Date(booking.start_date).toDateString()} - ${new Date(
-          booking.end_date
+          booking.end_date,
         ).toDateString()}`,
-        60,
-        doc.y + 25
+        50,
+        y + 25,
       )
-      .text(`Total Days: ${booking.days}`, 60, doc.y + 40);
-
-    doc.moveDown(6);
+      .text(`Days: ${booking.days}`, 50, y + 40);
 
     // =========================
-    // TABLE HEADER
+    // TABLE
     // =========================
-    const tableTop = doc.y;
+    y += 90;
 
-    doc
-      .rect(50, tableTop, 500, 30)
-      .fill("#e8f5e9");
+    doc.rect(40, y, 520, 25).fill("#e8f5e9");
 
     doc
       .fillColor("#000")
-      .fontSize(12)
-      .text("Description", 60, tableTop + 8)
-      .text("Rate", 300, tableTop + 8)
-      .text("Days", 380, tableTop + 8)
-      .text("Amount", 450, tableTop + 8);
+      .fontSize(11)
+      .text("Description", 50, y + 7)
+      .text("Rate", 300, y + 7)
+      .text("Days", 370, y + 7)
+      .text("Amount", 450, y + 7);
 
-    // =========================
-    // TABLE ROW
-    // =========================
-    const rowY = tableTop + 35;
+    y += 30;
 
-    doc
-      .rect(50, rowY, 500, 30)
-      .stroke("#dddddd");
+    doc.rect(40, y, 520, 25).stroke("#ddd");
 
     doc
       .fontSize(11)
-      .text(booking.name, 60, rowY + 8)
-      .text(`₹${booking.price}`, 300, rowY + 8)
-      .text(`${booking.days}`, 380, rowY + 8)
-      .text(`₹${subtotal}`, 450, rowY + 8);
-
-    doc.moveDown(4);
+      .text(booking.name, 50, y + 7)
+      .text(`₹${booking.price}`, 300, y + 7)
+      .text(`${booking.days}`, 370, y + 7)
+      .text(`₹${subtotal}`, 450, y + 7);
 
     // =========================
     // TOTAL SECTION
     // =========================
-    const summaryX = 350;
+    y += 60;
 
     doc
       .fontSize(11)
-      .text("Subtotal:", summaryX, doc.y)
-      .text(`₹${subtotal}`, 450, doc.y, { align: "right" });
+      .fillColor("#555")
+      .text("Subtotal:", 350, y)
+      .text(`₹${subtotal}`, 500, y, { align: "right" });
 
     doc
-      .text("GST (18%):", summaryX, doc.y + 15)
-      .text(`₹${tax}`, 450, doc.y + 15, { align: "right" });
+      .text("GST (8%):", 350, y + 18)
+      .text(`₹${tax}`, 500, y + 18, { align: "right" });
 
+    // Divider line
     doc
-      .moveTo(summaryX, doc.y + 35)
-      .lineTo(550, doc.y + 35)
+      .moveTo(350, y + 38)
+      .lineTo(560, y + 38)
+      .strokeColor("#cccccc")
       .stroke();
 
+    // TOTAL PAID (Highlight)
     doc
-      .fontSize(14)
+      .fontSize(15)
       .fillColor("#1b5e20")
-      .text("Total:", summaryX, doc.y + 45)
-      .text(`₹${total}`, 450, doc.y + 45, { align: "right" });
-
-    doc.moveDown(4);
-
+      .text("Total Paid:", 350, y + 50)
+      .text(`₹${total}`, 500, y + 50, { align: "right" });
     // =========================
     // FOOTER
     // =========================
+    y += 90;
+
     doc
-      .fontSize(10)
+      .fontSize(9)
       .fillColor("#777")
       .text(
         "This is a system generated invoice. No signature required.",
-        50,
-        doc.y,
-        { align: "center" }
+        40,
+        y,
+        { align: "center" },
       );
 
-    doc
-      .moveDown()
-      .text("Thank you for choosing Farm Connect 🌱", {
-        align: "center",
-      });
+    doc.moveDown().text("Thank you for choosing Farm Connect ", {
+      align: "center",
+    });
 
     doc.end();
   } catch (error: any) {

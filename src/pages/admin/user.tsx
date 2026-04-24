@@ -8,14 +8,15 @@ import StatsPanel from "@/components/users/StatsPanel";
 
 import styled from "@emotion/styled";
 
-import {
-  Page,
-  Main,
-  Content,
-  Title
-} from "@/styles/userStyles";
+import { Page, Main, Content, Title } from "@/styles/userStyles";
 import { useGetUsersQuery } from "@/store/api/apiSlice";
-import { CenterBox, Spinner, StatusCard, StatusText, StatusTitle } from "@/styles/admin/equipment";
+import {
+  CenterBox,
+  Spinner,
+  StatusCard,
+  StatusText,
+  StatusTitle,
+} from "@/styles/admin/equipment";
 
 /* GRID */
 const Grid = styled.div`
@@ -32,10 +33,8 @@ const btnStyle = {
   borderRadius: "8px",
   border: "none",
   background: "#eee",
-  cursor: "pointer"
+  cursor: "pointer",
 };
-
-
 
 // /* ✅ USERS DATA WITH IMAGES */
 // const users = [
@@ -53,12 +52,9 @@ const btnStyle = {
 const ITEMS_PER_PAGE = 4;
 
 const UserPage: NextPage = () => {
+  const { data, isLoading, error } = useGetUsersQuery();
 
-  const { data , isLoading , error } = useGetUsersQuery();
-
-  console.log(" user data" , data)
-
-  
+  console.log(" user data", data);
 
   const users = data?.data || [];
 
@@ -93,9 +89,9 @@ const UserPage: NextPage = () => {
 
           <Grid>
             {/* LEFT SIDE */}
-            <div style={{marginTop : "20px"}}>
+            <div style={{ marginTop: "20px" }}>
               {/* USERS LIST */}
-              {currentUsers?.map((user : any , index : any) => (
+              {currentUsers?.map((user: any, index: any) => (
                 <UserCard
                   key={index}
                   name={user.name}
@@ -110,7 +106,7 @@ const UserPage: NextPage = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  marginTop: "25px"
+                  marginTop: "25px",
                 }}
               >
                 <p style={{ fontSize: "13px", color: "#777" }}>
@@ -120,7 +116,6 @@ const UserPage: NextPage = () => {
                 </p>
 
                 <div style={{ display: "flex", gap: "8px" }}>
-                  
                   {/* PREVIOUS */}
                   <button
                     style={btnStyle}
@@ -137,7 +132,7 @@ const UserPage: NextPage = () => {
                       style={{
                         ...btnStyle,
                         background: page === i + 1 ? "#0d631b" : "#eee",
-                        color: page === i + 1 ? "#fff" : "#000"
+                        color: page === i + 1 ? "#fff" : "#000",
                       }}
                       onClick={() => setPage(i + 1)}
                     >
@@ -153,7 +148,6 @@ const UserPage: NextPage = () => {
                   >
                     ›
                   </button>
-
                 </div>
               </div>
             </div>

@@ -146,7 +146,9 @@ export default function detail() {
   const isInvalid = !form.start_date || !form.end_date || days <= 0;
   const today = new Date().toISOString().split("T")[0];
 
-  const totalPrice = days * (product?.price || 0);
+  const subtotal = days * product.price;
+  const tax = subtotal * 0.08;
+  const totalPrice = subtotal + tax;
 
   const handlesubmit = async () => {
     const toastId = toast.loading("Processing your request...");
@@ -234,33 +236,43 @@ export default function detail() {
       return;
     }
 
-    const userId = user._id; // safe now ✅
-
     if (!totalPrice || totalPrice <= 0) {
       toast.error("Invalid amount");
       return;
     }
 
+    const userId = user._id;
+
+    // =========================
+    // ✅ STEP 1: CALCULATE TAX
+    // =========================
+    const subtotal = totalPrice;
+    const tax = subtotal * 0.08; // 8% GST
+    const finalAmount = subtotal + tax;
+
     const toastId = toast.loading("Processing payment...");
 
     try {
-      // 1️⃣ Create order from backend
+      // =========================
+      // ✅ STEP 2: CREATE ORDER (UPDATED AMOUNT)
+      // =========================
       const res = await fetch("/api/payment/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: totalPrice }),
+        body: JSON.stringify({ amount: finalAmount }), // ✅ FIXED
       });
 
-      // ✅ IMPORTANT CHECK
       if (!res.ok) {
         throw new Error("Failed to create order");
       }
 
       const order = await res.json();
 
-      // 2️⃣ Razorpay options
+      // =========================
+      // RAZORPAY OPTIONS
+      // =========================
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -277,11 +289,14 @@ export default function detail() {
         },
 
         prefill: {
-          name: "Test User",
-          email: "test@farmconnect.com",
+          name: user?.name || "User",
+          email: user?.email || "test@farmconnect.com",
           contact: "9999999999",
         },
 
+        // =========================
+        // ✅ STEP 3: SUCCESS HANDLER
+        // =========================
         handler: async function (response: any) {
           try {
             const verifyRes = await fetch("/api/payment/verify", {
@@ -297,9 +312,9 @@ export default function detail() {
             if (data.success) {
               toast.success("Payment successful ✅", { id: toastId });
 
-              console.log("USING STORED USER ID:", userId);
-
-              // ✅ STEP 3: SAVE BOOKING HERE
+              // =========================
+              // ✅ STEP 4: SAVE BOOKING WITH TAX
+              // =========================
               const bookingData = {
                 name: product?.name,
                 images: product?.images[0],
@@ -307,14 +322,17 @@ export default function detail() {
                 end_date: form.end_date,
                 price: product?.price,
                 days: days,
-                totalprice: totalPrice,
+
+                subtotal, // ✅ NEW
+                tax, // ✅ NEW
+                totalprice: finalAmount, // ✅ UPDATED
               };
 
               const bookingRes = await fetch("/api/bookings/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  "x-user-id": userId, // ✅ THIS IS THE KEY FIX
+                  "x-user-id": userId,
                 },
                 body: JSON.stringify(bookingData),
               });
@@ -327,13 +345,16 @@ export default function detail() {
                 console.error("Booking failed:", bookingResult);
               }
             } else {
-              toast.error("Payment verification failed ❌", { id: toastId });
+              toast.error("Payment verification failed ❌", {
+                id: toastId,
+              });
             }
           } catch (err) {
             console.error(err);
             toast.error("Verification error ⚠️", { id: toastId });
           }
         },
+
         modal: {
           ondismiss: function () {
             toast.error("Payment cancelled ❌", { id: toastId });
@@ -345,7 +366,6 @@ export default function detail() {
         },
       };
 
-      // 3️⃣ Open Razorpay
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
     } catch (error) {

@@ -35,6 +35,8 @@ export default async function handler(
       price,
       days,
       totalprice,
+      tax,
+  subtotal,
     } = req.body;
 
     // ✅ FIX: Set proper start & end dates
@@ -51,6 +53,8 @@ export default async function handler(
       end_date: end,
       price,
       days,
+      subtotal,
+      tax,
       totalprice,
     });
 

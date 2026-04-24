@@ -108,8 +108,20 @@ export default function BookingDetails() {
             </Row>
 
             <Row>
-              <span>Total</span>
-              <b>₹{booking.totalprice}</b>
+              <span>Subtotal</span>
+              <b>₹{booking.subtotal}</b>
+            </Row>
+
+            <Row>
+              <span>GST (8%)</span>
+              <b>₹{booking.tax}</b>
+            </Row>
+
+            <Row style={{ borderTop: "1px solid #eee", paddingTop: "10px" }}>
+              <span>
+                <strong>Total Paid</strong>
+              </span>
+              <b style={{ color: "#1b5e20" }}>₹{booking.totalprice}</b>
             </Row>
 
             {/* ACTIONS */}
@@ -126,12 +138,10 @@ export default function BookingDetails() {
               Download Invoice
             </PrimaryBtn>
 
-            <SecondaryBtn>Contact Owner</SecondaryBtn>
-
             {status === "Completed" ? (
               <DisabledBtn disabled>Cannot Cancel</DisabledBtn>
             ) : (
-              <PrimaryBtn
+              <SecondaryBtn
                 onClick={async () => {
                   const confirmCancel = confirm("Cancel booking?");
                   if (!confirmCancel) return;
@@ -154,7 +164,7 @@ export default function BookingDetails() {
                 }}
               >
                 Cancel Booking
-              </PrimaryBtn>
+              </SecondaryBtn>
             )}
           </Card>
         </Grid>
