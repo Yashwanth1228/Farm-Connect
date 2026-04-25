@@ -1,5 +1,5 @@
 import Avatar from "@/components/Avatar";
-import { useGetBookingsQuery } from "@/store/api/apiSlice";
+import { useGetBookingsQuery, useUpdatestatusMutation } from "@/store/api/apiSlice";
 import { Icon } from "@/styles/about";
 import {
     PageWrapper,
@@ -48,19 +48,22 @@ import {
   } from "@/styles/admin/bookings";
 import { CenterBox, Spinner, StatusCard, StatusText, StatusTitle } from "@/styles/admin/equipment";
 import { GradientOverlay, SubText } from "@/styles/home";
+import axios from "axios";
+import { toast } from "react-toastify";
   
   /* ================= PAGE ================= */
   
   export default function BookingsPage() {
 
-    const { data , isLoading , error } = useGetBookingsQuery(); 
+    const { data , isLoading , error , refetch } = useGetBookingsQuery(); 
+    const [ updatestatus ] = useUpdatestatusMutation();
 
     if (isLoading) {
       return (
         <CenterBox>
           <StatusCard>
             <Spinner />
-            <StatusTitle>Loading Equipment...</StatusTitle>
+            <StatusTitle>Loading Bookings Data...</StatusTitle>
             <StatusText>Please wait while we fetch your data</StatusText>
           </StatusCard>
         </CenterBox>
@@ -85,6 +88,22 @@ const totalRevenue = bookings.reduce(
   0
 );
 
+const handleStatusChange = async (id: string, status: string) => {
+  try {
+    // await axios.put(`/api/bookings/${id}`, { status });
+    const response = await updatestatus({ id, status }).unwrap();
+
+    if(response) {
+      toast.success(`Booking ${status}`);
+    }
+
+    // refetch();
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to update status");
+  }
+};
 
     return (
       <PageWrapper>
@@ -235,13 +254,24 @@ const totalRevenue = bookings.reduce(
   </SubText>
 </Td>
            <Td>
-             <Status type="pending">{item.status}</Status>
+           <Status type={item.status}>{item.status}</Status>
            </Td>
  
            <TdRight>
              <ActionGroup>
-               <ActionButton variant="primary">Approve</ActionButton>
-               <ActionButton variant="danger">Reject</ActionButton>
+             <ActionButton
+  variant="primary"
+  onClick={() => handleStatusChange(item._id, "active")}
+>
+  Approve
+</ActionButton>
+
+<ActionButton
+  variant="danger"
+  onClick={() => handleStatusChange(item._id, "completed")}
+>
+  Reject
+</ActionButton>
              </ActionGroup>
            </TdRight>
           </Tr>

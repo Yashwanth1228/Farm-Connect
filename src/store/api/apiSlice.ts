@@ -45,7 +45,7 @@ export const apiSlice = createApi({
       // => `/equipment/delete/${id}`,
       query: (id) => ({
         url: `/equipment/delete/${id}`,
-        method: 'POST',
+        method: 'delete',
       }),
       invalidatesTags: ['equipment'],
     }),
@@ -59,6 +59,15 @@ export const apiSlice = createApi({
     getUsers: builder.query<any,void>({
       query: () => '/users/all',
       providesTags: ['user'],
+    }),
+
+    updatestatus: builder.mutation<object, any>({
+      query: ({ id, status }) => ({
+        url: `/bookings/${id}`,
+        method: "PUT",
+        body: { status },
+      }),
+      invalidatesTags: ['booking'],
     }),
     
     
@@ -74,4 +83,5 @@ export const {
   useDeleteEquipmentsMutation,
   useGetBookingsQuery,
   useGetUsersQuery,
+  useUpdatestatusMutation,
 } = apiSlice
