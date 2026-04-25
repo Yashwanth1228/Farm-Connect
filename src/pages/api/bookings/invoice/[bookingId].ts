@@ -28,9 +28,9 @@ export default async function handler(
     // =========================
     // CALCULATIONS
     // =========================
-    const subtotal = booking.subtotal;
-    const tax = booking.tax;
-    const total = booking.totalprice;
+    const subtotal = Number(booking.subtotal || 0);
+    const tax = Number(booking.tax || 0);
+    const total = Number(booking.totalprice || 0);
 
     const invoiceNumber = `FC-${new Date().getFullYear()}-${booking._id
       .toString()
@@ -138,11 +138,11 @@ export default async function handler(
       .fontSize(11)
       .fillColor("#555")
       .text("Subtotal:", 350, y)
-      .text(`₹${subtotal}`, 500, y, { align: "right" });
+      .text(`₹${subtotal}`, 520, y, { align: "right" });
 
     doc
       .text("GST (8%):", 350, y + 18)
-      .text(`₹${tax}`, 500, y + 18, { align: "right" });
+      .text(`₹${tax.toFixed(2)}`, 520, y + 18, { align: "right" });
 
     // Divider line
     doc
@@ -156,11 +156,13 @@ export default async function handler(
       .fontSize(15)
       .fillColor("#1b5e20")
       .text("Total Paid:", 350, y + 50)
-      .text(`₹${total}`, 500, y + 50, { align: "right" });
+      .text(`₹${total.toFixed(2)}`, 520, y + 50, { align: "right" });
     // =========================
     // FOOTER
     // =========================
     y += 90;
+
+    const footerY = doc.page.height - 80;
 
     doc
       .fontSize(9)
@@ -168,13 +170,17 @@ export default async function handler(
       .text(
         "This is a system generated invoice. No signature required.",
         40,
-        y,
-        { align: "center" },
+        footerY,
+        { align: "center", width: 520 },
       );
 
-    doc.moveDown().text("Thank you for choosing Farm Connect ", {
-      align: "center",
-    });
+    doc
+      .fontSize(10)
+      .fillColor("#1b5e20")
+      .text("Thank you for choosing Farm Connect 🌱", 40, footerY + 15, {
+        align: "center",
+        width: 520,
+      });
 
     doc.end();
   } catch (error: any) {

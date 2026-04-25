@@ -48,13 +48,11 @@ export default function ProfilePage() {
   // FETCH BOOKINGS
   // =========================
   useEffect(() => {
-      
-
     const fetchBookings = async () => {
       try {
         setLoading(true);
 
-        const res = await fetch(`/api/bookings/my`,);
+        const res = await fetch(`/api/bookings/my`);
 
         const data = await res.json();
         setBookings(data.data || []);
@@ -257,7 +255,7 @@ export default function ProfilePage() {
 
                     <Price>
                       <small>Total</small>
-                      <h3>{item.totalprice}</h3>
+                      <h3>{Number(item.totalprice).toFixed(2)}</h3>
                     </Price>
                   </Top>
 
