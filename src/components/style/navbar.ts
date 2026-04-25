@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
 
-
 export const Header = styled.header`
   position: fixed;
   top: 0;
@@ -20,22 +19,16 @@ export const Container = styled.div`
   max-width: 1200px;
   margin: auto;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
   height: 80px;
   padding: 0 20px;
 `;
 
-// const Logo = styled.div`
-//   font-size: 24px;
-//   font-weight: 800;
-//   color: #0d631b;
-// `;
-
 export const Nav = styled.nav`
   display: flex;
   gap: 30px;
-  margin-left: 190px;
+  margin-left: 80px;
 `;
 
 export const NavLink = styled(Link)`
@@ -43,85 +36,62 @@ export const NavLink = styled(Link)`
   color: #555;
   cursor: pointer;
   font-size: 22px;
-  margin-top: 5px;
-
-  &:active {
-    color: #0d631b;
-    border-bottom: 2px solid #0d631b;
-  }
 
   &:hover {
     color: #0d631b;
   }
 `;
 
-export const ButtonGroup = styled.div`
+export const SearchContainer = styled.div`
   display: flex;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
+  background: #f4f4ef;
+  padding: 6px 12px;
+  border-radius: 30px;
+  margin-left: 60px;
 `;
 
-// const Login = styled.button`
-//   padding: 8px 16px;
-//   background: transparent;
-//   border-radius: 6px;
-//   cursor: pointer;
-// `;
-
-// const Signup = styled.button`
-//   padding: 10px 18px;
-//   background: #0d631b;
-//   color: white;
-//   border-radius: 30px;
-//   font-weight: bold;
-// `;
-
 export const SearchInput = styled.input`
-  width: 170px;
-  padding: 8px 12px;
   border: 1px solid #ccc;
-  margin-left: 10px;
   border-radius: 30px;
-  font-size: 16px;
-
-  &:focus {
-    outline-color: #0d631b;
-  }
+  padding: 8px 12px;
+  outline: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
 `;
 
 export const SearchIcon = styled(FaSearch)`
   color: #555;
-  font-size: 18px;
+  font-size: 16px;
 `;
 
-export const SearchContainer = styled.div`
+export const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 150px;
+  gap: 15px;
 `;
 
 export const Logout = styled.button`
-  padding: 8px 16px;
+  padding: 8px 14px;
   background: transparent;
-
-  cursor: pointer;
   border: none;
+  cursor: pointer;
+  font-size: 14px;
+
   &:hover {
     color: #0d631b;
   }
 `;
 
 export const Profileicon = styled.img`
-  width: 50px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #0d631b;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 25px;
-  font-weight: bold;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 export const CartIcon = styled.div`
