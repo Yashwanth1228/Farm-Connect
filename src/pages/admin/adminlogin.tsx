@@ -35,8 +35,10 @@ export default function Login() {
 
       if (res.data.success) {
         alert("login successfull");
+
+        router.push("/admin/dashboard");
+        
         setTimeout(() => {
-          router.push("/admin/dashboard");
           router.refresh();
         }, 1000);
       } else {
