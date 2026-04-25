@@ -18,7 +18,6 @@ import {
   SubText,
   Wrapper,
 } from "./style/adminlogin";
-import { toast } from "react-hot-toast";
 
 /* MAIN LAYOUT */
 
@@ -48,14 +47,17 @@ export default function Login() {
 
       if (res.data.success) {
         alert("login successfull");
+
+        router.push("/admin/dashboard");
+
         setTimeout(() => {
           router.refresh();
         }, 1000);
       } else {
-        toast.error("would not login ");
+        alert("would not login ");
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      alert("Something went wrong");
     }
   };
 
