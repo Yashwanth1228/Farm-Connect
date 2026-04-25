@@ -211,8 +211,8 @@ const totalRevenue = bookings.reduce(
             <Tr>
            <Td>
              <UserCell>
-               <Avatar bg="#fed7aa">{item.name?.[0]}</Avatar>
-               <UserName>user name</UserName>
+               <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
+               <UserName>{item.username}</UserName>
              </UserCell>
            </Td>
  
@@ -235,7 +235,7 @@ const totalRevenue = bookings.reduce(
   </SubText>
 </Td>
            <Td>
-             <Status type="pending">Pending</Status>
+             <Status type="pending">{item.status}</Status>
            </Td>
  
            <TdRight>

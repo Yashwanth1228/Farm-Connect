@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "@emotion/styled";
-import { toast } from "react-toastify";
 
 /* ================= LAYOUT ================= */
 
@@ -204,405 +203,269 @@ const BlurCircle = styled.div`
   opacity: 0.4;
 `;
 
-/* ================= PAGE ================= */
 
-export default function AddEquipmentModal({ onClose }: any) {
+/* ================= PAGE ================= */
+type Props = {
+  onClose: () => void;
+  equipment?: any;
+};
+
+export default function AddEquipmentModal({ onClose, equipment }: Props) {
+
   const [files, setFiles] = useState<FileList | null>(null);
 
-  const [name, setName] = useState("");
-  const [Type, setType] = useState("");
-  const [price, setPrice] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [Availability, setAvalability] = useState("");
-  const [Quantity, setQuantity] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    type: "",
+    price: "",
+    quantity: "",
+    location: "",
+    description: "",
+    availability: "",
+    enginepower: "",
+    wheels: "",
+    FuelType: "",
+    transmission: "",
+    hydraulicFlow: "",
+    weight: "",
+    images: [] as string[],
+  });
 
-  const [enginepower, setEnginepower] = useState("");
-  const [Wheels, setWheels] = useState("");
-  const [FuelType, setFluelType] = useState("");
-  const [Transmission, setTransmission] = useState("");
-  const [HydraulicFlow, setHydraulicFlow] = useState("");
-  const [weight, setWeight] = useState("");
+  const isEdit = !!equipment;
 
-  const handleSubmit = async () => {
-    
-    const formData = new FormData();
-
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
-      }
+  /* ✅ PREFILL DATA (EDIT MODE) */
+  useEffect(() => {
+    if (equipment) {
+      console.log("equipment data in the edit equipment model " , equipment);
+      setFormData({
+        name: equipment.name || "",
+        type: equipment.type || "",
+        price: equipment.price || "",
+        quantity: equipment.quantity || "",
+        location: equipment.location || "",
+        description: equipment.description || "",
+        availability: equipment.available ? "true" : "false",
+        enginepower: equipment.enginepower || "",
+        wheels: equipment.wheels || "",
+        FuelType: equipment.fuel_type || "",
+        transmission: equipment.Transmission || "",
+        hydraulicFlow: equipment.Hydraulic_Flow || "",
+        weight: equipment.weight || "",
+        images: equipment.images || [],
+      });
     }
+  }, [equipment]);
 
-    const uploadRes = await axios.post("/api/admin/upload", formData);
-    const imageUrls = uploadRes.data.urls;
+  /* ✅ SUBMIT HANDLER */
+  const handleSubmit = async () => {
+    try {
+      let imageUrls = formData.images;
 
-    console.log("the avalaibility" , Availability)
+      /* ✅ Upload images if new */
+      if (files) {
+        const fd = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          fd.append("images", files[i]);
+        }
 
-    await axios.post("/api/admin/add-equipment", {
-      name,
-      Type,
-      price,
-      location,
-      Availability,
-      Quantity,
-      description,
-      enginepower,
-      Wheels,
-      FuelType,
-      Transmission,
-      HydraulicFlow,
-      weight,
-      images: imageUrls,
-    });
+        const uploadRes = await axios.post("/api/admin/upload", fd);
+        imageUrls = uploadRes.data.urls;
+      }
 
-    toast.success("Uploaded successfully");
+      const payload = {
+        ...formData,
+        images: imageUrls,
+      };
+      
+      if (isEdit) {
+        await axios.put(`/api/equipment/edit/${equipment._id}`, payload);
+        alert("Updated successfully");
+      } else {
+        await axios.post(`/api/admin/add-equipment`, payload);
+        alert("Added successfully");
+      }
+
+      onClose();
+
+    } catch (err) {
+      console.error(err);
+      alert("Error saving equipment");
+    }
   };
 
   return (
-    <>
+    <Overlay>
+      <Modal>
 
+        <CloseBtn onClick={onClose}>✕</CloseBtn>
 
-<Overlay>
-    <Modal>
+        {/* LEFT PANEL */}
+        <LeftPanel>
+          <div>
+            <PanelTitle>
+              {isEdit ? "Edit Equipment" : "Add Equipment"}
+            </PanelTitle>
+            <PanelText>
+              Manage your agricultural fleet efficiently.
+            </PanelText>
+          </div>
+          <FooterText>Harvest Ledger © 2026</FooterText>
+          <BlurCircle />
+        </LeftPanel>
 
-    <CloseBtn onClick={onClose}>✕</CloseBtn>
-      {/* LEFT DECORATIVE PANEL */}
-      <LeftPanel>
-        <div>
-          <PanelTitle>Curate Your Fleet</PanelTitle>
-          <PanelText>
-            Ensure every technical detail is captured to provide a premium experience.
-          </PanelText>
-        </div>
+        {/* RIGHT PANEL */}
+        <RightPanel>
+          <Title>{isEdit ? "Update Equipment" : "Add Equipment"}</Title>
 
-        <FooterText>Harvest Ledger © 2024</FooterText>
+          <Form>
 
-        <BlurCircle />
-      </LeftPanel>
-
-      {/* RIGHT FORM PANEL */}
-      <RightPanel>
-        <Title>Add Equipment</Title>
-        <Subtitle>Fill all details for listing equipment</Subtitle>
-
-        <Form>
-          <FullRow>
-            <Label>Equipment Name</Label>
-            <Input onChange={(e) => setName(e.target.value)} />
-          </FullRow>
-
-          <FullRow>
-            <Label>Upload Images</Label>
-            <UploadBox>
-              <input
-                type="file"
-                multiple
-                onChange={(e) => setFiles(e.target.files)}
+            <FullRow>
+              <Label>Name</Label>
+              <Input
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
-            </UploadBox>
-          </FullRow>
+            </FullRow>
 
-          <Row>
-            <div>
-              <Label>Type</Label>
-              <Input onChange={(e) => setType(e.target.value)} />
-            </div>
+            <FullRow>
+              <Label>Upload Images</Label>
+              <UploadBox>
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => setFiles(e.target.files)}
+                />
+              </UploadBox>
+            </FullRow>
 
-            <div>
-              <Label>Availability</Label>
-              <Select onChange={(e) => { setAvalability(e.target.value) }}>
-                <option value="">Select</option>
-                <option value="true">Available</option>
-                <option value="Maintenance">Maintenance</option>
-                <option value="Rented">Rented</option>
-              </Select>
-            </div>
-          </Row>
+            <Row>
+              <div>
+                <Label>Type</Label>
+                <Input
+                  value={formData.type}
+                  onChange={(e) =>
+                    setFormData({ ...formData, type: e.target.value })
+                  }
+                />
+              </div>
 
-          <Row>
-            <div>
+              <div>
+                <Label>Availability</Label>
+                <Select
+                  value={formData.availability}
+                  onChange={(e) =>
+                    setFormData({ ...formData, availability: e.target.value })
+                  }
+                >
+                  <option value="">Select</option>
+                  <option value="true">Available</option>
+                  <option value="false">Not Available</option>
+                </Select>
+              </div>
+            </Row>
+
+            <Row>
+              <div>
               <Label>Quantity</Label>
-              <Input type="number" onChange={(e) => setQuantity(e.target.value)} />
-            </div>
+              <Input
+                type="number"
+                placeholder="Quantity"
+                value={formData.quantity}
+                onChange={(e) =>
+                  setFormData({ ...formData, quantity: e.target.value })
+                }
+              />
 
-            <div>
+              </div>
+
+              <div>
+
               <Label>Price</Label>
-              <Input type="number" onChange={(e) => setPrice(e.target.value)} />
-            </div>
-          </Row>
+              <Input
+                placeholder="Price"
+                value={formData.price}
+                onChange={(e) =>
+                  setFormData({ ...formData, price: e.target.value })
+                }
+              />
 
-          <Row>
+              </div>
+
+            </Row>
+
+            <Row>
             <div>
               <Label>Location</Label>
-              <Input onChange={(e) => setLocation(e.target.value)} />
-            </div>
+             <Input  value={formData.location} onChange={(e) => setFormData({...formData , location:e.target.value})} /> 
+             </div> 
+             <div>
+               <Label>Engine Power</Label>
+                <Input type="text" value={formData.enginepower} onChange={(e) => setFormData({...formData , enginepower : e.target.value})} /> 
+                </div> 
+            </Row>
 
-            <div>
-              <Label>Engine Power</Label>
-              <Input onChange={(e) => setEnginepower(e.target.value)} />
-            </div>
-          </Row>
+                <Row> 
+                  <div> 
+                    <Label>Wheels</Label> 
+                    <Input type="text"  value={formData.wheels} onChange={(e) => setFormData({...formData , wheels : e.target.value})} /> 
+                    </div> 
+                    <div> 
+                      <Label>Fuel Type</Label> 
+                      <Input type="text"  value={formData.FuelType} onChange={(e) => setFormData({...formData , FuelType : e.target.value})} />
+                       </div> 
+                  </Row>
 
-          <Row>
-            <div>
-              <Label>Wheels</Label>
-              <Input onChange={(e) => setWheels(e.target.value)} />
-            </div>
+                  <Row> 
+                    <div> 
+                      <Label>Transmission</Label> 
+                      <Input type="text"  value={formData.transmission} onChange={(e) => setFormData({...formData , transmission : e.target.value})} /> 
+                      </div>
+                       <div>
+                         <Label>Hydraulic Flow</Label>
+                          <Input type="text" value={formData.hydraulicFlow} onChange={(e) => setFormData({...formData , hydraulicFlow : e.target.value})} /> 
+                          </div> 
+                    </Row>
 
-            <div>
-              <Label>Fuel Type</Label>
-              <Input onChange={(e) => setFluelType(e.target.value)} />
-            </div>
-          </Row>
+                    <Row> 
+                      <div> 
+                        <Label>Weight</Label> 
+                        <Input type="text" value={formData.weight} onChange={(e) => setFormData({...formData , weight : e.target.value})} /> 
+                        </div>
 
-          <Row>
-            <div>
-              <Label>Transmission</Label>
-              <Input onChange={(e) => setTransmission(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Hydraulic Flow</Label>
-              <Input onChange={(e) => setHydraulicFlow(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Weight</Label>
-              <Input onChange={(e) => setWeight(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Description</Label>
-              <Input onChange={(e) => setDescription(e.target.value)} />
-            </div>
-          </Row>
-
-          <Button onClick={handleSubmit}>
-            Save Equipment Profile
-          </Button>
-        </Form>
-      </RightPanel>
-
-    </Modal>
-  </Overlay>
-
-  
+                    </Row>
 
 
 
-
-
-
-    {/* <Title>Add Equipment</Title>
-    
-    <Subtitle>Fill all details for listing equipment</Subtitle> */}
-
-    {/* <Form>
-          <FullRow>
-            <Label>Equipment Name</Label>
-            <Input onChange={(e) => setName(e.target.value)} />
-          </FullRow>
-
-          <FullRow>
-            <Label>Upload Images</Label>
-            <UploadBox>
-              <input
-                type="file"
-                multiple
-                onChange={(e) => setFiles(e.target.files)}
+            {/* <FullRow>
+              <Input
+                placeholder="Location"
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
               />
-            </UploadBox>
-          </FullRow>
+            </FullRow> */}
 
-          <Row>
-            <div>
-              <Label>Type</Label>
-              <Input onChange={(e) => setType(e.target.value)} />
-            </div>
+            <FullRow>
+              <Input
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
+            </FullRow>
 
-            <div>
-              <Label>Availability</Label>
-              <Select onChange={(e) => setAvalability(e.target.value)}>
-                <option value="">Select</option>
-                <option value="Available">Available</option>
-                <option value="Maintenance">Maintenance</option>
-                <option value="Rented">Rented</option>
-              </Select>
-            </div>
-          </Row>
+            <Button onClick={handleSubmit}>
+              {isEdit ? "Update Equipment" : "Save Equipment"}
+            </Button>
 
-          <Row>
-            <div>
-              <Label>Quantity</Label>
-              <Input type="number" onChange={(e) => setQuantity(e.target.value)} />
-            </div>
+          </Form>
+        </RightPanel>
 
-            <div>
-              <Label>Price</Label>
-              <Input type="number" onChange={(e) => setPrice(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Location</Label>
-              <Input onChange={(e) => setLocation(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Engine Power</Label>
-              <Input onChange={(e) => setEnginepower(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Wheels</Label>
-              <Input onChange={(e) => setWheels(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Fuel Type</Label>
-              <Input onChange={(e) => setFluelType(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Transmission</Label>
-              <Input onChange={(e) => setTransmission(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Hydraulic Flow</Label>
-              <Input onChange={(e) => setHydraulicFlow(e.target.value)} />
-            </div>
-          </Row>
-
-          <Row>
-            <div>
-              <Label>Weight</Label>
-              <Input onChange={(e) => setWeight(e.target.value)} />
-            </div>
-
-            <div>
-              <Label>Description</Label>
-              <Input onChange={(e) => setDescription(e.target.value)} />
-            </div>
-          </Row>
-
-          <Button onClick={handleSubmit}>
-            Save Equipment Profile
-          </Button>
-        </Form> */}
-    
-    
-    </>
-    
-      
-
-        // <Form>
-        //   <FullRow>
-        //     <Label>Equipment Name</Label>
-        //     <Input onChange={(e) => setName(e.target.value)} />
-        //   </FullRow>
-
-        //   <FullRow>
-        //     <Label>Upload Images</Label>
-        //     <UploadBox>
-        //       <input
-        //         type="file"
-        //         multiple
-        //         onChange={(e) => setFiles(e.target.files)}
-        //       />
-        //     </UploadBox>
-        //   </FullRow>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Type</Label>
-        //       <Input onChange={(e) => setType(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Availability</Label>
-        //       <Select onChange={(e) => setAvalability(e.target.value)}>
-        //         <option value="">Select</option>
-        //         <option value="Available">Available</option>
-        //         <option value="Maintenance">Maintenance</option>
-        //         <option value="Rented">Rented</option>
-        //       </Select>
-        //     </div>
-        //   </Row>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Quantity</Label>
-        //       <Input type="number" onChange={(e) => setQuantity(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Price</Label>
-        //       <Input type="number" onChange={(e) => setPrice(e.target.value)} />
-        //     </div>
-        //   </Row>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Location</Label>
-        //       <Input onChange={(e) => setLocation(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Engine Power</Label>
-        //       <Input onChange={(e) => setEnginepower(e.target.value)} />
-        //     </div>
-        //   </Row>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Wheels</Label>
-        //       <Input onChange={(e) => setWheels(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Fuel Type</Label>
-        //       <Input onChange={(e) => setFluelType(e.target.value)} />
-        //     </div>
-        //   </Row>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Transmission</Label>
-        //       <Input onChange={(e) => setTransmission(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Hydraulic Flow</Label>
-        //       <Input onChange={(e) => setHydraulicFlow(e.target.value)} />
-        //     </div>
-        //   </Row>
-
-        //   <Row>
-        //     <div>
-        //       <Label>Weight</Label>
-        //       <Input onChange={(e) => setWeight(e.target.value)} />
-        //     </div>
-
-        //     <div>
-        //       <Label>Description</Label>
-        //       <Input onChange={(e) => setDescription(e.target.value)} />
-        //     </div>
-        //   </Row>
-
-        //   <Button onClick={handleSubmit}>
-        //     Save Equipment Profile
-        //   </Button>
-        // </Form>
-      
-    
+      </Modal>
+    </Overlay>
   );
 }

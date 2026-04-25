@@ -18,6 +18,8 @@ export default function EquipmentPage() {
 
     const [showModal, setShowModal] = useState(false);
 
+    const [selectedEquipment, setSelectedEquipment] = useState<any>(null);
+
     console.log("data from redux in the page of admin/equipment",data?.data)
 
     const handledelete = async (id : any ) => {
@@ -79,6 +81,7 @@ export default function EquipmentPage() {
 
     const totalPrice =
   data?.data?.reduce((sum: number, item: any) => sum + item.price, 0) 
+  
   
     return (
       <Container>
@@ -160,7 +163,14 @@ export default function EquipmentPage() {
                   <td><Badge green> {equipment.quantity}</Badge></td>
                   <td>₹{equipment.price}</td>
                   <td>
-                    <Action>Edit</Action>
+                  <Action
+  onClick={() => {
+    setSelectedEquipment(equipment);
+    setShowModal(true);
+  }}
+>
+  Edit
+</Action>
                     <Delete onClick={() => {handledelete(equipment._id)}}>Delete</Delete>
                   </td>
                 </tr>
@@ -214,8 +224,14 @@ export default function EquipmentPage() {
   
         {/* ✅ MODAL */}
         {showModal && (
-          <AddEquipmentModal onClose={() => setShowModal(false)} />
-        )}
+  <AddEquipmentModal
+    onClose={() => {
+      setShowModal(false);
+      setSelectedEquipment(null);
+    }}
+    equipment={selectedEquipment} // 👈 important
+  />
+)}
       </Container>
     );
   }
