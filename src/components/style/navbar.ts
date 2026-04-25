@@ -46,7 +46,7 @@ export const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #f4f4ef;
+  // background: #f4f4ef;
   padding: 6px 12px;
   border-radius: 30px;
   margin-left: 60px;
@@ -55,7 +55,7 @@ export const SearchContainer = styled.div`
 export const SearchInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 30px;
-  padding: 8px 12px;
+  padding: 15px 12px;
   outline: none;
   background: transparent;
   outline: none;

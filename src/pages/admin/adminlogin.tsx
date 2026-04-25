@@ -5,7 +5,19 @@ import { Input, InputGroup } from "@/components/InputBox";
 import { Button } from "@/components/Button";
 import { useState } from "react";
 import axios from "axios";
-import { Anc, BgImage, Left, LeftContent, Logo, Main, Overlay, QuoteBox, Right, SubText, Wrapper } from "./style/adminlogin";
+import {
+  Anc,
+  BgImage,
+  Left,
+  LeftContent,
+  Logo,
+  Main,
+  Overlay,
+  QuoteBox,
+  Right,
+  SubText,
+  Wrapper,
+} from "./style/adminlogin";
 
 /* MAIN LAYOUT */
 
@@ -37,21 +49,17 @@ export default function Login() {
         alert("login successfull");
 
         router.push("/admin/dashboard");
-        
+
         setTimeout(() => {
           router.refresh();
         }, 1000);
       } else {
         alert("would not login ");
       }
-
     } catch (error) {
       alert("Something went wrong");
     }
-
-    
   };
-
 
   return (
     <Main>
@@ -84,11 +92,21 @@ export default function Login() {
 
           <form onSubmit={handleSubmit}>
             <InputGroup>
-              <Input type="email" name="email"  onChange={handleChange} placeholder="Email" />
+              <Input
+                type="email"
+                name="email"
+                onChange={handleChange}
+                placeholder="Email"
+              />
             </InputGroup>
 
             <InputGroup>
-              <Input type="password" name="password" onChange={handleChange} placeholder="Password" />
+              <Input
+                type="password"
+                name="password"
+                onChange={handleChange}
+                placeholder="Password"
+              />
             </InputGroup>
 
             <Button type="submit">Login</Button>
