@@ -6,6 +6,7 @@ import ActivityList from "@/components/admin/ActivityList";
 import FieldStatus from "@/components/admin/FieldStatus";
 import { useGetBookingsQuery, useGetEquipmentsQuery, useGetUsersQuery } from "@/store/api/apiSlice";
 import { CenterBox, Spinner, StatusCard, StatusText, StatusTitle } from "@/styles/admin/equipment";
+import EquipmentUtilization from "@/components/admin/EquipmentUtilization";
 
 const Layout = styled.div`
   display: flex;
@@ -123,6 +124,16 @@ export default function Dashboard() {
     );
   }
 
+  const usageMap: any = {};
+
+  bookingData.data.forEach((b: any) => {
+    usageMap[b.name] = (usageMap[b.name] || 0) + 1;
+  });
+
+  const sorted = Object.entries(usageMap)
+  .sort((a: any, b: any) => b[1] - a[1])
+  .slice(0, 5);
+
 
   return (
     <Layout>
@@ -181,7 +192,8 @@ export default function Dashboard() {
           </Grid>
 
           <BottomGrid>
-            <ActivityList />
+            {/* <ActivityList /> */}
+            <EquipmentUtilization bookings={bookingData.data} />
             <FieldStatus />
           </BottomGrid>
         </Content>
