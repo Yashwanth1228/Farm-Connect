@@ -109,27 +109,33 @@ export default function BookingDetails() {
 
             <Row>
               <span>Subtotal</span>
-              <b>₹{booking.subtotal}</b>
+              <b>₹{Number(booking.subtotal).toFixed(2)}</b>
             </Row>
 
             <Row>
               <span>GST (8%)</span>
-              <b>₹{booking.tax}</b>
+              <b>₹{Number(booking.tax).toFixed(2)}</b>
             </Row>
 
             <Row style={{ borderTop: "1px solid #eee", paddingTop: "10px" }}>
               <span>
                 <strong>Total Paid</strong>
               </span>
-              <b style={{ color: "#1b5e20" }}>₹{booking.totalprice}</b>
+              <b style={{ color: "#1b5e20" }}>
+                ₹{Number(booking.totalprice).toFixed(2)}
+              </b>
             </Row>
 
             {/* ACTIONS */}
             <PrimaryBtn
               onClick={() => {
                 const link = document.createElement("a");
-                link.href = `/api/bookings/invoice?bookingId=${booking._id}`;
+
+                // ✅ FIXED URL
+                link.href = `/api/bookings/invoice/${booking._id}`;
+
                 link.download = `Invoice_${booking._id}.pdf`;
+
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);

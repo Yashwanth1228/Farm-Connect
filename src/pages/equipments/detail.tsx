@@ -146,10 +146,11 @@ export default function detail() {
   const isInvalid = !form.start_date || !form.end_date || days <= 0;
   const today = new Date().toISOString().split("T")[0];
 
-  const subtotal = days * product.price;
+  const quantity = Number(form.quantity || 1);
+
+  const subtotal = days * product.price * quantity;
   const tax = subtotal * 0.08;
   const totalPrice = subtotal + tax;
-
   const handlesubmit = async () => {
     const toastId = toast.loading("Processing your request...");
     if (!form.start_date || !form.end_date || days <= 0) {
@@ -243,36 +244,29 @@ export default function detail() {
 
     const userId = user._id;
 
-    // =========================
-    // ✅ STEP 1: CALCULATE TAX
-    // =========================
-    const subtotal = totalPrice;
-    const tax = subtotal * 0.08; // 8% GST
-    const finalAmount = subtotal + tax;
+    // ✅ USE EXISTING VALUES (NO RE-CALCULATION)
+    const finalAmount = Number(totalPrice.toFixed(2));
+    const finalSubtotal = Number(subtotal.toFixed(2));
+    const finalTax = Number(tax.toFixed(2));
 
     const toastId = toast.loading("Processing payment...");
 
     try {
       // =========================
-      // ✅ STEP 2: CREATE ORDER (UPDATED AMOUNT)
+      // CREATE ORDER
       // =========================
       const res = await fetch("/api/payment/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: finalAmount }), // ✅ FIXED
+        body: JSON.stringify({ amount: finalAmount }), // ✅ CORRECT
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to create order");
-      }
+      if (!res.ok) throw new Error("Failed to create order");
 
       const order = await res.json();
 
-      // =========================
-      // RAZORPAY OPTIONS
-      // =========================
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -281,22 +275,12 @@ export default function detail() {
         description: product?.name || "Equipment Rental",
         order_id: order.id,
 
-        method: {
-          card: true,
-          netbanking: true,
-          wallet: true,
-          upi: true,
-        },
-
         prefill: {
           name: user?.name || "User",
           email: user?.email || "test@farmconnect.com",
           contact: "9999999999",
         },
 
-        // =========================
-        // ✅ STEP 3: SUCCESS HANDLER
-        // =========================
         handler: async function (response: any) {
           try {
             const verifyRes = await fetch("/api/payment/verify", {
@@ -313,7 +297,7 @@ export default function detail() {
               toast.success("Payment successful ✅", { id: toastId });
 
               // =========================
-              // ✅ STEP 4: SAVE BOOKING WITH TAX
+              // SAVE BOOKING (CORRECT VALUES)
               // =========================
               const bookingData = {
                 name: product?.name,
@@ -322,13 +306,13 @@ export default function detail() {
                 end_date: form.end_date,
                 price: product?.price,
                 days: days,
-
-                subtotal, // ✅ NEW
-                tax, // ✅ NEW
-                totalprice: finalAmount, // ✅ UPDATED
+                quantity: quantity,
+                subtotal: finalSubtotal, // ✅ FIXED
+                tax: finalTax, // ✅ FIXED
+                totalprice: finalAmount, // ✅ FIXED
               };
 
-              const bookingRes = await fetch("/api/bookings/create", {
+              await fetch("/api/bookings/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -336,18 +320,8 @@ export default function detail() {
                 },
                 body: JSON.stringify(bookingData),
               });
-
-              const bookingResult = await bookingRes.json();
-
-              if (bookingRes.ok) {
-                console.log("Booking saved:", bookingResult);
-              } else {
-                console.error("Booking failed:", bookingResult);
-              }
             } else {
-              toast.error("Payment verification failed ❌", {
-                id: toastId,
-              });
+              toast.error("Payment verification failed ❌", { id: toastId });
             }
           } catch (err) {
             console.error(err);
