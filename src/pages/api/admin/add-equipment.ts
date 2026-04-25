@@ -14,18 +14,18 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // ✅ FIX 1: correct structure + types
     const formattedData = {
       name: data.name,
-      type: data.Type,
+      type: data.type,
       available : data.availability,
-      quantity : Number(data.Quantity),
+      quantity : Number(data.quantity),
       price: Number(data.price), // ✅ FIXED
       location: data.location,  
       description: data.description,
       images: data.images, // ✅ FIXED (consistent name)
       enginepower: data.enginepower, // ✅ FIXED
-      wheels: data.Wheels, // ✅ FIXED (consistent name)
+      wheels: data.wheels, // ✅ FIXED (consistent name)
       fuel_type: data.FuelType, // ✅ FIXED (consistent name)
-      Transmission: data.Transmission, // ✅ FIXED (consistent name)
-      Hydraulic_Flow: data.HydraulicFlow, // ✅ FIXED (consistent name)
+      Transmission: data.transmission, // ✅ FIXED (consistent name)
+      Hydraulic_Flow: data.hydraulicFlow, // ✅ FIXED (consistent name)
       weight: data.weight, // ✅ FIXED (consistent name)
     };
 
@@ -37,7 +37,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     // ✅ FIX 2: Use MongoDB _id for ES
     const elasticData = {
   name: data.name,
-  type: data.Type,
+  type: data.type,
   available : data.availability,
   price: Number(data.price),
   location: data.location,
