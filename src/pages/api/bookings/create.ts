@@ -1,10 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/lib/db";
 import Bookingmodel from "@/models/Bookingmodel";
+import Usermodel from "@/models/Usermodel";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   console.log("BOOKING API HIT");
 
@@ -19,6 +20,8 @@ export default async function handler(
 
   try {
     const userId = req.headers["x-user-id"] as string;
+
+    const user = await Usermodel.findById(userId);
 
     if (!userId) {
       return res.status(401).json({
@@ -36,7 +39,7 @@ export default async function handler(
       days,
       totalprice,
       tax,
-  subtotal,
+      subtotal,
     } = req.body;
 
     // ✅ FIX: Set proper start & end dates
@@ -47,6 +50,7 @@ export default async function handler(
 
     const booking = await Bookingmodel.create({
       userId,
+      username: user?.name || "User", // ✅ ADD THIS LINE
       name,
       images,
       start_date: start,
@@ -57,6 +61,8 @@ export default async function handler(
       tax,
       totalprice,
     });
+
+    console.log("USER FOUND:", user?.name);
 
     return res.status(200).json({
       success: true,

@@ -79,7 +79,7 @@ export default function detail() {
 
     const fetchproductdetail = async () => {
       try {
-        const res = await axios.post(`/api/equipment/${id}`);
+        const res = await axios.get(`/api/equipment/${id}`);
         console.log("the product details are ", res.data.data);
         setProduct(res.data.data);
 
@@ -296,9 +296,6 @@ export default function detail() {
             if (data.success) {
               toast.success("Payment successful ✅", { id: toastId });
 
-              // =========================
-              // SAVE BOOKING (CORRECT VALUES)
-              // =========================
               const bookingData = {
                 name: product?.name,
                 images: product?.images[0],
@@ -307,12 +304,13 @@ export default function detail() {
                 price: product?.price,
                 days: days,
                 quantity: quantity,
-                subtotal: finalSubtotal, // ✅ FIXED
-                tax: finalTax, // ✅ FIXED
-                totalprice: finalAmount, // ✅ FIXED
+                subtotal: finalSubtotal,
+                tax: finalTax,
+                totalprice: finalAmount,
               };
 
-              await fetch("/api/bookings/create", {
+              // ✅ 👉 PASTE HERE
+              const bookingRes = await fetch("/api/bookings/create", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
@@ -320,8 +318,18 @@ export default function detail() {
                 },
                 body: JSON.stringify(bookingData),
               });
-            } else {
-              toast.error("Payment verification failed ❌", { id: toastId });
+
+              const bookingResult = await bookingRes.json();
+
+              console.log("BOOKING RESPONSE:", bookingResult);
+
+              if (!bookingRes.ok || !bookingResult.success) {
+                console.error("Booking failed:", bookingResult);
+                toast.error("Booking failed ❌", { id: toastId });
+                return;
+              }
+
+              toast.success("Booking saved ✅", { id: toastId });
             }
           } catch (err) {
             console.error(err);
