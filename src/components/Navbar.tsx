@@ -19,11 +19,13 @@ import {
   Logout,
   Profileicon,
   CartIcon,
+  Badge,
 } from "@/components/style/navbar";
 
 export default function Navbar() {
   const { user, setUser }: any = useContext(AppContent);
   const [query, setQuery] = useState("");
+  const { cartCount, setCartCount }: any = useContext(AppContent);
   //  const [results, setResults] = useState<any[]>([]);
   // const [searchdata , setSearchdata] = useState();
 
@@ -48,6 +50,21 @@ export default function Navbar() {
   }, [query]);
 
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const res = await axios.get("/api/cart/all");
+        setCartCount(res.data.data.length);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (user && cartCount === 0) {
+      fetchCartCount(); // ✅ only initial load
+    }
+  }, [user]);
 
   const handlelogout = async () => {
     try {
@@ -111,6 +128,8 @@ export default function Navbar() {
               >
                 shopping_cart
               </span>
+              {cartCount > 0 && <Badge>{cartCount}</Badge>}
+              {/* <Badge>{cartCount}</Badge> */}
             </CartIcon>
             <Logout onClick={handlelogout}>Logout</Logout>
           </ButtonGroup>

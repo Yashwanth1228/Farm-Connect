@@ -298,14 +298,14 @@ export default function EquipmentPage() {
                 (item: Equipment) => (
                   console.log("the item id is ", item._id),
                   (
-                    <Card key={Number(item._id)}>
-                      <CardImage
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/equipments/detail?id=${item._id}`);
-                        }}
-                        src={String(item.images[0])}
-                      />
+                    <Card
+                      key={Number(item._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        router.push(`/equipments/detail?id=${item._id}`);
+                      }}
+                    >
+                      <CardImage src={String(item.images[0])} />
 
                       <CardBody>
                         <CardTitle>{String(item.name)}</CardTitle>

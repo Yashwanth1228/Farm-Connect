@@ -87,7 +87,7 @@ export default function Login() {
 
         {/* RIGHT SIDE */}
         <Right>
-          <Heading>Welcome Back</Heading>
+          <Heading>Welcome Back Admin</Heading>
           <Text>Login to continue your journey.</Text>
 
           <form onSubmit={handleSubmit}>
@@ -111,10 +111,6 @@ export default function Login() {
 
             <Button type="submit">Login</Button>
           </form>
-
-          <SubText style={{ marginTop: "20px" }}>
-            Don't have an account? <Anc href="/signup">Signup</Anc>
-          </SubText>
         </Right>
       </Wrapper>
     </Main>

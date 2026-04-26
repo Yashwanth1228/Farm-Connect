@@ -1,6 +1,9 @@
 import greentractor from "../assets/greentractor.jpg";
 import harvester from "../assets/harvester.jpg";
 import plough from "../assets/plough.jpg";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useRouter } from "next/router";
 import {
   Section2,
   Container2,
@@ -21,7 +24,33 @@ import {
   AddButton,
 } from "@/styles/home";
 
+type Equipment = {
+  name: string;
+  type: string;
+  price: number;
+  images: string[];
+};
+
 export default function FeaturedEquipment() {
+  const router = useRouter();
+  const [equipments, setEquipments] = useState<Equipment[]>([]);
+
+  useEffect(() => {
+    const fetchEquipments = async () => {
+      try {
+        const res = await axios.get("/api/equipment/all");
+
+        // 🔥 ADD THIS LINE HERE
+        console.log("API DATA:", res.data);
+
+        setEquipments(res.data.data); // we will fix this next
+      } catch (err) {
+        console.log("Error fetching equipments", err);
+      }
+    };
+
+    fetchEquipments();
+  }, []);
   return (
     <Section2>
       <Container2>
@@ -40,73 +69,43 @@ export default function FeaturedEquipment() {
           </ViewEquipment>
         </Header>
 
-        <Grid2>
-          <Card2>
-            <ImageWrapper>
-              <EquipmentImage src={greentractor.src} alt="John Deere Tractor" />
-              <Badge2>IN STOCK</Badge2>
-            </ImageWrapper>
+        {Array.isArray(equipments) && equipments.length > 0 ? (
+          <Grid2>
+            {equipments.slice(0, 3).map((item: any, index) => (
+              <Card2
+                key={index}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(`/equipments/detail?id=${item._id}`);
+                }}
+              >
+                <ImageWrapper>
+                  <EquipmentImage
+                    src={item.images?.[0] || "/images/fallback.png"}
+                    alt={item.name}
+                  />
+                </ImageWrapper>
 
-            <CardBody>
-              <EquipmentName>John Deere 7R 350</EquipmentName>
-              <Category>Heavy Duty Tractor</Category>
+                <CardBody>
+                  <EquipmentName>{item.name}</EquipmentName>
+                  <Category>{item.type}</Category>
 
-              <Footer>
-                <Price>
-                  <span>$450</span> <small>/ day</small>
-                </Price>
+                  <Footer>
+                    <Price>
+                      <span>₹{item.price}</span> <small>/ day</small>
+                    </Price>
 
-                <AddButton>
-                  <span>add</span>
-                </AddButton>
-              </Footer>
-            </CardBody>
-          </Card2>
-
-          <Card2>
-            <ImageWrapper>
-              <EquipmentImage src={harvester.src} alt="Combine Harvester" />
-              <Badge2>IN STOCK</Badge2>
-            </ImageWrapper>
-
-            <CardBody>
-              <EquipmentName>Claas Lexion 8900</EquipmentName>
-              <Category>Combine Harvester</Category>
-
-              <Footer>
-                <Price>
-                  <span>$1,200</span> <small>/ day</small>
-                </Price>
-
-                <AddButton>
-                  <span>add</span>
-                </AddButton>
-              </Footer>
-            </CardBody>
-          </Card2>
-
-          <Card2>
-            <ImageWrapper>
-              <EquipmentImage src={plough.src} alt="Reversible Plough" />
-              <Badge2>IN STOCK</Badge2>
-            </ImageWrapper>
-
-            <CardBody>
-              <EquipmentName>Maschio Gaspardo</EquipmentName>
-              <Category>Reversible Plough</Category>
-
-              <Footer>
-                <Price>
-                  <span>$180</span> <small>/ day</small>
-                </Price>
-
-                <AddButton>
-                  <span>add</span>
-                </AddButton>
-              </Footer>
-            </CardBody>
-          </Card2>
-        </Grid2>
+                    {/* <AddButton>
+                      <span>add</span>
+                    </AddButton> */}
+                  </Footer>
+                </CardBody>
+              </Card2>
+            ))}
+          </Grid2>
+        ) : (
+          <p>Loading equipment...</p>
+        )}
       </Container2>
     </Section2>
   );

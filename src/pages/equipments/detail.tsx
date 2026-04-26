@@ -53,7 +53,7 @@ type Props = {
 export default function detail() {
   const router = useRouter();
   //   const [productdetail , setProductdetail] = useState(product[]>([]));
-  const { user, loading } = useContext(AppContent);
+  const { user, loading, setCartCount }: any = useContext(AppContent);
 
   if (loading) {
     return <p>Loading user...</p>;
@@ -189,6 +189,7 @@ export default function detail() {
           console.log("response from the api ", res);
           if (res.data.success) {
             setCartId(res.data.data.id);
+            setCartCount((prev: number) => prev + 1);
             toast.success("Successfully added to cart!", { id: toastId });
           }
           console.log("cart id fro inserting of data ", cartId);
@@ -200,6 +201,8 @@ export default function detail() {
           const res = await axios.delete(`/api/cart/${cartId}`);
           console.log("response from the delete api ", res);
           if (res.data.success) {
+            setCartCount((prev: number) => Math.max(prev - 1, 0));
+
             toast.success("Successfully removed from cart!", { id: toastId });
           }
         } catch (error) {

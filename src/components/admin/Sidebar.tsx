@@ -92,10 +92,10 @@ const Icon = styled.span<{ active?: boolean }>`
   font-size: 22px;
 
   font-variation-settings:
-    'FILL' ${({ active }) => (active ? 1 : 0)},
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
+    "FILL" ${({ active }) => (active ? 1 : 0)},
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 `;
 
 const Footer = styled.div`
@@ -181,7 +181,7 @@ const Logout = styled.button`
 `;
 
 function SidebarItem({ href, label, icon }: NavItemProps) {
-    const router = useRouter();
+  const router = useRouter();
   const isActive = router.pathname === href;
 
   return (
@@ -195,33 +195,36 @@ function SidebarItem({ href, label, icon }: NavItemProps) {
 }
 
 export default function Sidebar() {
+  // const {admin , setAdmin } : any = useContext(AdminContent)
+  const { admin, setAdmin }: any = useContext(AppContent);
+  const router = useRouter();
 
-    // const {admin , setAdmin } : any = useContext(AdminContent)
-    const {admin , setAdmin } : any = useContext(AppContent);
-    const router = useRouter();
+  console.log("admin data from side bar", admin);
 
-    console.log("admin data from side bar" , admin);
+  const handlelogout = async () => {
+    try {
+      let res = await axios.post(
+        "/api/admin/logout",
+        {},
+        { withCredentials: true },
+      );
 
-    const handlelogout = async () => {
-        try {
-          let res = await axios.post("/api/admin/logout", {}, { withCredentials: true });
-    
-          if (res.data.success) {
-            alert("Logged out successfully");
-            setAdmin(false);
-            router.push("/admin/adminlogin");
-          } else {
-            alert("Logout failed");
-          }
-        } catch (error) {
-          console.log("Logout error ", error);
-          alert("An error occurred during logout");
-        }
-      };
+      if (res.data.success) {
+        alert("Logged out successfully");
+        setAdmin(false);
+        router.push("/admin/adminlogin");
+      } else {
+        alert("Logout failed");
+      }
+    } catch (error) {
+      console.log("Logout error ", error);
+      alert("An error occurred during logout");
+    }
+  };
 
   return (
     <Aside>
-         {/* <Profile>
+      {/* <Profile>
           <ProfileText>
             <p>Admin Panel</p>
             <p>Active Now</p>
@@ -235,35 +238,44 @@ export default function Sidebar() {
           </Avatar>
         </Profile> */}
 
-    <Profile>
-    <Logo>
-      <Avatar>
+      <Profile>
+        <Logo>
+          <Avatar>
             <img
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcwXB8zeIGyCJ4FNdBBP_rAvO_eS3Sz8mOh3Fnqq192WRD19X2Cy5Y6yEXTJO01xhb1_oHljqP-lF3rVbIokYue6yAld3zWJIQHpVGtv91wlAi8E08Jn3m3i4qLArgnkYl2FUrwc0uBOrTBayTYT5SMzUhx0kqvsAiGOlZ3zyxUWplKv6LfvS6h61mYoGNY3EXTx1K3yzUjV3bwKa1gCCcsZMyOk_xY1qMn_voRL0W8lYdiS05VVg9r-j-a3BlBkHtmGG38PW2Smc"
               alt="Admin"
             />
           </Avatar>
-        <h1>The Agrarian</h1>
-        <p>Editorial Admin</p>
-      </Logo>
-
-
-    </Profile>
-      
+          <h1>The Agrarian</h1>
+          <p>Editorial Admin</p>
+        </Logo>
+      </Profile>
 
       <Nav>
-        <SidebarItem href="/admin/dashboard" label="Dashboard" icon="dashboard" />
-        <SidebarItem href="/admin/equipment" label="Equipment" icon="agriculture" />
-        <SidebarItem href="/admin/bookings" label="Bookings" icon="calendar_today" />
+        <SidebarItem
+          href="/admin/dashboard"
+          label="Dashboard"
+          icon="dashboard"
+        />
+        <SidebarItem
+          href="/admin/equipment"
+          label="Equipment"
+          icon="agriculture"
+        />
+        <SidebarItem
+          href="/admin/bookings"
+          label="Bookings"
+          icon="calendar_today"
+        />
         <SidebarItem href="/admin/user" label="Users" icon="group" />
       </Nav>
 
       <Footer>
-  <Logout onClick={handlelogout}>
-    <Icon>logout</Icon>
-    <span className="label">Logout</span>
-  </Logout>
-</Footer>
+        <Logout onClick={handlelogout}>
+          <Icon>logout</Icon>
+          <span className="label">Logout</span>
+        </Logout>
+      </Footer>
     </Aside>
   );
 }

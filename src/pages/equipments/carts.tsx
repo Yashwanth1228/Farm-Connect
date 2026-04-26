@@ -31,7 +31,7 @@ import {
 } from "@/pages/equipments/style/carts";
 
 export default function CartPage() {
-  const { user } = useContext(AppContent);
+  const { user, setCartCount }: any = useContext(AppContent);
   useEffect(() => {
     const fetchcart = async () => {
       try {
@@ -82,6 +82,7 @@ export default function CartPage() {
         toast.success("Removed from cart");
 
         // ✅ Update UI instantly
+        setCartCount((prev: number) => prev - 1);
         setCart((prev: any) => prev.filter((item: any) => item._id !== cartId));
       }
     } catch (error) {
