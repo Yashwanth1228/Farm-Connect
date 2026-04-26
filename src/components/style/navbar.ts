@@ -76,10 +76,18 @@ export const ButtonGroup = styled.div`
 
 export const Logout = styled.button`
   padding: 8px 14px;
-  background: transparent;
+  background: #9ca3af;
   border: none;
   cursor: pointer;
   font-size: 14px;
+  border-radius: 50px;
+  padding: 15px;
+  font-weight: bold;
+  color: white;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &:hover {
     color: #0d631b;
@@ -95,10 +103,11 @@ export const Profileicon = styled.img`
 `;
 
 export const CartIcon = styled.div`
+  position:relative
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #f4f4ef;
+  // background: #f4f4ef;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,4 +117,16 @@ export const CartIcon = styled.div`
     font-size: 20px;
     color: #0d631b;
   }
+`;
+
+export const Badge = styled.div`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 3px 6px;
 `;

@@ -17,6 +17,7 @@ export const AppContextProvider = (props: any) => {
   const [user, setUser] = useState(null);
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
     const userauth = async () => {
@@ -63,6 +64,8 @@ export const AppContextProvider = (props: any) => {
     admin,
     setAdmin,
     loading,
+    cartCount,
+    setCartCount,
   };
 
   return (

@@ -4,8 +4,18 @@ import Topbar from "@/components/admin/Topbar";
 import SummaryCard from "@/components/admin/SummaryCard";
 import ActivityList from "@/components/admin/ActivityList";
 import FieldStatus from "@/components/admin/FieldStatus";
-import { useGetBookingsQuery, useGetEquipmentsQuery, useGetUsersQuery } from "@/store/api/apiSlice";
-import { CenterBox, Spinner, StatusCard, StatusText, StatusTitle } from "@/styles/admin/equipment";
+import {
+  useGetBookingsQuery,
+  useGetEquipmentsQuery,
+  useGetUsersQuery,
+} from "@/store/api/apiSlice";
+import {
+  CenterBox,
+  Spinner,
+  StatusCard,
+  StatusText,
+  StatusTitle,
+} from "@/styles/admin/equipment";
 import EquipmentUtilization from "@/components/admin/EquipmentUtilization";
 
 const Layout = styled.div`
@@ -93,24 +103,34 @@ const Icon = styled.span`
   font-size: 18px;
 
   font-variation-settings:
-    'FILL' 1,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
+    "FILL" 1,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 `;
 
 export default function Dashboard() {
-  
-  const { data : equipmentData, error: equipmentError , isLoading: equipmentLoading } = useGetEquipmentsQuery();
+  const {
+    data: equipmentData,
+    error: equipmentError,
+    isLoading: equipmentLoading,
+  } = useGetEquipmentsQuery();
 
-  const { data : userData , error: userError , isLoading: userLoading } = useGetUsersQuery();
+  const {
+    data: userData,
+    error: userError,
+    isLoading: userLoading,
+  } = useGetUsersQuery();
 
-  const { data : bookingData , error : bookingError , isLoading : bookingLoading } = useGetBookingsQuery();
+  const {
+    data: bookingData,
+    error: bookingError,
+    isLoading: bookingLoading,
+  } = useGetBookingsQuery();
 
-
-  console.log("bookings data " , bookingData);
-  console.log("equipment data " , equipmentData);
-  console.log("usersdata " , userData);
+  console.log("bookings data ", bookingData);
+  console.log("equipment data ", equipmentData);
+  console.log("usersdata ", userData);
 
   if (equipmentLoading || userLoading || bookingLoading) {
     return (
@@ -131,9 +151,8 @@ export default function Dashboard() {
   });
 
   const sorted = Object.entries(usageMap)
-  .sort((a: any, b: any) => b[1] - a[1])
-  .slice(0, 5);
-
+    .sort((a: any, b: any) => b[1] - a[1])
+    .slice(0, 5);
 
   return (
     <Layout>
@@ -143,52 +162,43 @@ export default function Dashboard() {
         {/* <Topbar /> */}
 
         <Content>
-        <Header>
-  <TitleBlock>
-    <h2>Dashboard Overview</h2>
-    <p>
-      Monitor your ecosystem metrics, equipment inventory, and seasonal activity.
-    </p>
-  </TitleBlock>
+          <Header>
+            <TitleBlock>
+              <h2>Dashboard Overview</h2>
+              <p>
+                Monitor your ecosystem metrics, equipment inventory, and
+                seasonal activity.
+              </p>
+            </TitleBlock>
 
-  {/* <ActionButton>
+            {/* <ActionButton>
     <Icon>add</Icon>
     New Listing
   </ActionButton> */}
-</Header>
+          </Header>
 
           <Grid>
-          <SummaryCard
-        title="Total Users"
-        value={userData.data.length || 0}
-        icon="group"
-        iconBg="#eff6ff"
-        iconColor="#2563eb"
-        extras={[
-          { label: "+12%", color: "#16a34a", bg: "#ecfdf5" }
-        ]}
-      />
-           <SummaryCard
-        title="Total Equipment"
-        value={equipmentData.data.length || 0}
-        icon="agriculture"
-        iconBg="#e6f4ea"
-        iconColor="#0d631b"
-        extras={[
-          { label: "12 Hubs", color: "#6b7280", bg: "#f3f4f6" }
-        ]}
-      />
-           <SummaryCard
-        title="Total Bookings"
-        value={bookingData.data.length || 0}
-        icon="calendar_today"
-        iconBg="#fff7ed"
-        iconColor="#ea580c"
-        extras={[
-          { label: "128 Act.", color: "#0d631b" },
-          { label: "42 Pen.", color: "#ea580c" }
-        ]}
-      />
+            <SummaryCard
+              title="Total Users"
+              value={userData.data.length || 0}
+              icon="group"
+              iconBg="#eff6ff"
+              iconColor="#2563eb"
+            />
+            <SummaryCard
+              title="Total Equipment"
+              value={equipmentData.data.length || 0}
+              icon="agriculture"
+              iconBg="#e6f4ea"
+              iconColor="#0d631b"
+            />
+            <SummaryCard
+              title="Total Bookings"
+              value={bookingData.data.length || 0}
+              icon="calendar_today"
+              iconBg="#fff7ed"
+              iconColor="#ea580c"
+            />
           </Grid>
 
           <BottomGrid>
