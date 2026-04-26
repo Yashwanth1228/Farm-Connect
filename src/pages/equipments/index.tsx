@@ -43,7 +43,7 @@ type Equipment = {
   name: string;
   type: string;
   price: number;
-  images: string;
+  images: string[];
   available: boolean;
   description: string;
   enginepower: string;
@@ -52,6 +52,7 @@ type Equipment = {
 export default function EquipmentPage() {
   // const { data, error, isLoading } =  useGetEquipmentsQuery()
   const [GetEquipments, { isLoading }] = useLazyGetEquipmentsQuery();
+  const [sortOption, setSortOption] = useState<string>("default");
 
   useEffect(() => {
     const fetchallequipment = async () => {
@@ -94,7 +95,8 @@ export default function EquipmentPage() {
         selectedTypes.length === 0 || selectedTypes.includes(String(item.type));
 
       const availabilityMatch =
-        avalibility === "all" || item.available === true;
+        avalibility === "all" ||
+        (avalibility === "available" && item.available === true);
 
       const priceRangeMatch = (() => {
         if (priceRange === "0-5000") return item.price <= 5000;
@@ -109,12 +111,20 @@ export default function EquipmentPage() {
     },
   );
 
+  // ✅ APPLY SORTING HERE
+  const sortedEquipments = [...filteredEquipments].sort((a, b) => {
+    if (sortOption === "priceLow") return a.price - b.price;
+    if (sortOption === "priceHigh") return b.price - a.price;
+    if (sortOption === "nameAZ") return a.name.localeCompare(b.name);
+    return 0;
+  });
+
   console.log("the filtered equipments are ", filteredEquipments);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentItems = filteredEquipments.slice(
+  const currentItems = sortedEquipments.slice(
     indexOfFirstItem,
     indexOfLastItem,
   );
@@ -288,9 +298,23 @@ export default function EquipmentPage() {
               setIsScrolled(scrollTop > 10);
             }}
           >
+            <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+              <label>Sort By:</label>
+
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+              >
+                <option value="default">Default</option>
+                <option value="priceLow">Price: Low to High</option>
+                <option value="priceHigh">Price: High to Low</option>
+                <option value="nameAZ">Name: A to Z</option>
+              </select>
+            </div>
             <Title>Premium Equipment</Title>
             <Subtitle>
-              Browse 42 machines available for rental in your region.
+              Showing {filteredEquipments.length} of {fetchedequipment.length}{" "}
+              machines available for rental in your region.
             </Subtitle>
 
             <Grid>
@@ -299,7 +323,7 @@ export default function EquipmentPage() {
                   console.log("the item id is ", item._id),
                   (
                     <Card
-                      key={Number(item._id)}
+                      key={item._id}
                       onClick={(e) => {
                         e.stopPropagation();
                         router.push(`/equipments/detail?id=${item._id}`);

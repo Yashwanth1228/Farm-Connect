@@ -17,6 +17,7 @@ import {
   StatusText,
   StatusTitle,
 } from "@/styles/admin/equipment";
+import User from "../api/user";
 
 /* GRID */
 const Grid = styled.div`
@@ -25,9 +26,26 @@ const Grid = styled.div`
   gap: 40px;
   align-items: start;
 `;
+const UserContainer = styled.div`
+  margin-top: 20px;
+`;
+
+/* PAGINATION */
+const Pageination = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 25px;
+  margin-right: 200px;
+`;
+
+const PText = styled.p`
+  font-size: "13px";
+  color: #777;
+`;
 
 /* BUTTON STYLE */
-const btnStyle = {
+const BtnStyle = {
   width: "34px",
   height: "34px",
   borderRadius: "8px",
@@ -36,20 +54,8 @@ const btnStyle = {
   cursor: "pointer",
 };
 
-// /* ✅ USERS DATA WITH IMAGES */
-// const users = [
-//   { name: "Elias Thorne", email: "elias.thorne@greenfield.farm", img: "https://i.pravatar.cc/60?img=1" },
-//   { name: "Sarah Jenkins", email: "s.jenkins@harvestway.com", img: "https://i.pravatar.cc/60?img=2" },
-//   { name: "Marcus Bennett", email: "marcus.b@terra-tech.io", img: "https://i.pravatar.cc/60?img=3" },
-//   { name: "John Doe", email: "john@example.com", img: "https://i.pravatar.cc/60?img=4" },
-//   { name: "Jane Smith", email: "jane@example.com", img: "https://i.pravatar.cc/60?img=5" },
-//   { name: "David Miller", email: "david@example.com", img: "https://i.pravatar.cc/60?img=6" },
-//   { name: "Ravi Kumar", email: "ravi@example.com", img: "https://i.pravatar.cc/60?img=7" },
-//   { name: "Anita Sharma", email: "anita@example.com", img: "https://i.pravatar.cc/60?img=8" },
-// ];
-
 /* ITEMS PER PAGE */
-const ITEMS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 5;
 
 const UserPage: NextPage = () => {
   const { data, isLoading, error } = useGetUsersQuery();
@@ -89,7 +95,7 @@ const UserPage: NextPage = () => {
 
           <Grid>
             {/* LEFT SIDE */}
-            <div style={{ marginTop: "20px" }}>
+            <UserContainer>
               {/* USERS LIST */}
               {currentUsers?.map((user: any, index: any) => (
                 <UserCard
@@ -101,24 +107,17 @@ const UserPage: NextPage = () => {
               ))}
 
               {/* PAGINATION */}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: "25px",
-                }}
-              >
-                <p style={{ fontSize: "13px", color: "#777" }}>
+              <Pageination>
+                <PText>
                   Showing {start + 1} to{" "}
                   {Math.min(start + ITEMS_PER_PAGE, users?.length)} of{" "}
                   {users.length} users
-                </p>
+                </PText>
 
                 <div style={{ display: "flex", gap: "8px" }}>
                   {/* PREVIOUS */}
                   <button
-                    style={btnStyle}
+                    style={BtnStyle}
                     disabled={page === 1}
                     onClick={() => setPage(page - 1)}
                   >
@@ -130,7 +129,7 @@ const UserPage: NextPage = () => {
                     <button
                       key={i}
                       style={{
-                        ...btnStyle,
+                        ...BtnStyle,
                         background: page === i + 1 ? "#0d631b" : "#eee",
                         color: page === i + 1 ? "#fff" : "#000",
                       }}
@@ -142,15 +141,15 @@ const UserPage: NextPage = () => {
 
                   {/* NEXT */}
                   <button
-                    style={btnStyle}
+                    style={BtnStyle}
                     disabled={page === totalPages}
                     onClick={() => setPage(page + 1)}
                   >
                     ›
                   </button>
                 </div>
-              </div>
-            </div>
+              </Pageination>
+            </UserContainer>
 
             {/* RIGHT SIDE */}
             <StatsPanel users={users} />

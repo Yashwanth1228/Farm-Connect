@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 
 export const Container = styled.div`
   font-family: "Work Sans", sans-serif;
-  
 `;
 
 export const Main = styled.main`
@@ -69,7 +68,7 @@ export const Label = styled.label`
 
 export const Content = styled.div<{ scrolled: boolean }>`
   flex: 1;
-  height: 80vh;
+  height: 120vh;
   overflow-y: auto;
   transition: all 0.3s ease;
 
@@ -165,7 +164,7 @@ export const PageBtn = styled.button`
   background: white;
 `;
 
-export  const ActivePage = styled(PageBtn)`
+export const ActivePage = styled(PageBtn)`
   background: #0d631b;
   color: white;
   font-weight: bold;

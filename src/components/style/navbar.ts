@@ -121,12 +121,12 @@ export const CartIcon = styled.div`
 
 export const Badge = styled.div`
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: 12px;
+  right: 105px;
   background: red;
   color: white;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 10px;
+  // font-weight: bold;
   border-radius: 50%;
   padding: 3px 6px;
 `;

@@ -126,8 +126,10 @@ import farmer from "@/assets/farmer.jpg";
 import farmerlabel from "@/assets/farmerlabtel.jpg";
 import farmertractor from "@/assets/farmertractor.jpg";
 import Footer from "@/components/Footer";
+import { useRouter } from "next/router";
 
 function about() {
+  const router = useRouter();
   return (
     <>
       {/* <Navbar /> */}
@@ -300,9 +302,13 @@ function about() {
             </CTADescription>
 
             <ButtonGroup>
-              <PrimaryButton>Explore Equipment</PrimaryButton>
+              <PrimaryButton onClick={() => router.push("/equipments")}>
+                Explore Equipment
+              </PrimaryButton>
 
-              <SecondaryButton>Learn More</SecondaryButton>
+              <SecondaryButton onClick={() => router.push("/contact")}>
+                Learn More
+              </SecondaryButton>
             </ButtonGroup>
           </CTAContent>
         </CTAContainer>
