@@ -64,7 +64,8 @@ export const Main = styled.div`
 `;
 
 export const Content = styled.div`
-  padding:10px ; /* ✅ FIXED */
+  padding: 10px;
+  margin-top: 20px;
 `;
 
 export const Title = styled.h2`
@@ -124,7 +125,7 @@ export const GrowthCard = styled.div`
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 `;
 
 export const ChartWrapper = styled.div`
@@ -136,9 +137,9 @@ export const ChartWrapper = styled.div`
 /* BARS */
 export const Bars = styled.div`
   display: flex;
-  align-items: flex-end;   /* 🔥 anchor bars at bottom */
+  align-items: flex-end; /* 🔥 anchor bars at bottom */
   justify-content: space-between;
-  height: 120px;           /* 🔥 fixed chart height */
+  height: 120px; /* 🔥 fixed chart height */
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
   gap: 12px;

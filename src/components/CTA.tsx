@@ -7,7 +7,9 @@ import {
   PrimaryBtn,
   SecondaryBtn,
 } from "@/styles/home";
+import { useRouter } from "next/router";
 export default function CTA() {
+  const router = useRouter();
   return (
     <Section4>
       <Container4>
@@ -19,8 +21,12 @@ export default function CTA() {
         </Text>
 
         <ButtonGroup4>
-          <PrimaryBtn>Browse Catalog</PrimaryBtn>
-          <SecondaryBtn>Contact Support</SecondaryBtn>
+          <PrimaryBtn onClick={() => router.push("/equipments")}>
+            Browse Catalog
+          </PrimaryBtn>
+          <SecondaryBtn onClick={() => router.push("/contact")}>
+            Contact Support
+          </SecondaryBtn>
         </ButtonGroup4>
       </Container4>
     </Section4>
