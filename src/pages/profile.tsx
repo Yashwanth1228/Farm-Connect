@@ -229,11 +229,15 @@ export default function ProfilePage() {
           {bookings.map((item) => {
             const today = new Date();
 
-            // ✅ ADD HERE
             const end = new Date(item.end_date);
             end.setHours(23, 59, 59, 999);
 
-            const status = end < today ? "Completed" : "Upcoming";
+            let status = item.status;
+
+            // ✅ AUTO COMPLETE
+            if (status === "active" && today > end) {
+              status = "completed";
+            }
 
             return (
               <BookingCard key={item._id}>
@@ -244,7 +248,7 @@ export default function ProfilePage() {
                 <Content>
                   <Top>
                     <div>
-                      <Badge>{status}</Badge>
+                      <Badge status={status}>{status}</Badge>
                       <Title>{item.name}</Title>
                       <Dates>
                         {new Date(item.start_date).toDateString()} →{" "}
@@ -260,17 +264,21 @@ export default function ProfilePage() {
                   </Top>
 
                   <Actions>
-                    <Btn onClick={() => router.push(`/bookings/${item._id}`)}>
-                      Details
-                    </Btn>
+                    {/* ✅ DETAILS BUTTON */}
+                    {item.status === "active" ||
+                    item.status === "completed" ||
+                    item.status === "upcoming" ? (
+                      <Btn onClick={() => router.push(`/bookings/${item._id}`)}>
+                        Details
+                      </Btn>
+                    ) : null}
 
                     {/* ✅ FIXED HERE */}
-                    <Btn
-                      disabled={status === "Completed"}
-                      onClick={() => handleCancel(item._id)}
-                    >
-                      Cancel Booking
-                    </Btn>
+                    {item.status === "active" || item.status === "upcoming" ? (
+                      <Btn onClick={() => handleCancel(item._id)}>
+                        Cancel Booking
+                      </Btn>
+                    ) : null}
                   </Actions>
                 </Content>
               </BookingCard>
