@@ -149,10 +149,46 @@ export const Top = styled.div`
 `;
 
 export const Badge = styled.span<{ status?: string }>`
-  background: #d6c953;
   padding: 5px 12px;
   border-radius: 20px;
   font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  display: inline-block;
+
+  background-color: ${({ status }) => {
+    switch (status) {
+      case "upcoming":
+        return "#FEF3C7"; // light yellow
+      case "active":
+        return "#DCFCE7"; // light green
+      case "completed":
+        return "#E0E7FF"; // light blue
+      case "Rejected":
+        return "#FEE2E2"; // light red
+      case "cancelled":
+        return "#F3F4F6"; // gray
+      default:
+        return "#E5E7EB";
+    }
+  }};
+
+  color: ${({ status }) => {
+    switch (status) {
+      case "pending":
+        return "#92400E";
+      case "active":
+        return "#166534";
+      case "completed":
+        return "#3730A3";
+      case "rejected":
+        return "#991B1B";
+      case "cancelled":
+        return "#374151";
+      default:
+        return "#111827";
+    }
+  }};
 `;
 
 export const Title = styled.h3`

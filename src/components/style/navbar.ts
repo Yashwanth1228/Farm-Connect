@@ -94,6 +94,22 @@ export const Logout = styled.button`
   }
 `;
 
+export const ProfileWrapper = styled.div`
+  width: 80px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #0d631b;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+  cursor: pointer;
+  overflow: hidden;
+`;
+
 export const Profileicon = styled.img`
   width: 40px;
   height: 40px;
@@ -122,7 +138,7 @@ export const CartIcon = styled.div`
 export const Badge = styled.div`
   position: absolute;
   top: 12px;
-  right: 105px;
+  right: 140px;
   background: red;
   color: white;
   font-size: 10px;
