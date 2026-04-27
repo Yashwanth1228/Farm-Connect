@@ -28,6 +28,7 @@ import {
   Top,
   Bottom,
   TotalPrice,
+  CloseIcon,
 } from "@/pages/equipments/style/carts";
 
 export default function CartPage() {
@@ -359,7 +360,8 @@ function CartItem({
           </div>
 
           <TotalPrice>{total}</TotalPrice>
-          <button onClick={() => onRemove(item._id)}>Remove</button>
+          {/* <button onClick={() => onRemove(item._id)}>Remove</button> */}
+          <CloseIcon onClick={() => alert("this is delete button")} className="material-symbols-outlined">close</CloseIcon>
         </Bottom>
       </Content>
     </Card>

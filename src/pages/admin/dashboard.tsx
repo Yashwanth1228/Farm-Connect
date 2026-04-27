@@ -25,54 +25,83 @@ const Layout = styled.div`
 `;
 
 const Main = styled.main`
-  margin-left: 260px;
+margin-left: 260px;
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1024px) {
+    margin-left: 0;
+  }
 `;
 
 const Content = styled.section`
-  padding: 10px;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+  }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
   margin-top: 20px;
 `;
 
 const BottomGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 32px;
+  gap: 24px;
   margin-top: 32px;
+
+  & > div:first-child {
+    grid-column: span 8;
+  }
+
+  & > div:last-child {
+    grid-column: span 4;
+  }
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+
+    & > div {
+      grid-column: span 1;
+    }
+  }
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const TitleBlock = styled.div`
   h2 {
     font-size: 28px;
-    font-weight: 800;
-    color: #111827;
-    margin: 0;
-    line-height: 1.1;
-    font-family: "Manrope", sans-serif;
+
+    @media (max-width: 768px) {
+      font-size: 22px;
+    }
   }
 
   p {
-    margin-top: 8px;
     font-size: 14px;
-    color: #6b7280;
-    max-width: 500px;
+
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
   }
 `;
-
 const ActionButton = styled.button`
   display: flex;
   align-items: center;
@@ -202,10 +231,14 @@ export default function Dashboard() {
           </Grid>
 
           <BottomGrid>
-            {/* <ActivityList /> */}
-            <EquipmentUtilization bookings={bookingData.data} />
-            <FieldStatus />
-          </BottomGrid>
+  <div style={{ gridColumn: "span 8" }}>
+    <EquipmentUtilization bookings={bookingData.data} />
+  </div>
+
+  <div style={{ gridColumn: "span 4" }}>
+    <FieldStatus />
+  </div>
+</BottomGrid>
         </Content>
       </Main>
     </Layout>

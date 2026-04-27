@@ -120,3 +120,21 @@ export const CheckoutBtn = styled.button`
   color: white;
   border-radius: 12px;
 `;
+
+export const CloseIcon = styled.span`
+  cursor: pointer;
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  color: #666;
+  transition: color 0.2s ease, transform 0.2s ease;
+  user-select: none; /* Prevents text selection on click */
+
+  &:hover {
+    color: #ff4d4f; /* Change to a red hue on hover */
+    transform: scale(1.1); /* Slight zoom effect */
+  }
+
+  &:active {
+    transform: scale(0.9); /* Click "press" effect */
+  }
+  `

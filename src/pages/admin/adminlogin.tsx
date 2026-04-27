@@ -5,19 +5,8 @@ import { Input, InputGroup } from "@/components/InputBox";
 import { Button } from "@/components/Button";
 import { useState } from "react";
 import axios from "axios";
-import {
-  Anc,
-  BgImage,
-  Left,
-  LeftContent,
-  Logo,
-  Main,
-  Overlay,
-  QuoteBox,
-  Right,
-  SubText,
-  Wrapper,
-} from "./style/adminlogin";
+import { Anc, BgImage, Left, LeftContent, Logo, Main, Overlay, QuoteBox, Right, SubText, Wrapper } from "./style/adminlogin";
+import { toast } from "react-toastify";
 
 /* MAIN LAYOUT */
 
@@ -54,7 +43,9 @@ export default function Login() {
           router.refresh();
         }, 1000);
       } else {
-        alert("would not login ");
+        toast.error(
+          res.data.message || "Login failed check Username or Password ❌",
+        );
       }
     } catch (error) {
       alert("Something went wrong");
