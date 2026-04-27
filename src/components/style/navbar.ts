@@ -1,6 +1,14 @@
 import styled from "@emotion/styled";
 import { FaSearch } from "react-icons/fa";
 import Link from "next/link";
+import { FiMenu } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
+
+export const mq = {
+  sm: "@media (max-width: 480px)",
+  md: "@media (max-width: 768px)",
+  lg: "@media (max-width: 1024px)",
+};
 
 export const Header = styled.header`
   position: fixed;
@@ -10,9 +18,16 @@ export const Header = styled.header`
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   z-index: 50;
-  margin-top: 20px;
-  margin-left: 3%;
+  margin: 20px auto;
+  left: 0;
+  right: 0;
   border-radius: 30px;
+
+  ${mq.md} {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
 `;
 
 export const Container = styled.div`
@@ -23,12 +38,21 @@ export const Container = styled.div`
   justify-content: space-between;
   height: 80px;
   padding: 0 20px;
+
+  ${mq.md} {
+    height: 65px;
+    padding: 0 12px;
+  }
 `;
 
 export const Nav = styled.nav`
   display: flex;
   gap: 30px;
-  margin-left: 80px;
+
+  ${mq.md} {
+    display: none; // 👈 change from none
+    gap: 10px; // ✅ hide for mobile
+  }
 `;
 
 export const NavLink = styled(Link)`
@@ -46,10 +70,20 @@ export const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  // background: #f4f4ef;
-  padding: 6px 12px;
-  border-radius: 30px;
-  margin-left: 60px;
+
+  ${mq.md} {
+    display: none; //  hide in mobile (we’ll add icon later)
+  }
+`;
+
+export const Hamburger = styled(FiMenu)`
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+
+  ${mq.md} {
+    display: block;
+  }
 `;
 
 export const SearchInput = styled.input`
@@ -95,7 +129,7 @@ export const Logout = styled.button`
 `;
 
 export const ProfileWrapper = styled.div`
-  width: 80px;
+  width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #0d631b;
@@ -105,11 +139,11 @@ export const ProfileWrapper = styled.div`
   align-items: center;
   justify-content: center;
 
-  font-weight: bold;
-  cursor: pointer;
-  overflow: hidden;
+  ${mq.md} {
+    width: 35px;
+    height: 35px;
+  }
 `;
-
 export const Profileicon = styled.img`
   width: 40px;
   height: 40px;
@@ -119,11 +153,10 @@ export const Profileicon = styled.img`
 `;
 
 export const CartIcon = styled.div`
-  position:relative
+  position: relative;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  // background: #f4f4ef;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -137,12 +170,23 @@ export const CartIcon = styled.div`
 
 export const Badge = styled.div`
   position: absolute;
-  top: 12px;
-  right: 140px;
+  top: -5px;
+  right: -10px;
   background: red;
   color: white;
   font-size: 10px;
-  // font-weight: bold;
   border-radius: 50%;
   padding: 3px 6px;
+`;
+
+// MOBILE MENU
+
+export const MobileSearchIcon = styled(FiSearch)`
+  display: none;
+  font-size: 22px;
+  cursor: pointer;
+
+  ${mq.md} {
+    display: block;
+  }
 `;
