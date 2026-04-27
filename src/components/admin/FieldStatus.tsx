@@ -18,21 +18,35 @@ const Container = styled.div`
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+  }
 `;
 
 const Header = styled.div`
-  padding: 16px 24px;
+  padding: 16px 20px;
   border-bottom: 1px solid #f3f4f6;
 
   display: flex;
   align-items: center;
   gap: 8px;
+
+  @media (max-width: 480px) {
+    padding: 14px 16px;
+  }
 `;
 
 const Icon = styled.span`
   font-family: "Material Symbols Outlined";
   font-size: 20px;
   color: #0d631b;
+
+  @media (max-width: 480px) {
+    font-size: 18px;
+  }
 
   font-variation-settings:
     'FILL' 1,
@@ -45,13 +59,27 @@ const Title = styled.h3`
   font-weight: 700;
   color: #111827;
   margin: 0;
+  font-size: 16px;
+
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
 `;
 
 const Body = styled.div`
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 14px;
+    gap: 12px;
+  }
 `;
 
 const Row = styled.div`
@@ -59,22 +87,41 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
+  gap: 8px;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Label = styled.span`
   color: #6b7280;
   font-weight: 500;
+
+  @media (max-width: 480px) {
+    font-size: 12px;
+  }
 `;
 
 const Value = styled.span`
   font-weight: 700;
   color: #111827;
+
+  @media (max-width: 480px) {
+    font-size: 13px;
+  }
 `;
 
 const RecommendationWrapper = styled.div`
-  margin-top: 24px;
-  padding-top: 24px;
+  margin-top: 16px;
+  padding-top: 16px;
   border-top: 1px solid #f3f4f6;
+
+  @media (max-width: 480px) {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
 `;
 
 const RecommendationBox = styled.div`
@@ -82,6 +129,10 @@ const RecommendationBox = styled.div`
   border: 1px solid rgba(13, 99, 27, 0.1);
   padding: 12px;
   border-radius: 8px;
+
+  @media (max-width: 480px) {
+    padding: 10px;
+  }
 `;
 
 const RecommendationText = styled.p`
@@ -91,6 +142,12 @@ const RecommendationText = styled.p`
   font-weight: 600;
   font-style: italic;
   margin: 0;
+
+  word-break: break-word;
+
+  @media (max-width: 480px) {
+    font-size: 10px;
+  }
 `;
 
 export default function FieldStatus() {
