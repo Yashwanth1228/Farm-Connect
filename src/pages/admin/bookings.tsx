@@ -242,7 +242,7 @@ export default function BookingsPage() {
                           <ActionButton
                             variant="danger"
                             onClick={() =>
-                              handleStatusChange(item._id, "completed")
+                              handleStatusChange(item._id, "Rejected")
                             }
                           >
                             Reject

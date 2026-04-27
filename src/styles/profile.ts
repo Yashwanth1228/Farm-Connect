@@ -148,7 +148,7 @@ export const Top = styled.div`
   justify-content: space-between;
 `;
 
-export const Badge = styled.span`
+export const Badge = styled.span<{ status?: string }>`
   background: #d6c953;
   padding: 5px 12px;
   border-radius: 20px;
