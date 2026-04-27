@@ -20,6 +20,7 @@ import {
   Profileicon,
   CartIcon,
   Badge,
+  ProfileWrapper,
 } from "@/components/style/navbar";
 
 export default function Navbar() {
@@ -101,24 +102,19 @@ export default function Navbar() {
             placeholder="Search Equipment"
             onChange={(e) => setQuery(e.target.value)}
           />
-          {/* <SearchInput placeholder="🔎Search Equipment" /> */}
         </SearchContainer>
-
-        {/* <ButtonGroup>
-          <Button href="/login">Login</Button>
-          <Button>Signup</Button>
-        </ButtonGroup> */}
 
         {user ? (
           <ButtonGroup>
             {/* <Logo>{user.name[0]}</Logo> */}
             {/* <Profileicon onClick={() => { router.push("/profile")}}>{user?.name?.[0]}</Profileicon> */}
-            <Profileicon
-              src={user?.profilePic}
-              onClick={() => {
-                router.push("/profile");
-              }}
-            ></Profileicon>
+            <ProfileWrapper onClick={() => router.push("/profile")}>
+              {user?.profilePic ? (
+                <Profileicon src={user.profilePic} alt="profile" />
+              ) : (
+                user?.name?.charAt(0)?.toUpperCase() || "U"
+              )}
+            </ProfileWrapper>
             <CartIcon>
               <span
                 onClick={() => {
