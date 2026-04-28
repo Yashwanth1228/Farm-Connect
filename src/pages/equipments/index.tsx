@@ -35,6 +35,16 @@ import {
   PageBtn,
   ActivePage,
   Desc,
+  MobileTopBar,
+  FilterBtn,
+  MobileSidebarOverlay,
+  MobileSidebar,
+  DesktopSort,
+  Badge,
+  SkeletonCard,
+  SkeletonImage,
+  SkeletonBody,
+  SkeletonLine,
 } from "@/pages/equipments/style/index";
 
 type Equipment = {
@@ -53,6 +63,7 @@ export default function EquipmentPage() {
   // const { data, error, isLoading } =  useGetEquipmentsQuery()
   const [GetEquipments, { isLoading }] = useLazyGetEquipmentsQuery();
   const [sortOption, setSortOption] = useState<string>("default");
+  const [filterOpen, setFilterOpen] = useState(false);
 
   useEffect(() => {
     const fetchallequipment = async () => {
@@ -85,7 +96,7 @@ export default function EquipmentPage() {
 
   const [avalibility, setAvalibility] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
 
   const filteredEquipments: Equipment[] = fetchedequipment.filter(
     (item: Equipment) => {
@@ -298,7 +309,10 @@ export default function EquipmentPage() {
               setIsScrolled(scrollTop > 10);
             }}
           >
-            <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+            <MobileTopBar>
+              <FilterBtn onClick={() => setFilterOpen(true)}>Filters</FilterBtn>
+            </MobileTopBar>
+            <DesktopSort>
               <label>Sort By:</label>
 
               <select
@@ -310,7 +324,8 @@ export default function EquipmentPage() {
                 <option value="priceHigh">Price: High to Low</option>
                 <option value="nameAZ">Name: A to Z</option>
               </select>
-            </div>
+            </DesktopSort>
+
             <Title>Premium Equipment</Title>
             <Subtitle>
               Showing {filteredEquipments.length} of {fetchedequipment.length}{" "}
@@ -318,10 +333,18 @@ export default function EquipmentPage() {
             </Subtitle>
 
             <Grid>
-              {currentItems.map(
-                (item: Equipment) => (
-                  console.log("the item id is ", item._id),
-                  (
+              {isLoading
+                ? Array.from({ length: 8 }).map((_, i) => (
+                    <SkeletonCard key={i}>
+                      <SkeletonImage />
+                      <SkeletonBody>
+                        <SkeletonLine />
+                        <SkeletonLine />
+                        <SkeletonLine />
+                      </SkeletonBody>
+                    </SkeletonCard>
+                  ))
+                : currentItems.map((item: Equipment) => (
                     <Card
                       key={item._id}
                       onClick={(e) => {
@@ -329,28 +352,27 @@ export default function EquipmentPage() {
                         router.push(`/equipments/detail?id=${item._id}`);
                       }}
                     >
-                      <CardImage src={String(item.images[0])} />
+                      <Badge available={item.available}>
+                        {item.available ? "Available" : "Not Available"}
+                      </Badge>
+
+                      <CardImage
+                        src={item.images?.[0] || "/images/placeholder.png"}
+                        onError={(e: any) => {
+                          e.target.src = "/images/placeholder.png";
+                        }}
+                      />
 
                       <CardBody>
-                        <CardTitle>{String(item.name)}</CardTitle>
-                        <Desc>Type: {String(item.type)}</Desc>
+                        <CardTitle>{item.name}</CardTitle>
+                        <Desc>Type: {item.type}</Desc>
 
                         <CardFooter>
-                          <Price>₹{Number(item.price)}/day</Price>
-                          {/* <Button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          router.push(`/equipments/detail?id=${item._id}`);
-                        }}
-                      >
-                        View Details
-                      </Button> */}
+                          <Price>₹{item.price}/day</Price>
                         </CardFooter>
                       </CardBody>
                     </Card>
-                  )
-                ),
-              )}
+                  ))}
             </Grid>
           </Content>
         </Layout>
@@ -383,6 +405,180 @@ export default function EquipmentPage() {
           </PageBtn>
         </Pagination>
       </Main>
+      {filterOpen && (
+        <MobileSidebarOverlay onClick={() => setFilterOpen(false)}>
+          <MobileSidebar onClick={(e) => e.stopPropagation()}>
+            {/* SAME FILTER UI REUSED */}
+            <FilterBox>
+              <FilterTitle>Filters</FilterTitle>
+
+              <Section>
+                <SectionTitle>Sort By</SectionTitle>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={sortOption === "default"}
+                    onChange={() => setSortOption("default")}
+                  />
+                  Default
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={sortOption === "priceLow"}
+                    onChange={() => setSortOption("priceLow")}
+                  />
+                  Price: Low → High
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={sortOption === "priceHigh"}
+                    onChange={() => setSortOption("priceHigh")}
+                  />
+                  Price: High → Low
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={sortOption === "nameAZ"}
+                    onChange={() => setSortOption("nameAZ")}
+                  />
+                  Name: A → Z
+                </Label>
+              </Section>
+
+              {/* PRICE */}
+              <Section>
+                <SectionTitle>Price Range</SectionTitle>
+                <Range
+                  type="range"
+                  min={1000}
+                  max={20000}
+                  value={price}
+                  step={400}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                />
+                <RangeText>
+                  <span>₹1,000</span>
+                  <span>₹{price.toLocaleString()}</span>
+                </RangeText>
+              </Section>
+
+              {/* PRICE RANGE RADIO */}
+              <Section>
+                <Label>
+                  <input
+                    type="radio"
+                    checked={priceRange === "all"}
+                    onChange={() => setPriceRange("all")}
+                  />
+                  All Prices
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={priceRange === "0-5000"}
+                    onChange={() => setPriceRange("0-5000")}
+                  />
+                  ₹0 - ₹5,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={priceRange === "6000-10000"}
+                    onChange={() => setPriceRange("6000-10000")}
+                  />
+                  ₹6000 - ₹10,000
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={priceRange === "10000-20000"}
+                    onChange={() => setPriceRange("10000-20000")}
+                  />
+                  ₹10,000 - ₹20,000
+                </Label>
+              </Section>
+
+              {/* TYPE */}
+              <Section>
+                <SectionTitle>Equipment Type</SectionTitle>
+
+                <Label>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Tractors")}
+                    onChange={() => handleTypeChange("Tractors")}
+                  />
+                  Tractors
+                </Label>
+
+                <Label>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Harvesters")}
+                    onChange={() => handleTypeChange("Harvesters")}
+                  />
+                  Harvesters
+                </Label>
+
+                <Label>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Ploughs")}
+                    onChange={() => handleTypeChange("Ploughs")}
+                  />
+                  Ploughs
+                </Label>
+
+                <Label>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes("Cultivators")}
+                    onChange={() => handleTypeChange("Cultivators")}
+                  />
+                  Cultivators
+                </Label>
+              </Section>
+
+              {/* AVAILABILITY */}
+              <Section>
+                <SectionTitle>Availability</SectionTitle>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={avalibility === "available"}
+                    onChange={() => setAvalibility("available")}
+                  />
+                  Available Now
+                </Label>
+
+                <Label>
+                  <input
+                    type="radio"
+                    checked={avalibility === "all"}
+                    onChange={() => setAvalibility("all")}
+                  />
+                  All Equipment
+                </Label>
+              </Section>
+
+              <Button onClick={handleClear}>Clear All Filters</Button>
+
+              <Button onClick={() => setFilterOpen(false)}>Apply</Button>
+            </FilterBox>
+          </MobileSidebar>
+        </MobileSidebarOverlay>
+      )}
     </Container>
   );
 }

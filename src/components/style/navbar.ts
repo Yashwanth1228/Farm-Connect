@@ -100,12 +100,20 @@ export const SearchInput = styled.input`
 export const SearchIcon = styled(FaSearch)`
   color: #555;
   font-size: 16px;
+
+  ${mq.md} {
+    margin-right: 10px;
+  }
 `;
 
 export const ButtonGroup = styled.div`
   display: flex;
   align-items: center;
   gap: 15px;
+
+  ${mq.md} {
+    gap: 10px;
+  }
 `;
 
 export const Logout = styled.button`
@@ -126,6 +134,10 @@ export const Logout = styled.button`
   &:hover {
     color: #0d631b;
   }
+
+  ${mq.md} {
+    display: none;
+  }
 `;
 
 export const ProfileWrapper = styled.div`
@@ -142,6 +154,7 @@ export const ProfileWrapper = styled.div`
   ${mq.md} {
     width: 35px;
     height: 35px;
+    display: none;
   }
 `;
 export const Profileicon = styled.img`
@@ -166,6 +179,11 @@ export const CartIcon = styled.div`
     font-size: 20px;
     color: #0d631b;
   }
+
+  ${mq.md} {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 export const Badge = styled.div`
@@ -189,4 +207,41 @@ export const MobileSearchIcon = styled(FiSearch)`
   ${mq.md} {
     display: block;
   }
+`;
+
+// export const MobileSearchInput = styled.input`
+//   display: none;
+
+//   ${mq.md} {
+//     display: block;
+//     position: absolute;
+//     top: 70px;
+//     left: 10px;
+//     right: 10px;
+//     padding: 12px;
+//     border-radius: 8px;
+//     border: 1px solid #ccc;
+//     background: white;
+//     z-index: 1000;
+//   }
+// `;
+
+export const MobileSearchWrapper = styled.div`
+  display: none;
+
+  ${mq.md} {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    margin: 0 10px;
+  }
+`;
+
+export const MobileSearchInput = styled.input`
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
 `;

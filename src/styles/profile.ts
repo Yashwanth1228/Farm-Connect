@@ -1,5 +1,11 @@
 import styled from "@emotion/styled";
 
+export const mq = {
+  sm: "@media (max-width: 480px)",
+  md: "@media (max-width: 768px)",
+  lg: "@media (max-width: 1024px)",
+};
+
 export const Page = styled.div`
   background: #fafaf5;
   min-height: 100vh;
@@ -9,6 +15,10 @@ export const Main = styled.div`
   padding: 120px 20px 40px;
   max-width: 1200px;
   margin: auto;
+
+  ${mq.md} {
+    padding: 100px 15px 30px;
+  }
 `;
 
 export const ProfileCard = styled.div`
@@ -19,6 +29,13 @@ export const ProfileCard = styled.div`
   border-radius: 30px;
   align-items: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+  ${mq.md} {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+    gap: 20px;
+  }
 `;
 
 export const Left = styled.div``;
@@ -78,6 +95,10 @@ export const SecondaryBtn = styled.button`
 export const Right = styled.div`
   display: flex;
   gap: 15px;
+
+  ${mq.md} {
+    justify-content: center;
+  }
 `;
 
 export const Stat = styled.div`
@@ -126,10 +147,19 @@ export const BookingCard = styled.div`
     transform: translateY(-4px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   }
+
+  ${mq.md} {
+    flex-direction: column;
+  }
 `;
 
 export const Image = styled.div`
   width: 250px;
+
+  ${mq.md} {
+    width: 100%;
+    height: 200px;
+  }
 
   img {
     width: 100%;
@@ -146,6 +176,11 @@ export const Content = styled.div`
 export const Top = styled.div`
   display: flex;
   justify-content: space-between;
+
+  ${mq.md} {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 export const Badge = styled.span<{ status?: string }>`
@@ -204,6 +239,10 @@ export const Dates = styled.p`
 export const Price = styled.div`
   text-align: right;
 
+  ${mq.md} {
+    text-align: left;
+  }
+
   h3 {
     color: #0d631b;
   }
@@ -213,6 +252,10 @@ export const Actions = styled.div`
   margin-top: 15px;
   display: flex;
   gap: 10px;
+
+  ${mq.md} {
+    flex-direction: column;
+  }
 `;
 
 export const Btn = styled.button`
@@ -304,6 +347,11 @@ export const Avatar = styled.div`
   height: 150px;
   border-radius: 50%;
   overflow: hidden;
+
+  ${mq.md} {
+    width: 150px;
+    height: 150px;
+  }
 
   img {
     width: 100%;

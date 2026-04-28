@@ -1,16 +1,24 @@
 import styled from "@emotion/styled";
 
+export const mq = {
+  sm: "@media (max-width: 480px)",
+  md: "@media (max-width: 768px)",
+  lg: "@media (max-width: 1024px)",
+};
+
 export const Page = styled.div`
   background: #fafaf5;
   font-family: "Work Sans", sans-serif;
 `;
 
-
-
 export const Main = styled.main`
   padding-top: 120px;
   max-width: 1200px;
   margin: auto;
+
+  ${mq.md} {
+    padding-bottom: 120px; /* space for sticky bar */
+  }
 `;
 
 export const Header = styled.div`
@@ -30,6 +38,10 @@ export const Grid = styled.div`
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 40px;
+
+  ${mq.md} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Left = styled.div`
@@ -37,9 +49,18 @@ export const Left = styled.div`
   flex-direction: column;
   gap: 20px;
   margin-bottom: 40px;
+
+  ${mq.md} {
+    padding: 0 10px; /* 👈 prevents touching screen edge */
+  }
 `;
 
-export const Right = styled.div``;
+export const Right = styled.div`
+  ${mq.md} {
+    display: block; /* 👈 change from none to block */
+    width: 100%;
+  }
+`;
 
 export const Card = styled.div`
   display: flex;
@@ -47,6 +68,10 @@ export const Card = styled.div`
   padding: 20px;
   background: white;
   border-radius: 20px;
+
+  ${mq.md} {
+    flex-direction: column;
+  }
 `;
 
 export const Img = styled.img`
@@ -54,6 +79,11 @@ export const Img = styled.img`
   height: 150px;
   object-fit: cover;
   border-radius: 12px;
+
+  ${mq.md} {
+    width: 100%;
+    height: 200px;
+  }
 `;
 
 export const Content = styled.div`
@@ -70,6 +100,12 @@ export const Bottom = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 20px;
+
+  ${mq.md} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 `;
 
 export const Qty = styled.div`
@@ -123,10 +159,12 @@ export const CheckoutBtn = styled.button`
 
 export const CloseIcon = styled.span`
   cursor: pointer;
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
   font-size: 24px;
   color: #666;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
   user-select: none; /* Prevents text selection on click */
 
   &:hover {
@@ -137,4 +175,24 @@ export const CloseIcon = styled.span`
   &:active {
     transform: scale(0.9); /* Click "press" effect */
   }
-  `
+`;
+
+export const MobileCheckoutBar = styled.div`
+  display: none;
+
+  ${mq.md} {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    background: white;
+    padding: 15px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+  }
+`;
