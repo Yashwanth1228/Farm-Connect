@@ -9,9 +9,18 @@ export const PageWrapper = styled.div`
 `;
 
 export const Content = styled.div`
-  margin-left: 260px; /* 👈 FIX: align with sidebar */
+  margin-left: 260px;
   width: 100%;
-  padding: 10px; 
+  padding: 16px;
+
+  @media (max-width: 1024px) {
+    margin-left: 0; /* ✅ remove sidebar gap */
+    padding: 14px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 10px;
+  }
 `;
 
 /* ================= HEADER ================= */
@@ -20,7 +29,13 @@ export const HeaderWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 export const Left = styled.div``;
@@ -28,8 +43,14 @@ export const Left = styled.div``;
 export const Title = styled.h2`
   font-size: 42px;
   font-weight: 900;
-  color: #1a1c19;
-  letter-spacing: -1px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 22px;
+  }
 `;
 
 export const Subtitle = styled.p`
@@ -42,7 +63,12 @@ export const Subtitle = styled.p`
 
 export const Actions = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 12px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    flex-wrap: wrap;
+  }
 `;
 
 export const Button = styled.button<{
@@ -82,6 +108,11 @@ export const Button = styled.button<{
 
   .material-symbols-outlined {
     font-size: 18px;
+  }
+
+  @media (max-width: 640px) {
+    flex: 1;
+    justify-content: center;
   }
 `;
 
@@ -150,11 +181,15 @@ export const TableRow = styled.tr`
 export const StatsGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 20px;
   margin-bottom: 30px;
 
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr); /* tablet */
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr; /* mobile */
   }
 `;
 
@@ -298,11 +333,17 @@ export const TableContainer = styled.div`
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #e5e7eb;
+
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 640px) {
+    display: none; /* ❌ hide table on mobile */
+  }
 `;
 
 export const TableWrapper = styled.div`
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 `;
 
 /* ================= TABLE ================= */
@@ -310,6 +351,10 @@ export const TableWrapper = styled.div`
 export const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
+
+  @media (max-width: 640px) {
+    font-size: 12px;
+  }
 `;
 
 /* ================= HEADER ================= */
@@ -320,10 +365,11 @@ export const Thead = styled.thead`
 
 export const Th = styled.th`
   padding: 18px 24px;
-  text-align: left;
-  font-size: 13px;
-  font-weight: 700;
-  color: #374151;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 12px;
+  }
 `;
 
 export const ThRight = styled(Th)`
@@ -342,11 +388,20 @@ export const Tr = styled.tr`
 
 export const Td = styled.td`
   padding: 16px 24px;
-  border-top: 1px solid #f0f0f0;
   font-size: 14px;
   color: #1a1c19;
-`;
 
+  white-space: nowrap; /* ✅ prevents ugly wrapping */
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 640px) {
+    white-space: normal; /* ✅ allow wrap ONLY on small screens */
+  }
+`;
 export const TdRight = styled(Td)`
   text-align: right;
 `;
@@ -401,7 +456,12 @@ export const Status = styled.span<{ type: "pending" | "approved" }>`
 export const ActionGroup = styled.div`
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch; /* ✅ full width buttons */
+  }
 `;
 
 export const ActionButton = styled.button<{
@@ -439,6 +499,70 @@ export const ActionButton = styled.button<{
   &:hover {
     opacity: 0.9;
   }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 8px;
+  }
+`;
+
+/* ================= MOBILE CARDS ================= */
+
+export const MobileList = styled.div`
+  display: none;
+
+  @media (max-width: 640px) {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+`;
+
+export const BookingCard = styled.div`
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+
+  transition: transform 0.2s ease;
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+export const CardRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 8px;
+`;
+
+export const CardLabel = styled.span`
+  font-size: 11px;
+  color: #9ca3af;
+  font-weight: 600;
+`;
+
+export const CardValue = styled.span`
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1c19;
+
+  text-align: right;
+`;
+
+export const CardActions = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+
+  button {
+    flex: 1;
+  }
 `;
 
 
@@ -446,43 +570,62 @@ export const ActionButton = styled.button<{
 /* ================= PAGINATION ================= */
 
 export const PaginationBar = styled.div`
-  padding: 16px 24px;
+  padding: 14px;
   background: #f9fafb;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 
-  border-top: 1px solid #e5e7eb;
-
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-
-  color: #6b7280;
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
-export const PaginationInfo = styled.span``;
+export const PaginationInfo = styled.span`
+  font-size: 12px;
+
+  @media (max-width: 640px) {
+    text-align: center;
+  }
+`;
 
 export const PaginationControls = styled.div`
   display: flex;
-  align-items: center;
-  gap: 16px;
+  gap: 6px;
+  flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
 `;
 
+
 export const PageBtn = styled.button<{ active?: boolean }>`
-  background: none;
-  border: none;
-  cursor: pointer;
+  padding: 8px;
+  min-width: 40px;
+
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+
+  background: ${({ active }) => (active ? "#0d631b" : "#fff")};
+  color: ${({ active }) => (active ? "#fff" : "#374151")};
 
   font-size: 13px;
-  font-weight: ${({ active }) => (active ? 800 : 600)};
-  color: ${({ active }) => (active ? "#0d631b" : "#6b7280")};
+  font-weight: 600;
 
-  transition: color 0.2s ease;
+  cursor: pointer;
 
   &:hover {
-    color: #0d631b;
+    background: #0d631b;
+    color: #fff;
+  }
+
+  @media (max-width: 640px) {
+    flex: 1;
   }
 `;

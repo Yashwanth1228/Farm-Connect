@@ -257,6 +257,8 @@ export default function Sidebar() {
   const { admin, setAdmin }: any = useContext(AppContent);
   const router = useRouter();
 
+  console.log("admin data from side bar", admin);
+
   const [open, setOpen] = useState(false);
 
   const handlelogout = async () => {

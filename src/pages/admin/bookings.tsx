@@ -48,6 +48,12 @@ import {
   PageBtn,
   HighlightIcon,
   HighlightOverlay,
+  MobileList,
+  BookingCard,
+  CardRow,
+  CardValue,
+  CardLabel,
+  CardActions,
 } from "@/styles/admin/bookings";
 import {
   CenterBox,
@@ -64,7 +70,9 @@ import { toast } from "react-toastify";
 /* ================= PAGE ================= */
 
 export default function BookingsPage() {
+
   const { data, isLoading } = useGetBookingsQuery();
+  console.log("bookings data ", data);
   const [updatestatus] = useUpdatestatusMutation();
 
   const [page, setPage] = useState(1);
@@ -178,170 +186,114 @@ export default function BookingsPage() {
         </StatsGrid>
 
         {/* ===== TABLE ===== */}
-        <TableContainer>
-          <TableWrapper>
-            <Table>
-              <Thead>
-                <tr>
-                  <Th>User</Th>
-                  <Th>Equipment</Th>
-                  <Th>Date</Th>
-                  <Th>Status</Th>
-                  <ThRight>Actions</ThRight>
-                </tr>
-              </Thead>
+       {/* ===== TABLE (DESKTOP ONLY) ===== */}
+<TableContainer>
+  <TableWrapper>
+    <Table>
+      <Thead>
+        <tr>
+          <Th>User</Th>
+          <Th>Equipment</Th>
+          <Th>Date</Th>
+          <Th>Status</Th>
+          <ThRight>Actions</ThRight>
+        </tr>
+      </Thead>
 
-              <tbody>
-                {/* ROW 1 */}
-                {currentBookings.map((item: any) => {
-                  return (
-                    <Tr>
-                      <Td>
-                        <UserCell>
-                          <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
-                          <UserName>{item.username}</UserName>
-                        </UserCell>
-                      </Td>
+      <tbody>
+        {currentBookings.map((item: any) => (
+          <Tr key={item._id}>
+            <Td>
+              <UserCell>
+                <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
+                <UserName>{item.username}</UserName>
+              </UserCell>
+            </Td>
 
-                      <Td>
-                        <SubText>{item.name}</SubText>
-                      </Td>
+            <Td>
+              <SubText>{item.name}</SubText>
+            </Td>
 
-                      <Td>
-                        <SubText>
-                          {new Date(item.start_date).toLocaleDateString(
-                            "en-IN",
-                            {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                            },
-                          )}{" "}
-                          -{" "}
-                          {new Date(item.end_date).toLocaleDateString("en-IN", {
-                            day: "numeric",
-                            month: "short",
-                          })}
-                        </SubText>
-                      </Td>
-                      <Td>
-                        <Status type={item.status}>{item.status}</Status>
-                      </Td>
+            <Td>
+              <SubText>
+                {new Date(item.start_date).toLocaleDateString("en-IN")} -{" "}
+                {new Date(item.end_date).toLocaleDateString("en-IN")}
+              </SubText>
+            </Td>
 
-                      <TdRight>
-                        <ActionGroup>
-                          <ActionButton
-                            variant="primary"
-                            onClick={() =>
-                              handleStatusChange(item._id, "active")
-                            }
-                          >
-                            Approve
-                          </ActionButton>
+            <Td>
+              <Status type={item.status}>{item.status}</Status>
+            </Td>
 
-                          <ActionButton
-                            variant="danger"
-                            onClick={() =>
-                              handleStatusChange(item._id, "Rejected")
-                            }
-                          >
-                            Reject
-                          </ActionButton>
-                        </ActionGroup>
-                      </TdRight>
-                    </Tr>
-                  );
-                })}
-                {/* <Tr>
-          <Td>
-            <UserCell>
-              <Avatar bg="#fed7aa">SM</Avatar>
-              <UserName>Samuel Miller</UserName>
-            </UserCell>
-          </Td>
+            <TdRight>
+              <ActionGroup>
+                <ActionButton
+                  variant="primary"
+                  onClick={() => handleStatusChange(item._id, "active")}
+                >
+                  Approve
+                </ActionButton>
 
-          <Td>
-            <SubText>Case IH Magnum 340</SubText>
-          </Td>
+                <ActionButton
+                  variant="danger"
+                  onClick={() => handleStatusChange(item._id, "Rejected")}
+                >
+                  Reject
+                </ActionButton>
+              </ActionGroup>
+            </TdRight>
+          </Tr>
+        ))}
+      </tbody>
+    </Table>
+  </TableWrapper>
+</TableContainer>
 
-          <Td>
-            <SubText>Oct 12 - Oct 15</SubText>
-          </Td>
+{/* ===== MOBILE CARDS (ONLY MOBILE) ===== */}
+<MobileList>
+  {currentBookings.map((item: any) => (
+    <BookingCard key={item._id}>
+      <UserCell style={{ marginBottom: "10px" }}>
+        <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
+        <UserName>{item.username}</UserName>
+      </UserCell>
 
-          <Td>
-            <Status type="pending">Pending</Status>
-          </Td>
+      <CardRow>
+        <CardLabel>Equipment</CardLabel>
+        <CardValue>{item.name}</CardValue>
+      </CardRow>
 
-          <TdRight>
-            <ActionGroup>
-              <ActionButton variant="primary">Approve</ActionButton>
-              <ActionButton variant="danger">Reject</ActionButton>
-            </ActionGroup>
-          </TdRight>
-        </Tr> */}
+      <CardRow>
+        <CardLabel>Date</CardLabel>
+        <CardValue>
+          {new Date(item.start_date).toLocaleDateString("en-IN")} -{" "}
+          {new Date(item.end_date).toLocaleDateString("en-IN")}
+        </CardValue>
+      </CardRow>
 
-                {/* ROW 2 */}
-                {/* <Tr>
-          <Td>
-            <UserCell>
-              <Avatar bg="#bbf7d0">EK</Avatar>
-              <UserName>Elena Kovach</UserName>
-            </UserCell>
-          </Td>
+      <CardRow>
+        <CardLabel>Status</CardLabel>
+        <Status type={item.status}>{item.status}</Status>
+      </CardRow>
 
-          <Td>
-            <SubText>Claas Lexion 8900</SubText>
-          </Td>
+      <CardActions>
+        <ActionButton
+          variant="primary"
+          onClick={() => handleStatusChange(item._id, "active")}
+        >
+          Approve
+        </ActionButton>
 
-          <Td>
-            <SubText>Oct 10 - Oct 20</SubText>
-          </Td>
-
-          <Td>
-            <Status type="approved">Approved</Status>
-          </Td>
-
-          <TdRight>
-            <ActionGroup>
-              <ActionButton variant="outline">
-                View Details
-              </ActionButton>
-            </ActionGroup>
-          </TdRight>
-        </Tr> */}
-
-                {/* ROW 3 */}
-                {/* <Tr>
-          <Td>
-            <UserCell>
-              <Avatar bg="#fde68a">RJ</Avatar>
-              <UserName>Robert Jenkins</UserName>
-            </UserCell>
-          </Td>
-
-          <Td>
-            <SubText>New Holland T8.435</SubText>
-          </Td>
-
-          <Td>
-            <SubText>Oct 14 - Oct 14</SubText>
-          </Td>
-
-          <Td>
-            <Status type="pending">Pending</Status>
-          </Td>
-
-          <TdRight>
-            <ActionGroup>
-              <ActionButton variant="primary">Approve</ActionButton>
-              <ActionButton variant="danger">Reject</ActionButton>
-            </ActionGroup>
-          </TdRight>
-        </Tr> */}
-              </tbody>
-            </Table>
-          </TableWrapper>
-        </TableContainer>
+        <ActionButton
+          variant="danger"
+          onClick={() => handleStatusChange(item._id, "Rejected")}
+        >
+          Reject
+        </ActionButton>
+      </CardActions>
+    </BookingCard>
+  ))}
+</MobileList>
 
         <PaginationBar>
           <PaginationInfo>

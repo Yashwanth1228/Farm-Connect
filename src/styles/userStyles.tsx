@@ -1,15 +1,23 @@
 import styled from "@emotion/styled";
 
 /* SIDEBAR */
-export const SidebarContainer = styled.aside`
+export const SidebarContainer = styled.aside<{ open?: boolean }>`
   width: 260px;
-  height: 100vh; /* ✅ FIXED */
+  height: 100vh;
   position: fixed;
   background: #fafaf5;
   padding: 20px;
 
   display: flex;
   flex-direction: column;
+  z-index: 1000;
+
+  transition: transform 0.3s ease;
+
+  @media (max-width: 768px) {
+    transform: ${({ open }) =>
+      open ? "translateX(0)" : "translateX(-100%)"};
+  }
 `;
 
 export const MenuItem = styled.div<{ active?: boolean }>`
@@ -38,11 +46,18 @@ export const TopbarContainer = styled.div`
   top: 0;
   height: 60px;
   background: #fafaf5;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
+
   border-bottom: 1px solid #ddd;
+  z-index: 900;
+
+  @media (max-width: 768px) {
+    left: 0; /* ✅ full width */
+  }
 `;
 
 export const Search = styled.input`
@@ -51,6 +66,14 @@ export const Search = styled.input`
   border-radius: 20px;
   border: none;
   background: #f4f4ef;
+
+  @media (max-width: 768px) {
+    width: 200px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 /* PAGE */
@@ -61,16 +84,32 @@ export const Page = styled.div`
 export const Main = styled.div`
   margin-left: 260px;
   width: 100%;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
 `;
 
 export const Content = styled.div`
-  padding: 10px;
-  margin-top: 20px;
+  padding: 16px;
+  margin-top: 70px; /* ✅ prevent overlap with topbar */
+
+  @media (max-width: 640px) {
+    padding: 12px;
+  }
 `;
 
 export const Title = styled.h2`
   font-size: 32px;
   font-weight: 800;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 /* USER CARD */
@@ -79,32 +118,51 @@ export const Card = styled.div`
   padding: 16px;
   border-radius: 12px;
   margin-bottom: 16px;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* ✅ ADDED */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
 `;
 
 export const UserInfo = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
+
+  @media (max-width: 640px) {
+    width: 100%;
+  }
 `;
 
 /* ✅ AVATAR FIXED */
 export const Avatar = styled.img`
   width: 50px;
   height: 50px;
-  border-radius: 50%; /* ✅ CIRCLE */
+  border-radius: 50%;
   object-fit: cover;
-`;
 
+  @media (max-width: 640px) {
+    width: 42px;
+    height: 42px;
+  }
+`;
 /* RIGHT PANEL */
 export const RightPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    order: 2; /* ✅ goes below users */
+  }
 `;
 
 /* STATS CARD */
@@ -137,12 +195,17 @@ export const ChartWrapper = styled.div`
 /* BARS */
 export const Bars = styled.div`
   display: flex;
-  align-items: flex-end; /* 🔥 anchor bars at bottom */
+  align-items: flex-end;
   justify-content: space-between;
-  height: 120px; /* 🔥 fixed chart height */
+  height: 120px;
   padding: 10px 5px;
   border-bottom: 1px solid #eee;
   gap: 12px;
+
+  @media (max-width: 640px) {
+    height: 100px;
+    gap: 6px;
+  }
 `;
 
 export const BarContainer = styled.div`
@@ -158,13 +221,12 @@ export const Bar = styled.div<{ height: string }>`
   width: 18px;
   height: ${({ height }) => height};
   max-height: 100%;
+
   background: linear-gradient(180deg, #22c55e, #15803d);
   border-radius: 6px 6px 0 0;
-  transition: all 0.3s ease;
 
-  &:hover {
-    opacity: 0.85;
-    transform: translateY(-3px);
+  @media (max-width: 640px) {
+    width: 12px;
   }
 `;
 
