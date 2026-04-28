@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Overlay = styled.div<{ open: boolean }>`
   position: fixed;
@@ -129,6 +129,7 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
             <UserEmail>{user?.email}</UserEmail>
           </ProfileSection>
         )}
+
         <MenuItem onClick={() => handleNav("/")}>Home</MenuItem>
         <MenuItem onClick={() => handleNav("/equipments")}>Equipment</MenuItem>
         <MenuItem onClick={() => handleNav("/about")}>About</MenuItem>

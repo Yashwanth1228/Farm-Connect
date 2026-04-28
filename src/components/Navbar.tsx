@@ -22,9 +22,11 @@ import {
   Badge,
   ProfileWrapper,
   Hamburger,
+  MobileSearchIcon,
+  MobileSearchInput,
+  MobileSearchWrapper,
 } from "@/components/style/navbar";
 import MobileMenu from "./user/MobileMenu";
-import { MobileSearchIcon } from "@/components/style/navbar";
 
 export default function Navbar() {
   const { user, setUser }: any = useContext(AppContent);
@@ -34,6 +36,7 @@ export default function Navbar() {
   const { cartCount, setCartCount }: any = useContext(AppContent);
 
   const [scrolled, setScrolled] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     window.addEventListener("scroll", () => {
@@ -93,10 +96,13 @@ export default function Navbar() {
     <>
       <Header>
         <Container>
+          {/* Hamburger */}
           <Hamburger onClick={() => setMenuOpen(true)} />
-          {/* <Logo>Farm Connect</Logo> */}
+
+          {/* Logo */}
           <Image src="/images/logos.png" alt="logo" width={130} height={60} />
 
+          {/* Desktop Nav */}
           <Nav>
             <NavLink
               href="/"
@@ -106,6 +112,7 @@ export default function Navbar() {
             >
               Home
             </NavLink>
+
             <NavLink
               href="/equipments"
               style={{
@@ -116,6 +123,7 @@ export default function Navbar() {
             >
               Equipments
             </NavLink>
+
             <NavLink
               href="/about"
               style={{
@@ -124,6 +132,7 @@ export default function Navbar() {
             >
               About
             </NavLink>
+
             <NavLink
               href="/contact"
               style={{
@@ -134,10 +143,12 @@ export default function Navbar() {
             </NavLink>
           </Nav>
 
+          {/* ✅ Desktop Search */}
           <SearchContainer>
             <SearchIcon />
             <SearchInput
               placeholder="Search Equipment"
+              value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -147,39 +158,62 @@ export default function Navbar() {
             />
           </SearchContainer>
 
-          {user ? (
-            <ButtonGroup>
-              {/* 👇 ADD HERE */}
-              <MobileSearchIcon onClick={() => router.push("/search")} />
+          {/* ✅ MOBILE SEARCH (INLINE) */}
+          <MobileSearchWrapper>
+            <SearchIcon />
+            <MobileSearchInput
+              placeholder="Search..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
+            />
+          </MobileSearchWrapper>
 
-              <ProfileWrapper onClick={() => router.push("/profile")}>
-                {user?.profilePic ? (
-                  <Profileicon src={user.profilePic} alt="profile" />
-                ) : (
-                  user?.name?.charAt(0)?.toUpperCase() || "U"
-                )}
-              </ProfileWrapper>
+          {/* Buttons */}
+          <ButtonGroup>
+            {user ? (
+              <>
+                <ProfileWrapper onClick={() => router.push("/profile")}>
+                  {user?.profilePic ? (
+                    <Profileicon src={user.profilePic} alt="profile" />
+                  ) : (
+                    user?.name?.charAt(0)?.toUpperCase() || "U"
+                  )}
+                </ProfileWrapper>
 
-              <CartIcon onClick={() => router.push("/equipments/carts")}>
-                <span className="material-symbols-outlined">shopping_cart</span>
-                {cartCount > 0 && <Badge>{cartCount}</Badge>}
-              </CartIcon>
+                <CartIcon onClick={() => router.push("/equipments/carts")}>
+                  <span className="material-symbols-outlined">
+                    shopping_cart
+                  </span>
+                  {cartCount > 0 && <Badge>{cartCount}</Badge>}
+                </CartIcon>
 
-              <Logout onClick={handlelogout}>Logout</Logout>
-            </ButtonGroup>
-          ) : (
-            <ButtonGroup>
-              <Button
-                onClick={() => {
-                  router.push("/login");
-                }}
-              >
-                Login
-              </Button>
-            </ButtonGroup>
-          )}
+                <Logout onClick={handlelogout}>Logout</Logout>
+              </>
+            ) : (
+              <Button onClick={() => router.push("/login")}>Login</Button>
+            )}
+          </ButtonGroup>
         </Container>
       </Header>
+
+      {showSearch && (
+        <MobileSearchInput
+          placeholder="Search equipment..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              router.push(`/search?q=${query}`);
+              setShowSearch(false); // close after search
+            }
+          }}
+        />
+      )}
 
       <MobileMenu
         open={menuOpen}

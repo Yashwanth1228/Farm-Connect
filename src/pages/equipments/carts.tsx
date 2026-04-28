@@ -29,6 +29,7 @@ import {
   Bottom,
   TotalPrice,
   CloseIcon,
+  MobileCheckoutBar,
 } from "@/pages/equipments/style/carts";
 
 export default function CartPage() {
@@ -232,6 +233,7 @@ export default function CartPage() {
       {/* MAIN */}
       <Main>
         {/* HEADER */}
+
         <Header>
           <Title>Your Cart</Title>
           <Subtitle>Review your selected equipment before checkout</Subtitle>
@@ -361,7 +363,7 @@ function CartItem({
 
           <TotalPrice>{total}</TotalPrice>
           {/* <button onClick={() => onRemove(item._id)}>Remove</button> */}
-          <CloseIcon onClick={() => alert("this is delete button")} className="material-symbols-outlined">close</CloseIcon>
+          <CloseIcon onClick={() => onRemove(item._id)}>close</CloseIcon>
         </Bottom>
       </Content>
     </Card>
