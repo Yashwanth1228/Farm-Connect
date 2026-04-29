@@ -118,7 +118,7 @@ export const ButtonGroup = styled.div`
 
 export const Logout = styled.button`
   padding: 8px 14px;
-  background: #9ca3af;
+  background: #0d631b;
   border: none;
   cursor: pointer;
   font-size: 14px;

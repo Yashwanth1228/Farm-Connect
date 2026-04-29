@@ -22,6 +22,8 @@ export default function App({ Component, pageProps }: AppProps) {
     "/admin/user",
     "/admin/equipment",
     "/admin/bookings",
+    "/admin/contact",
+    
   ];
   const showNavbar = !noNavbarRoutes.includes(router.pathname);
 
@@ -35,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
     "/admin/user",
     "/admin/equipment",
     "/admin/bookings",
+    "/admin/contact",
   ];
   const showFooter = !noFooterRoutes.includes(router.pathname);
 
@@ -44,6 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
     "/admin/add_equipment",
     "/admin/equipment",
     "/admin/bookings",
+    "/admin/contact",
   ];
 
   const showSidebar = sidebarRoutes.includes(router.pathname);

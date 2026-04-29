@@ -40,7 +40,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   type: data.type,
   available : data.availability,
   price: Number(data.price),
-  location: data.location,
+  location: data.location,  
   description: data.description,
   images: data.images, // ✅ correct field
 };

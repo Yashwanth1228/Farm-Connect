@@ -5,9 +5,12 @@ const connector = new APIConnector();
 export const searchConfig = {
   apiConnector: connector,
 
-  resultsPerPage: 3,
+  // initialState: {
+  //   resultsPerPage: 3, // ✅ VERY IMPORTANT
+  // },
 
   searchQuery: {
+
     search_fields: {
       name: {},
       description: {},
@@ -20,6 +23,7 @@ export const searchConfig = {
       category: { raw: {} },
       price: { raw: {} },
       images: { raw: {} },
+      available: { raw: {} },
     },
 
     facets: {

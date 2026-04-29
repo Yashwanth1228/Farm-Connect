@@ -19,6 +19,7 @@ export const Button = styled.button`
   font-weight: bold;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 
   ${mq.md} {
     width: 100%;

@@ -92,8 +92,7 @@ export const Main = styled.div`
 
 export const Content = styled.div`
   padding: 16px;
-  margin-top: 70px; /* ✅ prevent overlap with topbar */
-
+  
   @media (max-width: 640px) {
     padding: 12px;
   }

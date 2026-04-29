@@ -46,6 +46,7 @@ export default function Contact() {
 
       const data = await res.json();
 
+
       if (res.ok) {
         toast.success("Message sent successfully!", { id: toastId });
         setForm({
@@ -85,6 +86,7 @@ export default function Contact() {
                 <Input
                   placeholder="Enter your full name"
                   name="name"
+                  value={form.name}
                   onChange={handleChange}
                 />
               </InputGroup>
@@ -94,6 +96,7 @@ export default function Contact() {
                 <Input
                   placeholder="Enter your email"
                   name="email"
+                  value={form.email}
                   onChange={handleChange}
                 />
               </InputGroup>
@@ -103,6 +106,7 @@ export default function Contact() {
                 <Input
                   placeholder="Your Subject Here"
                   name="subject"
+                  value={form.subject}
                   onChange={handleChange}
                 />
               </InputGroup>
@@ -113,6 +117,7 @@ export default function Contact() {
                   rows={4}
                   placeholder="Enter your message"
                   name="message"
+                  value={form.message}
                   onChange={handleChange}
                 />
               </InputGroup>

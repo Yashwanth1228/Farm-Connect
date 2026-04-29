@@ -15,11 +15,11 @@
 
       console.log("the request state", requestState);
   
-      // const page = requestState.current || 1;
-      // // const size = requestState.resultsPerPage || 3; // 👈 force fallback to 3
-      // const size = 3; // ✅ HARD LOCK
+      const page = requestState.current || 1;
+      // const size = requestState.resultsPerPage || 5; // 👈 force fallback to 3
+      const size = 3; // ✅ HARD LOCK
   
-      // const from = (page - 1) * size;
+      const from = (page - 1) * size;
   
       const searchTerm = requestState?.searchTerm || "";
   
@@ -48,9 +48,9 @@
   
       const result = await client.search({
         index: process.env.NEXT_PUBLIC_ELASTIC_INDEX,
+        from,
+        size,
         body: {
-          // from,
-          // size,
           query: {
             bool: {
               must: [
@@ -90,9 +90,15 @@
         category: { raw: hit._source?.category ?? "N/A" },
         price: { raw: hit._source?.price ?? 0 },
         images: { raw: hit._source?.images ?? [] },
+        available: { raw: hit._source?.available ?? false },
       }));
   
       const total = (result.hits.total as any).value;
+      console.log("TOTAL:", total);
+      console.log("HITS LENGTH:", result.hits.hits.length);
+
+      const totalPages = Math.ceil(total / size);
+
   
       const facets = {
         type: [
@@ -115,19 +121,21 @@
         ],
       };
 
-      console.log("tptalResults " , total)
+      // console.log("tptalResults " , total)
   
       res.json({
         results: formattedResults,
-        // totalResults: total,
+        totalResults: total,
         facets,
+        totalPages, // ✅ ADD THIS
         
       });
 
       const response = {
         results: formattedResults,
-        // totalResults: total,
+        totalResults: total,
         facets,
+        totalPages, // ✅ ADD THIS
 
       }
 

@@ -308,6 +308,8 @@ export default function Sidebar() {
     { href: "/admin/equipment", label: "Equipment", icon: "agriculture" },
     { href: "/admin/bookings", label: "Bookings", icon: "calendar_today" },
     { href: "/admin/user", label: "Users", icon: "group" },
+    { href: "/admin/contact", label: "Contact", icon: "phone" },
+
   ].map((item) => (
     <div key={item.href} onClick={() => setOpen(false)}>
       <SidebarItem {...item} />

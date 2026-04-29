@@ -18,7 +18,7 @@ export const apiSlice = createApi({
     baseUrl: 'http://localhost:3000/api',
     credentials: 'include', // for session/cookies
   }),
-  tagTypes: ['User','equipment','booking',"user",],
+  tagTypes: ['User','equipment','booking',"user","contact"],
 
 
   endpoints: (builder) => ({
@@ -69,6 +69,29 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['booking'],
     }),
+
+    getContacts: builder.query<any,void>({
+      query: () => "/contact", 
+      providesTags: ['contact'],
+    }),
+
+    updateRead: builder.mutation<any, any>({
+      query: ({ id, isRead }) => ({
+        url: `/contact/${id}`,
+        method: "PATCH",
+        body: { isRead },   // ✅ IMPORTANT
+      }),
+      invalidatesTags: ["contact"],
+    }),
+
+    deleteContact: builder.mutation<any, any>({
+      query: ({ id }) => ({
+        url: `/contact/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ['contact'],
+
+    })
     
     
 
@@ -84,4 +107,7 @@ export const {
   useGetBookingsQuery,
   useGetUsersQuery,
   useUpdatestatusMutation,
+  useGetContactsQuery,
+  useUpdateReadMutation,
+  useDeleteContactMutation
 } = apiSlice
