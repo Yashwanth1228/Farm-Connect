@@ -114,27 +114,53 @@ export const Title = styled.h2`
 /* USER CARD */
 export const Card = styled.div`
   background: #fff;
-  padding: 16px;
-  border-radius: 12px;
+  padding: 18px 20px;
+  border-radius: 14px;
   margin-bottom: 16px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
 
   @media (max-width: 640px) {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: stretch;
+    gap: 12px;
+  }
+`;
+
+export const RoleSelect = styled.select`
+  padding: 6px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  background: #f9fafb;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #0d631b;
+  }
+
+  @media (max-width: 640px) {
+    width: 100%; /* ✅ full width on mobile */
   }
 `;
 
 export const UserInfo = styled.div`
   display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 14px;
+  flex: 1;
 
   @media (max-width: 640px) {
     width: 100%;
@@ -143,10 +169,11 @@ export const UserInfo = styled.div`
 
 /* ✅ AVATAR FIXED */
 export const Avatar = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #f0f0f0;
 
   @media (max-width: 640px) {
     width: 42px;

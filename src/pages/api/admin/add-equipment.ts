@@ -38,7 +38,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     const elasticData = {
   name: data.name,
   type: data.type,
-  available : data.availability,
+  available : Boolean(data.availability),
   price: Number(data.price),
   location: data.location,  
   description: data.description,
@@ -62,7 +62,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       console.log("ELASTIC ERROR:", err.response?.data); // ✅ better logging
     }
 
-    res.status(200).json(savedDoc);
+    res.status(200).json({success: true , savedDoc});
 
   } catch (err) {
     console.log("API ERROR:", err);

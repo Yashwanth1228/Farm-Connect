@@ -29,7 +29,7 @@
       filters.forEach((filter: any) => {
         if (filter.field === "type") {
           esFilters.push({
-            term: { "type.keyword": filter.values[0] },
+            term: { "type": filter.values[0] },
           });
         }
   
@@ -66,7 +66,7 @@
           },
           aggs: {
             type: {
-              terms: { field: "type.keyword" },
+              terms: { field: "type" },
             },
             price: {
               range: {

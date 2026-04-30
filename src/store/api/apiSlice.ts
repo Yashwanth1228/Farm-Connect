@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { UploadApiResponse } from 'cloudinary'
 
 // ✅ Define types
 export interface User {
@@ -18,7 +19,7 @@ export const apiSlice = createApi({
     baseUrl: 'http://localhost:3000/api',
     credentials: 'include', // for session/cookies
   }),
-  tagTypes: ['User','equipment','booking',"user","contact"],
+  tagTypes: ['User','equipment','booking',"user","contact","admin","Images"],
 
 
   endpoints: (builder) => ({
@@ -91,9 +92,54 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['contact'],
 
-    })
-    
-    
+    }),
+
+    adminLogin: builder.mutation<any, CreateUserRequest>({
+      query: (data) => ({
+        url: '/admin/login',
+        method: 'POST',
+        body: data,
+        withCredentials: true,
+        
+      }),
+      invalidatesTags: ['admin'],
+    }),
+
+    uploadImages: builder.mutation<any,FormData>({
+      query: (fd) => ({
+        url: '/admin/upload',
+        method: 'POST',
+        body: fd, 
+      }),
+      invalidatesTags: ['Images'],
+    }),
+
+    updateEquipment: builder.mutation<any, any>({
+      query: ({id , data}) => ({
+        url: `/equipment/${id}`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: ['equipment'],
+    }),
+
+    addEquipment: builder.mutation<any, any>({
+      query: (data) => ({
+        url: '/admin/add-equipment',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['equipment'],
+    }),
+
+    updateUserRole: builder.mutation<any, { userId: string; role: string }>({
+      query: (data) => ({
+        url: "/admin/update-role",
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
 
   }),
 })
@@ -109,5 +155,10 @@ export const {
   useUpdatestatusMutation,
   useGetContactsQuery,
   useUpdateReadMutation,
-  useDeleteContactMutation
+  useDeleteContactMutation,
+  useAdminLoginMutation,
+  useUploadImagesMutation,
+  useUpdateEquipmentMutation,
+  useAddEquipmentMutation,
+  useUpdateUserRoleMutation,
 } = apiSlice

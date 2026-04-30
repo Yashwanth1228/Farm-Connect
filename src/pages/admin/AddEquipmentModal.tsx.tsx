@@ -2,6 +2,9 @@
   import axios from "axios";
   import styled from "@emotion/styled";
 import { BlurCircle, Button, CloseBtn, Field, FooterText, Form, FullRow, Input, Label, LeftPanel, Modal, Overlay, PanelText, PanelTitle, RightPanel, Row, Select, Title, UploadBox } from "./style/add_equipment";
+import { useAddEquipmentMutation, useUpdateEquipmentMutation, useUploadImagesMutation } from "@/store/api/apiSlice";
+import { toast } from "react-toastify";
+
 
   /* ================= LAYOUT ================= */
 
@@ -15,6 +18,9 @@ import { BlurCircle, Button, CloseBtn, Field, FooterText, Form, FullRow, Input, 
   export default function AddEquipmentModal({ onClose, equipment }: Props) {
 
     const [files, setFiles] = useState<FileList | null>(null);
+    const [ uploadImages ] = useUploadImagesMutation();
+    const [ UpdateEquipment ] = useUpdateEquipmentMutation();
+    const [ addEquipment ] = useAddEquipmentMutation();
 
     const [formData, setFormData] = useState({
       name: "",
@@ -70,8 +76,9 @@ import { BlurCircle, Button, CloseBtn, Field, FooterText, Form, FullRow, Input, 
           fd.append("images", files[i]);
         }
 
-        const uploadRes = await axios.post("/api/admin/upload", fd);
-        imageUrls = uploadRes.data.urls;
+        // const uploadRes = await axios.post("/api/admin/upload", fd);
+        const uploadRes = await uploadImages(fd).unwrap();
+        imageUrls = uploadRes.urls;
       }
 
         const payload = {
@@ -80,18 +87,29 @@ import { BlurCircle, Button, CloseBtn, Field, FooterText, Form, FullRow, Input, 
         };
         
         if (isEdit) {
-          await axios.put(`/api/equipment/${equipment._id}`, payload);
-          alert("Updated successfully");
+          // await axios.put(`/api/equipment/${equipment._id}`, payload);
+          const response = await UpdateEquipment({ id: equipment._id, data: payload}).unwrap();
+          console.log(" response from update equipment function " , response);
+          if(response.success) {
+            // alert("Updated successfully");
+            toast.success("Updated successfully");
+          }
         } else {
-          await axios.post(`/api/admin/add-equipment`, payload);
-          alert("Added successfully");
+          // await axios.post(`/api/admin/add-equipment`, payload);
+          const response1 = await addEquipment(payload).unwrap();
+          
+          if(response1.success){
+            // alert("Added successfully");
+            toast.success("Added Successfully");
+          }
         }
 
         onClose();
 
       } catch (err) {
         console.error(err);
-        alert("Error saving equipment");
+        // alert("Error saving equipment");
+        toast.error("Error saving equipment");
       }
     };
 

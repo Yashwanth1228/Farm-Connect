@@ -67,17 +67,32 @@ const Main = styled.main`
   padding-bottom: 80px;
   padding-left: 24px;
   padding-right: 24px;
+
+  @media (max-width: 768px) {
+    padding: 100px 16px 60px;
+  }
 `;
 
 const Layout = styled.div`
   display: flex;
   gap: 48px;
+
+  @media (max-width: 1024px) {
+    gap: 24px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column; /* 🔥 stack sidebar + content */
+  }
 `;
 
 const Sidebar = styled.aside`
   width: 288px;
-`;
 
+  @media (max-width: 768px) {
+    width: 100%; /* 🔥 full width on mobile */
+  }
+`;
 const FilterBox = styled.div`
   background: #ffffff;
   padding: 24px;
@@ -85,14 +100,10 @@ const FilterBox = styled.div`
   position: sticky;
   top: 112px;
 
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  @media (max-width: 768px) {
+    position: static; /* ❌ sticky breaks on mobile */
+  }
 `;
-
 const FilterTitle = styled.h2`
   font-size: 20px;
   font-weight: bold;
@@ -142,6 +153,10 @@ const Content = styled.section`
 const Title = styled.h1`
   font-size: 36px;
   font-weight: 800;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const Subtitle = styled.p`
@@ -153,6 +168,14 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 32px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr); /* tablet */
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr; /* mobile */
+  }
 `;
 
 const Card = styled.div`
@@ -180,6 +203,10 @@ const CardImage = styled.img`
   transition: transform 0.2s;
   &:hover {
     transform: scale(1.02);
+  }
+
+  @media (max-width: 640px) {
+    height: 200px; /* smaller on mobile */
   }
 `;
 
@@ -394,6 +421,7 @@ export const ActivePage = styled(PageBtn)`
 `;
 
 import { useSearch } from "@elastic/react-search-ui";
+import { useEffect, useState } from "react";
 
 const Debug = () => {
   const { results, totalResults } = useSearch();
@@ -403,101 +431,222 @@ const Debug = () => {
 };
 
 export const SearchLayout = () => {
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+
+  handleResize(); // initial check
+  window.addEventListener("resize", handleResize);
+
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
     return (
       <Container>
         <Main>
           <Layout>
             
-          {/* <Debug /> */}
+          <Debug />
+
+          {/* ✅ Show toggle ONLY on mobile */}
+{isMobile && (
+  <button onClick={() => setShowFilters(!showFilters)}>
+    Filters
+  </button>
+)}
+
+           {/* ✅ SIDEBAR (Elastic Facets instead of manual filters) */}
+
+
+          {/* ✅ Desktop → always show */}
+{!isMobile && (
+  <Sidebar>
+  <FilterBox>
+    <FilterTitle>Filters</FilterTitle>
   
-            {/* ✅ SIDEBAR (Elastic Facets instead of manual filters) */}
-            <Sidebar>
-              <FilterBox>
-                <FilterTitle>Filters</FilterTitle>
+    {/* ✅ TYPE FACET */}
+    <Facet
+      field="type"
+      label="Type"
+      view={({ options, onSelect, onRemove, values }: any)  => (
+        <Section>
+          <SectionTitle>Equipment Type</SectionTitle>
   
-                {/* ✅ TYPE FACET */}
-                <Facet
-                  field="type"
-                  label="Type"
-                  view={({ options, onSelect, onRemove, values }: any)  => (
-                    <Section>
-                      <SectionTitle>Equipment Type</SectionTitle>
+          {options.map((option: any) => {
+            const checked = values.includes(option.value);
   
-                      {options.map((option: any) => {
-                        const checked = values.includes(option.value);
-  
-                        return (
-                          <Label key={option.value}>
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() =>
-                                checked
-                                  ? onRemove(option.value)
-                                  : onSelect(option.value)
-                              }
-                            />
-                            {option.value} ({option.count})
-                          </Label>
-                        );
-                      })}
-                    </Section>
-                  )}
+            return (
+              <Label key={option.value}>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() =>
+                    checked
+                      ? onRemove(option.value)
+                      : onSelect(option.value)
+                  }
                 />
+                {option.value} ({option.count})
+              </Label>
+            );
+          })}
+        </Section>
+      )}
+    />
   
-                {/* ✅ PRICE FACET */}
-                <Facet
-                  field="price"
-                  label="Price"
-                  view={({
-                    options,
-                    onSelect,
-                    onRemove,
-                    values,
-                  }: {
-                    options: any[];
-                    onSelect: (value: any) => void;
-                    onRemove: (value: any) => void;
-                    values: any[];
-                  }) => (
-                    <Section>
-                      <SectionTitle>Price Range</SectionTitle>
+    {/* ✅ PRICE FACET */}
+    <Facet
+      field="price"
+      label="Price"
+      view={({
+        options,
+        onSelect,
+        onRemove,
+        values,
+      }: {
+        options: any[];
+        onSelect: (value: any) => void;
+        onRemove: (value: any) => void;
+        values: any[];
+      }) => (
+        <Section>
+          <SectionTitle>Price Range</SectionTitle>
   
-                      {options.map((option: any) => {
-                        if (typeof option.value === "object") {
-                          const value = option.value;
+          {options.map((option: any) => {
+            if (typeof option.value === "object") {
+              const value = option.value;
   
-                          const checked = values.some(
-                            (v: any) =>
-                              v?.from === value.from && v?.to === value.to
-                          );
+              const checked = values.some(
+                (v: any) =>
+                  v?.from === value.from && v?.to === value.to
+              );
   
-                          const label = value.to
-                            ? `₹${value.from} - ₹${value.to}`
-                            : `₹${value.from}+`;
+              const label = value.to
+                ? `₹${value.from} - ₹${value.to}`
+                : `₹${value.from}+`;
   
-                          return (
-                            <Label key={label}>
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() =>
-                                  checked
-                                    ? onRemove(value)
-                                    : onSelect(value)
-                                }
-                              />
-                              {label} ({option.count})
-                            </Label>
-                          );
-                        }
-                        return null;
-                      })}
-                    </Section>
-                  )}
+              return (
+                <Label key={label}>
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() =>
+                      checked
+                        ? onRemove(value)
+                        : onSelect(value)
+                    }
+                  />
+                  {label} ({option.count})
+                </Label>
+              );
+            }
+            return null;
+          })}
+        </Section>
+      )}
+    />
+  </FilterBox>
+  </Sidebar>
+)}
+
+{/* ✅ Mobile → show only when toggled */}
+{isMobile && showFilters && (
+  <Sidebar>
+  <FilterBox>
+    <FilterTitle>Filters</FilterTitle>
+  
+    {/* ✅ TYPE FACET */}
+    <Facet
+      field="type"
+      label="Type"
+      view={({ options, onSelect, onRemove, values }: any)  => (
+        <Section>
+          <SectionTitle>Equipment Type</SectionTitle>
+  
+          {options.map((option: any) => {
+            const checked = values.includes(option.value);
+  
+            return (
+              <Label key={option.value}>
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() =>
+                    checked
+                      ? onRemove(option.value)
+                      : onSelect(option.value)
+                  }
                 />
-              </FilterBox>
-            </Sidebar>
+                {option.value} ({option.count})
+              </Label>
+            );
+          })}
+        </Section>
+      )}
+    />
+  
+    {/* ✅ PRICE FACET */}
+    <Facet
+      field="price"
+      label="Price"
+      view={({
+        options,
+        onSelect,
+        onRemove,
+        values,
+      }: {
+        options: any[];
+        onSelect: (value: any) => void;
+        onRemove: (value: any) => void;
+        values: any[];
+      }) => (
+        <Section>
+          <SectionTitle>Price Range</SectionTitle>
+  
+          {options.map((option: any) => {
+            if (typeof option.value === "object") {
+              const value = option.value;
+  
+              const checked = values.some(
+                (v: any) =>
+                  v?.from === value.from && v?.to === value.to
+              );
+  
+              const label = value.to
+                ? `₹${value.from} - ₹${value.to}`
+                : `₹${value.from}+`;
+  
+              return (
+                <Label key={label}>
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() =>
+                      checked
+                        ? onRemove(value)
+                        : onSelect(value)
+                    }
+                  />
+                  {label} ({option.count})
+                </Label>
+              );
+            }
+            return null;
+          })}
+        </Section>
+      )}
+    />
+  </FilterBox>
+  </Sidebar>
+)}
+           
+           
   
             {/* ✅ CONTENT (Index UI style + Elastic Results) */}
             <Content>

@@ -9,7 +9,7 @@ import StatsPanel from "@/components/users/StatsPanel";
 import styled from "@emotion/styled";
 
 import { Page, Main, Content, Title } from "@/styles/userStyles";
-import { useGetUsersQuery } from "@/store/api/apiSlice";
+import { useGetUsersQuery, useUpdateUserRoleMutation } from "@/store/api/apiSlice";
 import {
   CenterBox,
   Spinner,
@@ -18,6 +18,7 @@ import {
   StatusTitle,
 } from "@/styles/admin/equipment";
 import User from "../api/user";
+import { toast } from "react-toastify";
 
 /* GRID */
 const Grid = styled.div`
@@ -119,6 +120,7 @@ const ITEMS_PER_PAGE = 5;
 
 const UserPage: NextPage = () => {
   const { data, isLoading, error } = useGetUsersQuery();
+  const [updateRole] = useUpdateUserRoleMutation();
   const [open, setOpen] = useState(false);
 
   console.log(" user data", data);
@@ -161,14 +163,27 @@ const UserPage: NextPage = () => {
             {/* LEFT SIDE */}
             <UserList>
               {/* USERS LIST */}
-              {currentUsers?.map((user: any, index: any) => (
-                <UserCard
-                  key={index}
-                  name={user.name}
-                  email={user.email}
-                  img={user.profilePic} // ✅ PASS IMAGE
-                />
-              ))}
+              {currentUsers?.map((user: any) => (
+  <UserCard
+    key={user._id}
+    name={user.name}
+    email={user.email}
+    img={user.profilePic}
+    role={user.role}
+    onRoleChange={async (newRole: string) => {
+      try {
+        await updateRole({
+          userId: user._id,
+          role: newRole,
+        }).unwrap();
+
+        toast.success("Role updated ✅");
+      } catch (err) {
+        toast.error("Failed to update role ❌");
+      }
+    }}
+  />
+))}
 
               {/* PAGINATION */}
               <Pageination>
