@@ -22,12 +22,18 @@ const Drawer = styled.div<{ open: boolean }>`
   z-index: 1000; // ✅ ADD THIS
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ active?: boolean }>`
   padding: 14px 0;
   font-size: 18px;
   border-bottom: 1px solid #eee;
+  border-radius: 8px;
   cursor: pointer;
   transition: 0.2s;
+  background: ${({ active }) => (active ? "#e6f4ea" : "transparent")};
+
+  color: ${({ active }) => (active ? "#0d631b" : "#333")};
+  font-weight: ${({ active }) => (active ? "700" : "400")};
+  padding-left: ${({ active }) => (active ? "8px" : "auto")};
 
   &:hover {
     color: #0d631b;
@@ -83,7 +89,7 @@ const LogoutButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  margin-top: 15rem;
+  margin-top: 28rem;
 
   &:hover {
     background: #0d631b;
@@ -130,10 +136,33 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
           </ProfileSection>
         )}
 
-        <MenuItem onClick={() => handleNav("/")}>Home</MenuItem>
-        <MenuItem onClick={() => handleNav("/equipments")}>Equipment</MenuItem>
-        <MenuItem onClick={() => handleNav("/about")}>About</MenuItem>
-        <MenuItem onClick={() => handleNav("/contact")}>Contact</MenuItem>
+        <MenuItem
+          active={router.pathname === "/"}
+          onClick={() => handleNav("/")}
+        >
+          Home
+        </MenuItem>
+
+        <MenuItem
+          active={router.pathname === "/equipments"}
+          onClick={() => handleNav("/equipments")}
+        >
+          Equipment
+        </MenuItem>
+
+        <MenuItem
+          active={router.pathname === "/about"}
+          onClick={() => handleNav("/about")}
+        >
+          About
+        </MenuItem>
+
+        <MenuItem
+          active={router.pathname === "/contact"}
+          onClick={() => handleNav("/contact")}
+        >
+          Contact
+        </MenuItem>
 
         {user && <LogoutButton onClick={handlelogout}>Logout</LogoutButton>}
       </Drawer>

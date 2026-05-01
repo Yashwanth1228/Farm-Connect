@@ -43,6 +43,9 @@ export default function ProfilePage() {
 
   const router = useRouter();
   const { user, setUser }: any = useContext(AppContent);
+  useEffect(() => {
+    console.log("USER:", user);
+  }, [user]);
 
   // =========================
   // FETCH BOOKINGS
@@ -203,7 +206,16 @@ export default function ProfilePage() {
           <Center>
             <Name>{user?.name || "User"}</Name>
             <Email>{user?.email}</Email>
-            <SubText>Member since March 2022 • Premium Cultivator</SubText>
+            <SubText>
+              Member since{" "}
+              {user?.createdAt
+                ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+                    month: "long",
+                    year: "numeric",
+                  })
+                : "Recently"}{" "}
+              • Premium Cultivator
+            </SubText>
           </Center>
 
           <Right>
@@ -212,10 +224,10 @@ export default function ProfilePage() {
               <span>Rentals</span>
             </Stat>
 
-            <Stat>
+            {/* <Stat>
               <h2>4.9</h2>
               <span>Rating</span>
-            </Stat>
+            </Stat> */}
           </Right>
         </ProfileCard>
 
@@ -265,16 +277,16 @@ export default function ProfilePage() {
 
                   <Actions>
                     {/* ✅ DETAILS BUTTON */}
-                    {item.status === "active" ||
-                    item.status === "completed" ||
-                    item.status === "upcoming" ? (
+                    {status === "active" ||
+                    status === "completed" ||
+                    status === "upcoming" ? (
                       <Btn onClick={() => router.push(`/bookings/${item._id}`)}>
                         Details
                       </Btn>
                     ) : null}
 
                     {/* ✅ FIXED HERE */}
-                    {item.status === "active" || item.status === "upcoming" ? (
+                    {status === "active" || status === "upcoming" ? (
                       <Btn onClick={() => handleCancel(item._id)}>
                         Cancel Booking
                       </Btn>
