@@ -328,6 +328,7 @@ export const CameraButton = styled.div`
 
   background: #0d631b;
   color: white;
+  font-size: 20px;
 
   display: flex;
   align-items: center;

@@ -6,38 +6,69 @@ const Overlay = styled.div<{ open: boolean }>`
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: ${({ open }) => (open ? "block" : "none")};
-  z-index: 999; // ✅ ADD THIS
+
+  opacity: ${({ open }) => (open ? 1 : 0)};
+  visibility: ${({ open }) => (open ? "visible" : "hidden")};
+
+  transition: opacity 0.3s ease;
+
+  z-index: 999;
 `;
 
 const Drawer = styled.div<{ open: boolean }>`
   position: fixed;
   top: 0;
-  left: ${({ open }) => (open ? "0" : "-100%")};
+  left: 0; /* keep fixed */
+
   width: 260px;
   height: 100%;
   background: white;
   padding: 20px;
-  transition: left 0.3s ease;
-  z-index: 1000; // ✅ ADD THIS
+
+  display: flex;
+  flex-direction: column;
+
+  transform: ${({ open }) => (open ? "translateX(0)" : "translateX(-100%)")};
+
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform; /* 🔥 performance boost */
+
+  z-index: 1000;
 `;
 
 const MenuItem = styled.div<{ active?: boolean }>`
-  padding: 14px 0;
-  font-size: 18px;
-  border-bottom: 1px solid #eee;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.2s;
-  background: ${({ active }) => (active ? "#e6f4ea" : "transparent")};
+  display: flex;
+  align-items: center;
+  gap: 12px;
 
-  color: ${({ active }) => (active ? "#0d631b" : "#333")};
-  font-weight: ${({ active }) => (active ? "700" : "400")};
-  padding-left: ${({ active }) => (active ? "8px" : "auto")};
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+
+  font-weight: 600;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+  background: ${({ active }) => (active ? "#e6f4ea" : "transparent")};
+  color: ${({ active }) => (active ? "#0d631b" : "#6b7280")};
 
   &:hover {
-    color: #0d631b;
+    background: #f3f4f6;
+    color: #111827;
+    transform: translateX(3px);
   }
+`;
+
+const Icon = styled.span<{ active?: boolean }>`
+  font-family: "Material Symbols Outlined";
+  font-size: 22px;
+
+  font-variation-settings:
+    "FILL" ${({ active }) => (active ? 1 : 0)},
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 `;
 
 const ProfileSection = styled.div`
@@ -80,19 +111,18 @@ const UserEmail = styled.p`
 `;
 
 const LogoutButton = styled.button`
-  margin-top: 20px;
+  margin-top: auto; /* ✅ MAGIC FIX */
   padding: 12px;
   width: 100%;
   border: none;
-  background: #9ca3af;
-  color: white;
+  background: #fef2f2;
+  color: #dc2626;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  margin-top: 28rem;
 
   &:hover {
-    background: #0d631b;
+    background: #fee2e2;
   }
 `;
 
@@ -140,6 +170,7 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
           active={router.pathname === "/"}
           onClick={() => handleNav("/")}
         >
+          <Icon active={router.pathname === "/"}>home</Icon>
           Home
         </MenuItem>
 
@@ -147,6 +178,7 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
           active={router.pathname === "/equipments"}
           onClick={() => handleNav("/equipments")}
         >
+          <Icon active={router.pathname === "/equipments"}>agriculture</Icon>
           Equipment
         </MenuItem>
 
@@ -154,6 +186,7 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
           active={router.pathname === "/about"}
           onClick={() => handleNav("/about")}
         >
+          <Icon active={router.pathname === "/about"}>info</Icon>
           About
         </MenuItem>
 
@@ -161,6 +194,7 @@ export default function MobileMenu({ open, setOpen, user, handlelogout }: any) {
           active={router.pathname === "/contact"}
           onClick={() => handleNav("/contact")}
         >
+          <Icon active={router.pathname === "/contact"}>phone</Icon>
           Contact
         </MenuItem>
 
