@@ -127,6 +127,7 @@ import farmerlabel from "@/assets/farmerlabtel.jpg";
 import farmertractor from "@/assets/farmertractor.jpg";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
+import FadeInSection from "@/components/user/FadeInSection";
 
 function about() {
   const router = useRouter();
@@ -135,68 +136,75 @@ function about() {
       {/* <Navbar /> */}
 
       {/* hero section */}
+      <FadeInSection delay={0}>
+        <HeroSection>
+          <HeroContainer>
+            <Content>
+              <Badge>Our Purpose</Badge>
 
-      <HeroSection>
-        <HeroContainer>
-          <Content>
-            <Badge>Our Purpose</Badge>
+              <HeroTitle>
+                Empowering the <span>hands</span> that feed the world.
+              </HeroTitle>
 
-            <HeroTitle>
-              Empowering the <span>hands</span> that feed the world.
-            </HeroTitle>
+              <Description>
+                At Farm Connect, we merge heritage with high-tech. We believe
+                every farmer deserves access to tools that cultivate progress
+                and sustainability.
+              </Description>
+            </Content>
 
-            <Description>
-              At Farm Connect, we merge heritage with high-tech. We believe
-              every farmer deserves access to tools that cultivate progress and
-              sustainability.
-            </Description>
-          </Content>
-
-          <ImageWrapper>
-            <Glow />
-
-            <ImageCard>
-              <Image
-                src={farmer}
-                alt="Farmer portrait"
-                width={500}
-                height={500}
-                style={{ width: "100%", height: "500px", objectFit: "cover" }}
-              />
-            </ImageCard>
-          </ImageWrapper>
-        </HeroContainer>
-      </HeroSection>
-
+            <ImageWrapper>
+              <Glow />
+              <FadeInSection delay={0.2}>
+                <ImageCard>
+                  <Image
+                    src={farmer}
+                    alt="Farmer portrait"
+                    width={500}
+                    height={500}
+                    style={{
+                      width: "100%",
+                      height: "500px",
+                      objectFit: "cover",
+                    }}
+                  />
+                </ImageCard>
+              </FadeInSection>
+            </ImageWrapper>
+          </HeroContainer>
+        </HeroSection>
+      </FadeInSection>
       {/* Mission Vision */}
 
       <Section>
         <Container>
-          <Grid>
-            <Card>
-              <IconBox>🚀</IconBox>
+          <FadeInSection delay={0} direction="left">
+            <Grid>
+              <Card>
+                <IconBox>🚀</IconBox>
 
-              <Title>Our Mission</Title>
+                <Title>Our Mission</Title>
 
-              <Text>
-                To democratize agricultural productivity by bridging the gap
-                between small-scale farmers and modern technology.
-              </Text>
-            </Card>
+                <Text>
+                  To democratize agricultural productivity by bridging the gap
+                  between small-scale farmers and modern technology.
+                </Text>
+              </Card>
 
-            <Card style={{ borderBottom: "4px solid #b9ad3a" }}>
-              <IconBox style={{ background: "#b9ad3a", color: "#1f1c00" }}>
-                👁
-              </IconBox>
+              <Card style={{ borderBottom: "4px solid #b9ad3a" }}>
+                <IconBox style={{ background: "#b9ad3a", color: "#1f1c00" }}>
+                  👁
+                </IconBox>
 
-              <Title>Our Vision</Title>
+                <Title>Our Vision</Title>
 
-              <Text>
-                To create a global agrarian ecosystem where resource sharing is
-                the standard and every acre reaches its highest potential.
-              </Text>
-            </Card>
-          </Grid>
+                <Text>
+                  To create a global agrarian ecosystem where resource sharing
+                  is the standard and every acre reaches its highest potential.
+                </Text>
+              </Card>
+            </Grid>
+          </FadeInSection>
         </Container>
       </Section>
 
@@ -205,57 +213,69 @@ function about() {
       <StorySection>
         <StoryContainer>
           <StoryGrid>
-            <ImageGrid>
-              <ImgWrapper>
-                <Image
-                  src={farmerlabel}
-                  alt="Farmer using tablet in greenhouse"
-                  width={400}
-                  height={320}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </ImgWrapper>
+            <FadeInSection direction="left">
+              <ImageGrid>
+                <ImgWrapper>
+                  <Image
+                    src={farmerlabel}
+                    alt="Farmer using tablet in greenhouse"
+                    width={400}
+                    height={320}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </ImgWrapper>
 
-              <ImgWrapper offset>
-                <Image
-                  src={farmertractor}
-                  alt="Modern tractor in green field"
-                  width={400}
-                  height={320}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </ImgWrapper>
-            </ImageGrid>
+                <ImgWrapper offset>
+                  <Image
+                    src={farmertractor}
+                    alt="Modern tractor in green field"
+                    width={400}
+                    height={320}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                </ImgWrapper>
+              </ImageGrid>
+            </FadeInSection>
 
-            <TextContent>
-              <StoryTitle>The Seeds of an Idea</StoryTitle>
+            <FadeInSection direction="right">
+              <TextContent>
+                <StoryTitle>The Seeds of an Idea</StoryTitle>
 
-              <ParagraphGroup>
-                <p>
-                  Farm Connect didn't start in a boardroom; it started in a
-                  field. In the summer of 2021, our founders witnessed a
-                  neighboring farmer struggling to harvest his crop while a
-                  multi-million dollar combine sat idle just two miles away.
-                </p>
+                <ParagraphGroup>
+                  <p>
+                    Farm Connect didn't start in a boardroom; it started in a
+                    field. In the summer of 2021, our founders witnessed a
+                    neighboring farmer struggling to harvest his crop while a
+                    multi-million dollar combine sat idle just two miles away.
+                  </p>
 
-                <p>
-                  The problem wasn't a lack of machinery; it was a lack of
-                  connection. We realized that the prohibitive cost of modern
-                  agricultural technology was stifling the growth of the family
-                  farm.
-                </p>
+                  <p>
+                    The problem wasn't a lack of machinery; it was a lack of
+                    connection. We realized that the prohibitive cost of modern
+                    agricultural technology was stifling the growth of the
+                    family farm.
+                  </p>
 
-                <Highlight>
-                  We asked: Why can't we share the strength?
-                </Highlight>
+                  <Highlight>
+                    We asked: Why can't we share the strength?
+                  </Highlight>
 
-                <p>
-                  Since then, we've evolved into a platform that allows farmers
-                  to rent, share, and collaborate, ensuring that no machine sits
-                  idle while there is earth to be tilled.
-                </p>
-              </ParagraphGroup>
-            </TextContent>
+                  <p>
+                    Since then, we've evolved into a platform that allows
+                    farmers to rent, share, and collaborate, ensuring that no
+                    machine sits idle while there is earth to be tilled.
+                  </p>
+                </ParagraphGroup>
+              </TextContent>
+            </FadeInSection>
           </StoryGrid>
         </StoryContainer>
       </StorySection>
@@ -265,25 +285,29 @@ function about() {
       <ValueSection>
         <ValueContainer>
           <Header>
-            <ValueTitle>Values that Root Us</ValueTitle>
-            <Divider />
+            <FadeInSection dealy={0}>
+              <ValueTitle>Values that Root Us</ValueTitle>
+              <Divider />
+            </FadeInSection>
           </Header>
 
-          <ValueGrid>
-            {values.map((value, index) => (
-              <ValueCard key={index}>
-                <IconWrapper>
-                  <Icon className="material-symbols-outlined">
-                    {value.icon}
-                  </Icon>
-                </IconWrapper>
+          <FadeInSection delay={0.2}>
+            <ValueGrid>
+              {values.map((value, index) => (
+                <ValueCard key={index}>
+                  <IconWrapper>
+                    <Icon className="material-symbols-outlined">
+                      {value.icon}
+                    </Icon>
+                  </IconWrapper>
 
-                <CardTitle>{value.title}</CardTitle>
+                  <CardTitle>{value.title}</CardTitle>
 
-                <ValueDescription>{value.description}</ValueDescription>
-              </ValueCard>
-            ))}
-          </ValueGrid>
+                  <ValueDescription>{value.description}</ValueDescription>
+                </ValueCard>
+              ))}
+            </ValueGrid>
+          </FadeInSection>
         </ValueContainer>
       </ValueSection>
 
@@ -294,22 +318,24 @@ function about() {
           <BlurCircle />
 
           <CTAContent>
-            <CTATitle>Ready to grow with us?</CTATitle>
+            <FadeInSection delay={0}>
+              <CTATitle>Ready to grow with us?</CTATitle>
 
-            <CTADescription>
-              Join thousands of farmers already optimizing their harvest through
-              the Farm Connect network.
-            </CTADescription>
+              <CTADescription>
+                Join thousands of farmers already optimizing their harvest
+                through the Farm Connect network.
+              </CTADescription>
 
-            <ButtonGroup>
-              <PrimaryButton onClick={() => router.push("/equipments")}>
-                Explore Equipment
-              </PrimaryButton>
+              <ButtonGroup>
+                <PrimaryButton onClick={() => router.push("/equipments")}>
+                  Explore Equipment
+                </PrimaryButton>
 
-              <SecondaryButton onClick={() => router.push("/contact")}>
-                Learn More
-              </SecondaryButton>
-            </ButtonGroup>
+                <SecondaryButton onClick={() => router.push("/contact")}>
+                  Learn More
+                </SecondaryButton>
+              </ButtonGroup>
+            </FadeInSection>
           </CTAContent>
         </CTAContainer>
       </CTASection>

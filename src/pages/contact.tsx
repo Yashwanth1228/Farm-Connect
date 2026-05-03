@@ -17,6 +17,7 @@ import {
   MapImage,
   CTA,
 } from "@/styles/contact";
+import FadeInSection from "@/components/user/FadeInSection";
 
 // ---------------- COMPONENT ----------------
 export default function Contact() {
@@ -46,7 +47,6 @@ export default function Contact() {
 
       const data = await res.json();
 
-
       if (res.ok) {
         toast.success("Message sent successfully!", { id: toastId });
         setForm({
@@ -66,94 +66,107 @@ export default function Contact() {
   return (
     <>
       <Page>
-        <Hero>
-          <h1>
-            Cultivating <span>Connections.</span>
-          </h1>
-          <p>
-            Whether you're looking for high-performance machinery or need expert
-            agricultural advice.
-          </p>
-        </Hero>
+        <FadeInSection delay={0} direction="left">
+          <Hero>
+            <h1>
+              Cultivating <span>Connections.</span>
+            </h1>
+            <p>
+              Whether you're looking for high-performance machinery or need
+              expert agricultural advice.
+            </p>
+          </Hero>
+        </FadeInSection>
 
         <Grid>
           {/* FORM */}
-          <FormCard>
-            <FormHeading>Send a Message</FormHeading>
-            <form onSubmit={handleSubmit}>
-              <InputGroup>
-                <FormLabel>Full Name</FormLabel>
-                <Input
-                  placeholder="Enter your full name"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                />
-              </InputGroup>
+          <FadeInSection delay={0.2} direction="left">
+            <FormCard>
+              <FormHeading>Send a Message</FormHeading>
+              <form onSubmit={handleSubmit}>
+                <InputGroup>
+                  <FormLabel>Full Name</FormLabel>
+                  <Input
+                    placeholder="Enter your full name"
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
+                  />
+                </InputGroup>
 
-              <InputGroup>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  placeholder="Enter your email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                />
-              </InputGroup>
+                <InputGroup>
+                  <FormLabel>Email</FormLabel>
+                  <Input
+                    placeholder="Enter your email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                  />
+                </InputGroup>
 
-              <InputGroup>
-                <FormLabel>Subject</FormLabel>
-                <Input
-                  placeholder="Your Subject Here"
-                  name="subject"
-                  value={form.subject}
-                  onChange={handleChange}
-                />
-              </InputGroup>
+                <InputGroup>
+                  <FormLabel>Subject</FormLabel>
+                  <Input
+                    placeholder="Your Subject Here"
+                    name="subject"
+                    value={form.subject}
+                    onChange={handleChange}
+                  />
+                </InputGroup>
 
-              <InputGroup>
-                <FormLabel>Message</FormLabel>
-                <InputMessage
-                  rows={4}
-                  placeholder="Enter your message"
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                />
-              </InputGroup>
+                <InputGroup>
+                  <FormLabel>Message</FormLabel>
+                  <InputMessage
+                    rows={4}
+                    placeholder="Enter your message"
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                  />
+                </InputGroup>
 
-              <Button>Send Message</Button>
-            </form>
-          </FormCard>
+                <Button>Send Message</Button>
+              </form>
+            </FormCard>
+          </FadeInSection>
 
           {/* RIGHT SIDE */}
           <div>
-            <InfoCard>
-              <div>📞</div>
-              <div>
-                <p>Call</p>
-                <h3>+91-8800-9911-22</h3>
-              </div>
-            </InfoCard>
+            <FadeInSection delay={0.2} direction="right">
+              <InfoCard>
+                <div>📞</div>
+                <div>
+                  <p>Call</p>
+                  <h3>+91-8800-9911-22</h3>
+                </div>
+              </InfoCard>
+            </FadeInSection>
 
-            <InfoCard>
-              <div>✉️</div>
-              <div>
-                <p>Email</p>
-                <h3>support@farmconnect.com</h3>
-              </div>
-            </InfoCard>
+            <FadeInSection delay={0.4} direction="right">
+              <InfoCard>
+                <div>✉️</div>
+                <div>
+                  <p>Email</p>
+                  <h3>support@farmconnect.com</h3>
+                </div>
+              </InfoCard>
+            </FadeInSection>
 
-            <MapBox>
-              <MapImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmYhVssb_9uwa0ywDv2CLz3lAa7W6uYpwY-TiayzbbkJljtUCTHGHHAR2aukTlmsDbdCoKeFfk71ZHRhLorHIgQi3NNM-mig9E50nfZKLSXrqNlFAhknUWx8LcF65vo2LN94YOF0LEDC8UXZMGWT5SWHjXF1bGgpXntHU4Ismw57DaDp94kharMQ8J1Y9d41u80JediFYpSTArlLdryco7C_NQ7wpy2oMtbDhchizLPQX8Syh_-5rUqv2w1sZQ5H6D1FoMPeFBZTA" />
-            </MapBox>
+            <FadeInSection delay={0} direction="right">
+              <MapBox>
+                <MapImage src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmYhVssb_9uwa0ywDv2CLz3lAa7W6uYpwY-TiayzbbkJljtUCTHGHHAR2aukTlmsDbdCoKeFfk71ZHRhLorHIgQi3NNM-mig9E50nfZKLSXrqNlFAhknUWx8LcF65vo2LN94YOF0LEDC8UXZMGWT5SWHjXF1bGgpXntHU4Ismw57DaDp94kharMQ8J1Y9d41u80JediFYpSTArlLdryco7C_NQ7wpy2oMtbDhchizLPQX8Syh_-5rUqv2w1sZQ5H6D1FoMPeFBZTA" />
+              </MapBox>
+            </FadeInSection>
           </div>
         </Grid>
 
         {/* CTA */}
+
         <CTA>
-          <h2>Join our growing community</h2>
-          <p>Follow us for updates and farming tips</p>
+          <FadeInSection delay={0.2}>
+            <h2>Join our growing community</h2>
+            <p>Follow us for updates and farming tips</p>
+          </FadeInSection>
         </CTA>
       </Page>
 

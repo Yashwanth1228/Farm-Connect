@@ -36,6 +36,7 @@ import {
   Badge,
   Title,
 } from "@/styles/profile";
+import FadeInSection from "@/components/user/FadeInSection";
 
 export default function ProfilePage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -180,27 +181,29 @@ export default function ProfilePage() {
         {/* PROFILE */}
         <ProfileCard>
           <Left>
-            <Avatar>
-              {user?.profilePic ? (
-                <img src={user.profilePic} alt="profile" />
-              ) : (
-                <div>{user?.name?.charAt(0)?.toUpperCase() || "U"}</div>
-              )}
+            <FadeInSection delay={0} direction="left">
+              <Avatar>
+                {user?.profilePic ? (
+                  <img src={user.profilePic} alt="profile" />
+                ) : (
+                  <div>{user?.name?.charAt(0)?.toUpperCase() || "U"}</div>
+                )}
 
-              {/* ✅ Hidden file input */}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: "none" }}
-                id="profileUpload"
-              />
+                {/* ✅ Hidden file input */}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  style={{ display: "none" }}
+                  id="profileUpload"
+                />
 
-              {/* ✅ Camera button */}
-              <label htmlFor="profileUpload">
-                <CameraButton>📷</CameraButton>
-              </label>
-            </Avatar>
+                {/* ✅ Camera button */}
+                <label htmlFor="profileUpload">
+                  <CameraButton>📷</CameraButton>
+                </label>
+              </Avatar>
+            </FadeInSection>
           </Left>
 
           <Center>
@@ -218,25 +221,29 @@ export default function ProfilePage() {
             </SubText>
           </Center>
 
-          <Right>
-            <Stat>
-              <h2>{bookings.length}</h2>
-              <span>Rentals</span>
-            </Stat>
+          <FadeInSection delay={0} direction="right">
+            <Right>
+              <Stat>
+                <h2>{bookings.length}</h2>
+                <span>Rentals</span>
+              </Stat>
 
-            {/* <Stat>
+              {/* <Stat>
               <h2>4.9</h2>
               <span>Rating</span>
             </Stat> */}
-          </Right>
+            </Right>
+          </FadeInSection>
         </ProfileCard>
 
         {/* BOOKINGS */}
         <Section>
-          <SectionHeader>
-            <h2>My Bookings</h2>
-            <p>Manage your rentals</p>
-          </SectionHeader>
+          <FadeInSection delay={0} direction="up">
+            <SectionHeader>
+              <h2>My Bookings</h2>
+              <p>Manage your rentals</p>
+            </SectionHeader>
+          </FadeInSection>
 
           {bookings.map((item) => {
             const today = new Date();
@@ -252,48 +259,52 @@ export default function ProfilePage() {
             }
 
             return (
-              <BookingCard key={item._id}>
-                <Image>
-                  <img src={item.images} alt="Tractor" />
-                </Image>
+              <FadeInSection delay={0} direction="up">
+                <BookingCard key={item._id}>
+                  <Image>
+                    <img src={item.images} alt="Tractor" />
+                  </Image>
 
-                <Content>
-                  <Top>
-                    <div>
-                      <Badge status={status}>{status}</Badge>
-                      <Title>{item.name}</Title>
-                      <Dates>
-                        {new Date(item.start_date).toDateString()} →{" "}
-                        {new Date(item.end_date).toDateString()} • {item.days}{" "}
-                        Days
-                      </Dates>
-                    </div>
+                  <Content>
+                    <Top>
+                      <div>
+                        <Badge status={status}>{status}</Badge>
+                        <Title>{item.name}</Title>
+                        <Dates>
+                          {new Date(item.start_date).toDateString()} →{" "}
+                          {new Date(item.end_date).toDateString()} • {item.days}{" "}
+                          Days
+                        </Dates>
+                      </div>
 
-                    <Price>
-                      <small>Total</small>
-                      <h3>{Number(item.totalprice).toFixed(2)}</h3>
-                    </Price>
-                  </Top>
+                      <Price>
+                        <small>Total</small>
+                        <h3>{Number(item.totalprice).toFixed(2)}</h3>
+                      </Price>
+                    </Top>
 
-                  <Actions>
-                    {/* ✅ DETAILS BUTTON */}
-                    {status === "active" ||
-                    status === "completed" ||
-                    status === "upcoming" ? (
-                      <Btn onClick={() => router.push(`/bookings/${item._id}`)}>
-                        Details
-                      </Btn>
-                    ) : null}
+                    <Actions>
+                      {/* ✅ DETAILS BUTTON */}
+                      {status === "active" ||
+                      status === "completed" ||
+                      status === "upcoming" ? (
+                        <Btn
+                          onClick={() => router.push(`/bookings/${item._id}`)}
+                        >
+                          Details
+                        </Btn>
+                      ) : null}
 
-                    {/* ✅ FIXED HERE */}
-                    {status === "active" || status === "upcoming" ? (
-                      <Btn onClick={() => handleCancel(item._id)}>
-                        Cancel Booking
-                      </Btn>
-                    ) : null}
-                  </Actions>
-                </Content>
-              </BookingCard>
+                      {/* ✅ FIXED HERE */}
+                      {status === "active" || status === "upcoming" ? (
+                        <Btn onClick={() => handleCancel(item._id)}>
+                          Cancel Booking
+                        </Btn>
+                      ) : null}
+                    </Actions>
+                  </Content>
+                </BookingCard>
+              </FadeInSection>
             );
           })}
         </Section>

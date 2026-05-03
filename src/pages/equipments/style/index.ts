@@ -114,7 +114,7 @@ export const Subtitle = styled.p`
   font-size: 14px;
   margin-top: 4px;
   color: #666;
-  // margin-bottom: 24px;
+  margin-bottom: 24px;
 `;
 
 export const Grid = styled.div`

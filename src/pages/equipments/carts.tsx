@@ -31,6 +31,7 @@ import {
   CloseIcon,
   MobileCheckoutBar,
 } from "@/pages/equipments/style/carts";
+import FadeInSection from "@/components/user/FadeInSection";
 
 export default function CartPage() {
   const { user, setCartCount }: any = useContext(AppContent);
@@ -241,72 +242,76 @@ export default function CartPage() {
 
         <Grid>
           {/* LEFT SIDE */}
-          <Left>
-            {cart.map((item: any) => (
-              <CartItem
-                pid={item.productid}
-                key={item._id}
-                title={item.name}
-                price={`₹${item.price}`}
-                total={`₹${item.totalprice}`}
-                startDate={item.start_date}
-                endDate={item.end_date}
-                days={item.days}
-                img={item.image}
-                item={item}
-                cart={cart}
-                setCart={setCart}
-                onRemove={handleRemove}
-              />
-            ))}
+          <FadeInSection delay={0} direction="left">
+            <Left>
+              {cart.map((item: any) => (
+                <CartItem
+                  pid={item.productid}
+                  key={item._id}
+                  title={item.name}
+                  price={`₹${item.price}`}
+                  total={`₹${item.totalprice}`}
+                  startDate={item.start_date}
+                  endDate={item.end_date}
+                  days={item.days}
+                  img={item.image}
+                  item={item}
+                  cart={cart}
+                  setCart={setCart}
+                  onRemove={handleRemove}
+                />
+              ))}
 
-            <Button onClick={() => Router.push("/equipments")}>
-              ← Continue Browsing Equipment
-            </Button>
-          </Left>
+              <Button onClick={() => Router.push("/equipments")}>
+                ← Continue Browsing Equipment
+              </Button>
+            </Left>
+          </FadeInSection>
 
           {/* RIGHT SIDE */}
-          <Right>
-            <SummaryBox>
-              <h2>Order Summary</h2>
+          <FadeInSection delay={0} direction="right">
+            <Right>
+              <SummaryBox>
+                <h2>Order Summary</h2>
 
-              <Row>
-                <span>Base Price</span>
-                <span>₹{baseTotal}</span>
-              </Row>
-
-              <Row>
-                <span>Total Duration</span>
-                <span>{totalDays} Days</span>
-              </Row>
-
-              <Row>
-                <span>GST (8%)</span>
-                <span>₹{gst.toFixed(2)}</span>
-              </Row>
-
-              {/* ✅ SHOW DISCOUNT ONLY IF APPLIED */}
-              {discount > 0 && (
-                <Row style={{ color: "#1b5e20", fontWeight: 600 }}>
-                  <span>Discount (10%)</span>
-                  <span>- ₹{discount.toFixed(2)}</span>
+                <Row>
+                  <span>Base Price</span>
+                  <span>₹{baseTotal}</span>
                 </Row>
-              )}
 
-              <Divider />
+                <Row>
+                  <span>Total Duration</span>
+                  <span>{totalDays} Days</span>
+                </Row>
 
-              <Total>
-                <span>Grand Total</span>
-                <strong>₹{grandTotal.toFixed(2)}</strong>
-              </Total>
-              {discount > 0 && (
-                <p style={{ color: "#1b5e20", fontWeight: 600 }}>
-                  🎉 You saved ₹{discount.toFixed(0)} on this order!
-                </p>
-              )}
-              <Button onClick={handleCheckout}>Proceed to Checkout</Button>
-            </SummaryBox>
-          </Right>
+                <Row>
+                  <span>GST (8%)</span>
+                  <span>₹{gst.toFixed(2)}</span>
+                </Row>
+
+                {/* ✅ SHOW DISCOUNT ONLY IF APPLIED */}
+                {discount > 0 && (
+                  <Row style={{ color: "#1b5e20", fontWeight: 600 }}>
+                    <span>Discount (10%)</span>
+                    <span>- ₹{discount.toFixed(2)}</span>
+                  </Row>
+                )}
+
+                <Divider />
+
+                <Total>
+                  <span>Grand Total</span>
+                  <strong>₹{grandTotal.toFixed(2)}</strong>
+                </Total>
+                {discount > 0 && (
+                  <p style={{ color: "#1b5e20", fontWeight: 600 }}>
+                    🎉 You saved ₹{discount.toFixed(0)} on this order!
+                  </p>
+                )}
+                <Button onClick={handleCheckout}>Proceed to Checkout</Button>
+              </SummaryBox>
+            </Right>
+          </FadeInSection>
         </Grid>
       </Main>
     </Page>

@@ -54,7 +54,8 @@ export const Card = styled.div`
   background: #fff;
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  min-height: 350px;
 `;
 
 export const Title = styled.h1`
