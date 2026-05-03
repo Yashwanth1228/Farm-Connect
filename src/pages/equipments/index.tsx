@@ -46,6 +46,7 @@ import {
   SkeletonBody,
   SkeletonLine,
 } from "@/pages/equipments/style/index";
+import FadeInSection from "@/components/user/FadeInSection";
 
 type Equipment = {
   id: number;
@@ -169,137 +170,139 @@ export default function EquipmentPage() {
       <Main>
         <Layout>
           {/* Sidebar */}
-          <Sidebar>
-            <FilterBox>
-              <FilterTitle>Filters</FilterTitle>
+          <FadeInSection delay={0}>
+            <Sidebar>
+              <FilterBox>
+                <FilterTitle>Filters</FilterTitle>
 
-              <Section>
-                <SectionTitle>Price Range</SectionTitle>
-                <Range
-                  type="range"
-                  min={1000}
-                  max={20000}
-                  value={price}
-                  step={400}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
-                <RangeText>
-                  <span>₹1,000</span>
-                  <span>₹{price.toLocaleString()}</span>
-                </RangeText>
-              </Section>
-
-              <div
-                style={{
-                  marginTop: "10px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                  marginBottom: "20px",
-                }}
-              >
-                <Label>
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={priceRange === "all"}
-                    onChange={() => setPriceRange("all")}
+                <Section>
+                  <SectionTitle>Price Range</SectionTitle>
+                  <Range
+                    type="range"
+                    min={1000}
+                    max={20000}
+                    value={price}
+                    step={400}
+                    onChange={(e) => setPrice(Number(e.target.value))}
                   />
-                  All Prices
-                </Label>
+                  <RangeText>
+                    <span>₹1,000</span>
+                    <span>₹{price.toLocaleString()}</span>
+                  </RangeText>
+                </Section>
 
-                <Label>
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={priceRange === "0-5000"}
-                    onChange={() => setPriceRange("0-5000")}
-                  />
-                  ₹0 - ₹5,000
-                </Label>
+                <div
+                  style={{
+                    marginTop: "10px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  <Label>
+                    <input
+                      type="radio"
+                      name="priceRange"
+                      checked={priceRange === "all"}
+                      onChange={() => setPriceRange("all")}
+                    />
+                    All Prices
+                  </Label>
 
-                <Label>
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={priceRange === "6000-10000"}
-                    onChange={() => setPriceRange("6000-10000")}
-                  />
-                  ₹6,000 - ₹10,000
-                </Label>
+                  <Label>
+                    <input
+                      type="radio"
+                      name="priceRange"
+                      checked={priceRange === "0-5000"}
+                      onChange={() => setPriceRange("0-5000")}
+                    />
+                    ₹0 - ₹5,000
+                  </Label>
 
-                <Label>
-                  <input
-                    type="radio"
-                    name="priceRange"
-                    checked={priceRange === "10000-20000"}
-                    onChange={() => setPriceRange("10000-20000")}
-                  />
-                  ₹10,000 - ₹20,000
-                </Label>
-              </div>
+                  <Label>
+                    <input
+                      type="radio"
+                      name="priceRange"
+                      checked={priceRange === "6000-10000"}
+                      onChange={() => setPriceRange("6000-10000")}
+                    />
+                    ₹6,000 - ₹10,000
+                  </Label>
 
-              <Section>
-                <SectionTitle>Equipment Type</SectionTitle>
-                <Label>
-                  <input
-                    type="checkbox"
-                    checked={selectedTypes.includes("Tractors")}
-                    onChange={() => handleTypeChange("Tractors")}
-                  />{" "}
-                  Tractors
-                </Label>
-                <Label>
-                  <input
-                    type="checkbox"
-                    checked={selectedTypes.includes("Harvesters")}
-                    onChange={() => handleTypeChange("Harvesters")}
-                  />{" "}
-                  Harvesters
-                </Label>
-                <Label>
-                  <input
-                    type="checkbox"
-                    checked={selectedTypes.includes("Ploughs")}
-                    onChange={() => handleTypeChange("Ploughs")}
-                  />{" "}
-                  Ploughs
-                </Label>
-                <Label>
-                  <input
-                    type="checkbox"
-                    checked={selectedTypes.includes("Cultivators")}
-                    onChange={() => handleTypeChange("Cultivators")}
-                  />{" "}
-                  Cultivators
-                </Label>
-              </Section>
+                  <Label>
+                    <input
+                      type="radio"
+                      name="priceRange"
+                      checked={priceRange === "10000-20000"}
+                      onChange={() => setPriceRange("10000-20000")}
+                    />
+                    ₹10,000 - ₹20,000
+                  </Label>
+                </div>
 
-              <Section>
-                <SectionTitle>Availability</SectionTitle>
-                <Label>
-                  <input
-                    type="radio"
-                    name="a"
-                    checked={avalibility === "available"}
-                    onChange={() => setAvalibility("available")}
-                  />{" "}
-                  Available Now
-                </Label>
-                <Label>
-                  <input
-                    type="radio"
-                    name="a"
-                    checked={avalibility === "all"}
-                    onChange={() => setAvalibility("all")}
-                  />{" "}
-                  All Equipment
-                </Label>
-              </Section>
+                <Section>
+                  <SectionTitle>Equipment Type</SectionTitle>
+                  <Label>
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("Tractors")}
+                      onChange={() => handleTypeChange("Tractors")}
+                    />{" "}
+                    Tractors
+                  </Label>
+                  <Label>
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("Harvesters")}
+                      onChange={() => handleTypeChange("Harvesters")}
+                    />{" "}
+                    Harvesters
+                  </Label>
+                  <Label>
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("Ploughs")}
+                      onChange={() => handleTypeChange("Ploughs")}
+                    />{" "}
+                    Ploughs
+                  </Label>
+                  <Label>
+                    <input
+                      type="checkbox"
+                      checked={selectedTypes.includes("Cultivators")}
+                      onChange={() => handleTypeChange("Cultivators")}
+                    />{" "}
+                    Cultivators
+                  </Label>
+                </Section>
 
-              <Button onClick={handleClear}>Clear All Filters</Button>
-            </FilterBox>
-          </Sidebar>
+                <Section>
+                  <SectionTitle>Availability</SectionTitle>
+                  <Label>
+                    <input
+                      type="radio"
+                      name="a"
+                      checked={avalibility === "available"}
+                      onChange={() => setAvalibility("available")}
+                    />{" "}
+                    Available Now
+                  </Label>
+                  <Label>
+                    <input
+                      type="radio"
+                      name="a"
+                      checked={avalibility === "all"}
+                      onChange={() => setAvalibility("all")}
+                    />{" "}
+                    All Equipment
+                  </Label>
+                </Section>
+
+                <Button onClick={handleClear}>Clear All Filters</Button>
+              </FilterBox>
+            </Sidebar>
+          </FadeInSection>
 
           {/* Content */}
           <Content
@@ -345,33 +348,35 @@ export default function EquipmentPage() {
                     </SkeletonCard>
                   ))
                 : currentItems.map((item: Equipment) => (
-                    <Card
-                      key={item._id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        router.push(`/equipments/detail?id=${item._id}`);
-                      }}
-                    >
-                      <Badge available={item.available}>
-                        {item.available ? "Available" : "Not Available"}
-                      </Badge>
-
-                      <CardImage
-                        src={item.images?.[0] || "/images/placeholder.png"}
-                        onError={(e: any) => {
-                          e.target.src = "/images/placeholder.png";
+                    <FadeInSection delay={0.1}>
+                      <Card
+                        key={item._id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          router.push(`/equipments/detail?id=${item._id}`);
                         }}
-                      />
+                      >
+                        <Badge available={item.available}>
+                          {item.available ? "Available" : "Not Available"}
+                        </Badge>
 
-                      <CardBody>
-                        <CardTitle>{item.name}</CardTitle>
-                        <Desc>Type: {item.type}</Desc>
+                        <CardImage
+                          src={item.images?.[0] || "/images/placeholder.png"}
+                          onError={(e: any) => {
+                            e.target.src = "/images/placeholder.png";
+                          }}
+                        />
 
-                        <CardFooter>
-                          <Price>₹{item.price}/day</Price>
-                        </CardFooter>
-                      </CardBody>
-                    </Card>
+                        <CardBody>
+                          <CardTitle>{item.name}</CardTitle>
+                          <Desc>Type: {item.type}</Desc>
+
+                          <CardFooter>
+                            <Price>₹{item.price}/day</Price>
+                          </CardFooter>
+                        </CardBody>
+                      </Card>
+                    </FadeInSection>
                   ))}
             </Grid>
           </Content>

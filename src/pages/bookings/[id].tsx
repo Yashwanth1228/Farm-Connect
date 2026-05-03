@@ -17,6 +17,7 @@ import {
   SecondaryBtn,
   DisabledBtn,
 } from "@/pages/bookings/styles/bookingDetails";
+import FadeInSection from "@/components/user/FadeInSection";
 
 export default function BookingDetails() {
   const router = useRouter();
@@ -58,121 +59,127 @@ export default function BookingDetails() {
   return (
     <Page>
       {/* HERO */}
-      <Hero>
-        <img src={booking.images} alt="equipment" />
-        <StatusBadge>{status}</StatusBadge>
-      </Hero>
+      <FadeInSection delay={0} direction="up">
+        <Hero>
+          <img src={booking.images} alt="equipment" />
+          <StatusBadge>{status}</StatusBadge>
+        </Hero>
+      </FadeInSection>
 
       <Container>
         <Grid>
           {/* LEFT */}
-          <Card>
-            <Title>{booking.name}</Title>
-            <SubText>Premium Equipment Rental</SubText>
+          <FadeInSection delay={0.2} direction="left">
+            <Card>
+              <Title>{booking.name}</Title>
+              <SubText>Premium Equipment Rental</SubText>
 
-            <br />
+              <br />
 
-            <Row>
-              <span>Start Date</span>
-              <b>{new Date(booking.start_date).toDateString()}</b>
-            </Row>
+              <Row>
+                <span>Start Date</span>
+                <b>{new Date(booking.start_date).toDateString()}</b>
+              </Row>
 
-            <Row>
-              <span>End Date</span>
-              <b>{new Date(booking.end_date).toDateString()}</b>
-            </Row>
+              <Row>
+                <span>End Date</span>
+                <b>{new Date(booking.end_date).toDateString()}</b>
+              </Row>
 
-            <Row>
-              <span>Duration</span>
-              <b>{booking.days} Days</b>
-            </Row>
+              <Row>
+                <span>Duration</span>
+                <b>{booking.days} Days</b>
+              </Row>
 
-            <Row>
-              <span>Booking ID</span>
-              <b>{booking._id}</b>
-            </Row>
-          </Card>
+              <Row>
+                <span>Booking ID</span>
+                <b>{booking._id}</b>
+              </Row>
+            </Card>
+          </FadeInSection>
 
           {/* RIGHT */}
-          <Card>
-            <h2>Summary</h2>
+          <FadeInSection delay={0.2} direction="right">
+            <Card>
+              <h2>Summary</h2>
 
-            <Row>
-              <span>Price / day</span>
-              <b>₹{booking.price}</b>
-            </Row>
+              <Row>
+                <span>Price / day</span>
+                <b>₹{booking.price}</b>
+              </Row>
 
-            <Row>
-              <span>Days</span>
-              <b>{booking.days}</b>
-            </Row>
+              <Row>
+                <span>Days</span>
+                <b>{booking.days}</b>
+              </Row>
 
-            <Row>
-              <span>Subtotal</span>
-              <b>₹{Number(booking.subtotal).toFixed(2)}</b>
-            </Row>
+              <Row>
+                <span>Subtotal</span>
+                <b>₹{Number(booking.subtotal).toFixed(2)}</b>
+              </Row>
 
-            <Row>
-              <span>GST (8%)</span>
-              <b>₹{Number(booking.tax).toFixed(2)}</b>
-            </Row>
+              <Row>
+                <span>GST (8%)</span>
+                <b>₹{Number(booking.tax).toFixed(2)}</b>
+              </Row>
 
-            <Row style={{ borderTop: "1px solid #eee", paddingTop: "10px" }}>
-              <span>
-                <strong>Total Paid</strong>
-              </span>
-              <b style={{ color: "#1b5e20" }}>
-                ₹{Number(booking.totalprice).toFixed(2)}
-              </b>
-            </Row>
+              <Row style={{ borderTop: "1px solid #eee", paddingTop: "10px" }}>
+                <span>
+                  <strong>Total Paid</strong>
+                </span>
+                <b style={{ color: "#1b5e20" }}>
+                  ₹{Number(booking.totalprice).toFixed(2)}
+                </b>
+              </Row>
 
-            {/* ACTIONS */}
-            <PrimaryBtn
-              onClick={() => {
-                const link = document.createElement("a");
+              {/* ACTIONS */}
+              <PrimaryBtn
+                onClick={() => {
+                  const link = document.createElement("a");
 
-                // ✅ FIXED URL
-                link.href = `/api/bookings/invoice/${booking._id}`;
+                  // ✅ FIXED URL
+                  link.href = `/api/bookings/invoice/${booking._id}`;
 
-                link.download = `Invoice_${booking._id}.pdf`;
+                  link.download = `Invoice_${booking._id}.pdf`;
 
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-              }}
-            >
-              Download Invoice
-            </PrimaryBtn>
-
-            {status === "Completed" ? (
-              <DisabledBtn disabled>Cannot Cancel</DisabledBtn>
-            ) : (
-              <SecondaryBtn
-                onClick={async () => {
-                  const confirmCancel = confirm("Cancel booking?");
-                  if (!confirmCancel) return;
-
-                  const res = await fetch("/api/bookings/cancel", {
-                    method: "DELETE",
-                    headers: {
-                      "Content-Type": "application/json",
-                      "x-user-id": user._id,
-                    },
-                    body: JSON.stringify({ bookingId: booking._id }),
-                  });
-
-                  if (res.ok) {
-                    toast.success("Cancelled");
-                    router.push("/profile");
-                  } else {
-                    toast.error("Failed");
-                  }
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
               >
-                Cancel Booking
-              </SecondaryBtn>
-            )}
-          </Card>
+                Download Invoice
+              </PrimaryBtn>
+
+              {status === "Completed" ? (
+                <DisabledBtn disabled>Cannot Cancel</DisabledBtn>
+              ) : (
+                <SecondaryBtn
+                  onClick={async () => {
+                    const confirmCancel = confirm("Cancel booking?");
+                    if (!confirmCancel) return;
+
+                    const res = await fetch("/api/bookings/cancel", {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                        "x-user-id": user._id,
+                      },
+                      body: JSON.stringify({ bookingId: booking._id }),
+                    });
+
+                    if (res.ok) {
+                      toast.success("Cancelled");
+                      router.push("/profile");
+                    } else {
+                      toast.error("Failed");
+                    }
+                  }}
+                >
+                  Cancel Booking
+                </SecondaryBtn>
+              )}
+            </Card>
+          </FadeInSection>
         </Grid>
       </Container>
     </Page>

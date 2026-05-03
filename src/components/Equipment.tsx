@@ -23,6 +23,7 @@ import {
   Price,
   AddButton,
 } from "@/styles/home";
+import FadeInSection from "./user/FadeInSection";
 
 type Equipment = {
   name: string;
@@ -69,43 +70,45 @@ export default function FeaturedEquipment() {
           </ViewEquipment>
         </Header>
 
-        {Array.isArray(equipments) && equipments.length > 0 ? (
-          <Grid2>
-            {equipments.slice(0, 3).map((item: any, index) => (
-              <Card2
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(`/equipments/detail?id=${item._id}`);
-                }}
-              >
-                <ImageWrapper>
-                  <EquipmentImage
-                    src={item.images?.[0] || "/images/fallback.png"}
-                    alt={item.name}
-                  />
-                </ImageWrapper>
+        <FadeInSection delay={0.2}>
+          {Array.isArray(equipments) && equipments.length > 0 ? (
+            <Grid2>
+              {equipments.slice(0, 3).map((item: any, index) => (
+                <Card2
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/equipments/detail?id=${item._id}`);
+                  }}
+                >
+                  <ImageWrapper>
+                    <EquipmentImage
+                      src={item.images?.[0] || "/images/fallback.png"}
+                      alt={item.name}
+                    />
+                  </ImageWrapper>
 
-                <CardBody>
-                  <EquipmentName>{item.name}</EquipmentName>
-                  <Category>{item.type}</Category>
+                  <CardBody>
+                    <EquipmentName>{item.name}</EquipmentName>
+                    <Category>{item.type}</Category>
 
-                  <Footer>
-                    <Price>
-                      <span>₹{item.price}</span> <small>/ day</small>
-                    </Price>
+                    <Footer>
+                      <Price>
+                        <span>₹{item.price}</span> <small>/ day</small>
+                      </Price>
 
-                    {/* <AddButton>
+                      {/* <AddButton>
                       <span>add</span>
                     </AddButton> */}
-                  </Footer>
-                </CardBody>
-              </Card2>
-            ))}
-          </Grid2>
-        ) : (
-          <p>Loading equipment...</p>
-        )}
+                    </Footer>
+                  </CardBody>
+                </Card2>
+              ))}
+            </Grid2>
+          ) : (
+            <p>Loading equipment...</p>
+          )}
+        </FadeInSection>
       </Container2>
     </Section2>
   );

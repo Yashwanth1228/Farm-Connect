@@ -8,50 +8,57 @@ import {
   Title1,
   Description1,
 } from "@/styles/home";
+import FadeInSection from "./user/FadeInSection";
 
 export default function Features() {
   return (
     <Section1>
       <Container1>
         <Grid>
-          <Card>
-            <IconBox color="#2e7d32">
-              <Icon>event_available</Icon>
-            </IconBox>
+          <FadeInSection delay={0} direction="left">
+            <Card>
+              <IconBox color="#2e7d32">
+                <Icon>event_available</Icon>
+              </IconBox>
 
-            <Title1>Easy Booking</Title1>
+              <Title1>Easy Booking</Title1>
 
-            <Description1>
-              Seamless scheduling through our digital platform. Secure your
-              machinery in seconds with just a few clicks.
-            </Description1>
-          </Card>
+              <Description1>
+                Seamless scheduling through our digital platform. Secure your
+                machinery in seconds with just a few clicks.
+              </Description1>
+            </Card>
+          </FadeInSection>
 
-          <Card>
-            <IconBox color="#9c27b0">
-              <Icon>payments</Icon>
-            </IconBox>
+          <FadeInSection delay={0.2} direction="up">
+            <Card>
+              <IconBox color="#9c27b0">
+                <Icon>payments</Icon>
+              </IconBox>
 
-            <Title1>Affordable Pricing</Title1>
+              <Title1>Affordable Pricing</Title1>
 
-            <Description1>
-              Competitive rates designed for farms of all sizes. No hidden fees,
-              just honest transparent pricing.
-            </Description1>
-          </Card>
+              <Description1>
+                Competitive rates designed for farms of all sizes. No hidden
+                fees, just honest transparent pricing.
+              </Description1>
+            </Card>
+          </FadeInSection>
 
-          <Card>
-            <IconBox color="#1976d2">
-              <Icon>verified_user</Icon>
-            </IconBox>
+          <FadeInSection delay={0.4} direction="right">
+            <Card>
+              <IconBox color="#1976d2">
+                <Icon>verified_user</Icon>
+              </IconBox>
 
-            <Title1>Trusted by Farmers</Title1>
+              <Title1>Trusted by Farmers</Title1>
 
-            <Description1>
-              Join thousands of local producers who rely on our curated fleet of
-              top-tier agricultural instruments.
-            </Description1>
-          </Card>
+              <Description1>
+                Join thousands of local producers who rely on our curated fleet
+                of top-tier agricultural instruments.
+              </Description1>
+            </Card>
+          </FadeInSection>
         </Grid>
       </Container1>
     </Section1>

@@ -118,7 +118,7 @@ export const ButtonGroup = styled.div`
 
 export const Logout = styled.button`
   padding: 8px 14px;
-  background: #0d631b;
+  background: #9ca3af;
   border: none;
   cursor: pointer;
   font-size: 14px;
@@ -132,7 +132,8 @@ export const Logout = styled.button`
   align-items: center;
 
   &:hover {
-    color: #0d631b;
+    color: white;
+    background: #9ca3af;
   }
 
   ${mq.md} {
