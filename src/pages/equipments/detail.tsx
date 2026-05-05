@@ -72,6 +72,7 @@ export default function detail() {
 
   const [togglecart, setTogglecart] = useState(false);
   const [cartId, setCartId] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<string | null>(null);
 
   console.log("the form data is ", form);
 
@@ -83,6 +84,10 @@ export default function detail() {
         const res = await axios.get(`/api/equipment/${id}`);
         console.log("the product details are ", res.data.data);
         setProduct(res.data.data);
+
+        if (res.data.data.images?.length > 0) {
+          setActiveImage(res.data.data.images[0]);
+        }
 
         const cartres = await axios.get("/api/cart/all");
 
@@ -360,6 +365,51 @@ export default function detail() {
     }
   };
 
+  const getFeatures = (product: any) => {
+    const type = product?.type?.toLowerCase();
+  
+    if (type === "tractor") {
+      return [
+        "🚜 Ideal for heavy-duty farming",
+        "💪 High pulling capacity",
+        "🌾 Suitable for large-scale cultivation",
+        // "⚡ High-performance engine for demanding tasks",
+        // "⛽ Optimized for long working hours",
+        product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
+      ];
+    }
+  
+    if (type === "sprayer") {
+      return [
+        "🌿 Uniform pesticide spraying",
+        "🎯 Precision coverage",
+        "🪶 Lightweight and easy to use",
+        "🔋 Efficient operation",
+        product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
+      ];
+    }
+  
+    if (type === "harvester") {
+      return [
+        "🌾 Efficient crop harvesting",
+        "⚡ Saves time and labor",
+        "🚜 Suitable for large farms",
+        "💰 Reduces operational cost",
+        product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
+      ];
+    }
+  
+    // fallback
+    return [
+      "🌾 Reliable farming equipment",
+      "⚙️ Designed for efficiency",
+      "💪 Durable build quality",
+      product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
+    ];
+  };
+
+  const features = getFeatures(product);
+
   return (
     <>
       <Container>
@@ -368,16 +418,22 @@ export default function detail() {
           <FadeInSection delay={0} direction="left">
             <div>
               {/* MAIN IMAGE */}
-              {images && images.length > 0 && (
-                <MainImage src={images[0]} alt={product?.name} />
-              )}
+              <MainImage src={activeImage || images?.[0]} alt={product?.name} />
 
               {/* THUMBNAILS */}
               <Gallery>
-                {images?.slice(1).map((img: string, index: number) => (
-                  <Thumb key={index} src={img} />
-                ))}
-              </Gallery>
+  {images?.map((img: string, index: number) => (
+    <Thumb
+      key={index}
+      src={img}
+      onClick={() => setActiveImage(img)}
+      style={{
+        border: activeImage === img ? "2px solid #0d631b" : "none",
+        cursor: "pointer",
+      }}
+    />
+  ))}
+</Gallery>
             </div>
           </FadeInSection>
 
@@ -468,19 +524,17 @@ export default function detail() {
         <Section>
           <FadeInSection delay={0.2} direction="left">
             <div>
-              <SectionTitle>Engineered for the Field</SectionTitle>
+            <SectionTitle>Why Choose This Equipment</SectionTitle>
+            <Text>
+  Designed for {product?.type?.toLowerCase()} operations in {product?.location}, 
+  this equipment ensures reliable performance and efficiency for modern farming needs.
+</Text>
 
-              <Text>
-                The 7R 350 is a powerhouse built for farmers who demand
-                efficiency and precision. Designed for large-scale operations.
-              </Text>
-
-              <FeatureGrid>
-                <FeatureCard>Integrated GPS</FeatureCard>
-                <FeatureCard>Climate Control</FeatureCard>
-                <FeatureCard>Auto-Steer</FeatureCard>
-                <FeatureCard>Efficiency Mode</FeatureCard>
-              </FeatureGrid>
+<FeatureGrid>
+  {features.map((item: string, i: number) => (
+    <FeatureCard key={i}>{item}</FeatureCard>
+  ))}
+</FeatureGrid>
             </div>
           </FadeInSection>
 

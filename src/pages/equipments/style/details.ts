@@ -34,7 +34,10 @@ export const Hero = styled.div`
 export const MainImage = styled.img`
   width: 100%;
   border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  
 `;
+
 
 export const Gallery = styled.div`
   display: grid;

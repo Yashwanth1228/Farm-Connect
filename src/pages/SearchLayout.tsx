@@ -518,7 +518,7 @@ useEffect(() => {
         <Section>
           <SectionTitle>Price Range</SectionTitle>
   
-          {options.map((option: any) => {
+          {options?.map((option: any) => {
             if (typeof option.value === "object") {
               const value = option.value;
   

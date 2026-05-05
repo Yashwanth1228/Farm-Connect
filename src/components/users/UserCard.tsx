@@ -31,6 +31,7 @@ export default function UserCard({ name, email, img , role , onRoleChange}: Prop
     <option value="admin">Admin</option>
   </RoleSelect>
 </div>
+
       </UserInfo>
     </Card>
   );
