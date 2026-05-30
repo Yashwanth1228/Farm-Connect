@@ -367,8 +367,8 @@ export default function detail() {
 
   const getFeatures = (product: any) => {
     const type = product?.type?.toLowerCase();
-  
-    if (type === "tractor") {
+
+    if (type === "tractors") {
       return [
         "🚜 Ideal for heavy-duty farming",
         "💪 High pulling capacity",
@@ -378,7 +378,7 @@ export default function detail() {
         product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
       ];
     }
-  
+
     if (type === "sprayer") {
       return [
         "🌿 Uniform pesticide spraying",
@@ -388,7 +388,7 @@ export default function detail() {
         product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
       ];
     }
-  
+
     if (type === "harvester") {
       return [
         "🌾 Efficient crop harvesting",
@@ -398,7 +398,7 @@ export default function detail() {
         product?.available ? "✅ Ready for use" : "❌ Currently unavailable",
       ];
     }
-  
+
     // fallback
     return [
       "🌾 Reliable farming equipment",
@@ -422,18 +422,19 @@ export default function detail() {
 
               {/* THUMBNAILS */}
               <Gallery>
-  {images?.map((img: string, index: number) => (
-    <Thumb
-      key={index}
-      src={img}
-      onClick={() => setActiveImage(img)}
-      style={{
-        border: activeImage === img ? "2px solid #0d631b" : "none",
-        cursor: "pointer",
-      }}
-    />
-  ))}
-</Gallery>
+                {images?.map((img: string, index: number) => (
+                  <Thumb
+                    key={index}
+                    src={img}
+                    onClick={() => setActiveImage(img)}
+                    style={{
+                      border:
+                        activeImage === img ? "2px solid #0d631b" : "none",
+                      cursor: "pointer",
+                    }}
+                  />
+                ))}
+              </Gallery>
             </div>
           </FadeInSection>
 
@@ -524,17 +525,18 @@ export default function detail() {
         <Section>
           <FadeInSection delay={0.2} direction="left">
             <div>
-            <SectionTitle>Why Choose This Equipment</SectionTitle>
-            <Text>
-  Designed for {product?.type?.toLowerCase()} operations in {product?.location}, 
-  this equipment ensures reliable performance and efficiency for modern farming needs.
-</Text>
+              <SectionTitle>Why Choose This Equipment</SectionTitle>
+              <Text>
+                Designed for {product?.type?.toLowerCase()} operations in{" "}
+                {product?.location}, this equipment ensures reliable performance
+                and efficiency for modern farming needs.
+              </Text>
 
-<FeatureGrid>
-  {features.map((item: string, i: number) => (
-    <FeatureCard key={i}>{item}</FeatureCard>
-  ))}
-</FeatureGrid>
+              <FeatureGrid>
+                {features.map((item: string, i: number) => (
+                  <FeatureCard key={i}>{item}</FeatureCard>
+                ))}
+              </FeatureGrid>
             </div>
           </FadeInSection>
 

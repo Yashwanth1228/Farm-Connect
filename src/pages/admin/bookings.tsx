@@ -70,7 +70,6 @@ import { toast } from "react-toastify";
 /* ================= PAGE ================= */
 
 export default function BookingsPage() {
-
   const { data, isLoading } = useGetBookingsQuery();
   console.log("bookings data ", data);
   const [updatestatus] = useUpdatestatusMutation();
@@ -143,7 +142,7 @@ export default function BookingsPage() {
             </Subtitle>
           </Left>
 
-          <Actions>
+          {/* <Actions>
             <Button>
               <span className="material-symbols-outlined">filter_list</span>
               Filter Status
@@ -153,7 +152,7 @@ export default function BookingsPage() {
               <span className="material-symbols-outlined">download</span>
               Export Ledger
             </Button>
-          </Actions>
+          </Actions> */}
         </HeaderWrapper>
 
         <StatsGrid>
@@ -186,47 +185,99 @@ export default function BookingsPage() {
         </StatsGrid>
 
         {/* ===== TABLE ===== */}
-       {/* ===== TABLE (DESKTOP ONLY) ===== */}
-<TableContainer>
-  <TableWrapper>
-    <Table>
-      <Thead>
-        <tr>
-          <Th>User</Th>
-          <Th>Equipment</Th>
-          <Th>Date</Th>
-          <Th>Status</Th>
-          <ThRight>Actions</ThRight>
-        </tr>
-      </Thead>
+        {/* ===== TABLE (DESKTOP ONLY) ===== */}
+        <TableContainer>
+          <TableWrapper>
+            <Table>
+              <Thead>
+                <tr>
+                  <Th>User</Th>
+                  <Th>Equipment</Th>
+                  <Th>Date</Th>
+                  <Th>Status</Th>
+                  <ThRight>Actions</ThRight>
+                </tr>
+              </Thead>
 
-      <tbody>
-        {currentBookings.map((item: any) => (
-          <Tr key={item._id}>
-            <Td>
-              <UserCell>
+              <tbody>
+                {currentBookings.map((item: any) => (
+                  <Tr key={item._id}>
+                    <Td>
+                      <UserCell>
+                        <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
+                        <UserName>{item.username}</UserName>
+                      </UserCell>
+                    </Td>
+
+                    <Td>
+                      <SubText>{item.name}</SubText>
+                    </Td>
+
+                    <Td>
+                      <SubText>
+                        {new Date(item.start_date).toLocaleDateString("en-IN")}{" "}
+                        - {new Date(item.end_date).toLocaleDateString("en-IN")}
+                      </SubText>
+                    </Td>
+
+                    <Td>
+                      <Status type={item.status}>{item.status}</Status>
+                    </Td>
+
+                    <TdRight>
+                      <ActionGroup>
+                        <ActionButton
+                          variant="primary"
+                          onClick={() => handleStatusChange(item._id, "active")}
+                        >
+                          Approve
+                        </ActionButton>
+
+                        <ActionButton
+                          variant="danger"
+                          onClick={() =>
+                            handleStatusChange(item._id, "Rejected")
+                          }
+                        >
+                          Reject
+                        </ActionButton>
+                      </ActionGroup>
+                    </TdRight>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </TableWrapper>
+        </TableContainer>
+
+        {/* ===== MOBILE CARDS (ONLY MOBILE) ===== */}
+        <MobileList>
+          {currentBookings.map((item: any) => (
+            <BookingCard key={item._id}>
+              <UserCell style={{ marginBottom: "10px" }}>
                 <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
                 <UserName>{item.username}</UserName>
               </UserCell>
-            </Td>
 
-            <Td>
-              <SubText>{item.name}</SubText>
-            </Td>
+              <CardRow>
+                <CardLabel>Equipment</CardLabel>
+                <CardValue>{item.name}</CardValue>
+              </CardRow>
 
-            <Td>
-              <SubText>
-                {new Date(item.start_date).toLocaleDateString("en-IN")} -{" "}
-                {new Date(item.end_date).toLocaleDateString("en-IN")}
-              </SubText>
-            </Td>
+              <CardRow>
+                <CardLabel>Date</CardLabel>
+                <CardValue>
+                  {new Date(item.start_date).toLocaleDateString("en-IN")} -{" "}
+                  {new Date(item.end_date).toLocaleDateString("en-IN")}
+                </CardValue>
+              </CardRow>
 
-            <Td>
-              <Status type={item.status}>{item.status}</Status>
-            </Td>
+              <CardRow>
+                <CardLabel>Status</CardLabel>
+                <Status type={item.status}>{item.status}</Status>
+              </CardRow>
 
-            <TdRight>
-              <ActionGroup>
+              <CardActions>
                 <ActionButton
                   variant="primary"
                   onClick={() => handleStatusChange(item._id, "active")}
@@ -240,60 +291,10 @@ export default function BookingsPage() {
                 >
                   Reject
                 </ActionButton>
-              </ActionGroup>
-            </TdRight>
-          </Tr>
-        ))}
-      </tbody>
-    </Table>
-  </TableWrapper>
-</TableContainer>
-
-{/* ===== MOBILE CARDS (ONLY MOBILE) ===== */}
-<MobileList>
-  {currentBookings.map((item: any) => (
-    <BookingCard key={item._id}>
-      <UserCell style={{ marginBottom: "10px" }}>
-        <Avatar bg="#fed7aa">{item.username?.[0]}</Avatar>
-        <UserName>{item.username}</UserName>
-      </UserCell>
-
-      <CardRow>
-        <CardLabel>Equipment</CardLabel>
-        <CardValue>{item.name}</CardValue>
-      </CardRow>
-
-      <CardRow>
-        <CardLabel>Date</CardLabel>
-        <CardValue>
-          {new Date(item.start_date).toLocaleDateString("en-IN")} -{" "}
-          {new Date(item.end_date).toLocaleDateString("en-IN")}
-        </CardValue>
-      </CardRow>
-
-      <CardRow>
-        <CardLabel>Status</CardLabel>
-        <Status type={item.status}>{item.status}</Status>
-      </CardRow>
-
-      <CardActions>
-        <ActionButton
-          variant="primary"
-          onClick={() => handleStatusChange(item._id, "active")}
-        >
-          Approve
-        </ActionButton>
-
-        <ActionButton
-          variant="danger"
-          onClick={() => handleStatusChange(item._id, "Rejected")}
-        >
-          Reject
-        </ActionButton>
-      </CardActions>
-    </BookingCard>
-  ))}
-</MobileList>
+              </CardActions>
+            </BookingCard>
+          ))}
+        </MobileList>
 
         <PaginationBar>
           <PaginationInfo>
