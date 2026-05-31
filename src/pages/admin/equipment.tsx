@@ -26,7 +26,7 @@ import {
   TableWrapper,
 } from "@/styles/admin/equipment";
 import { useEffect, useState } from "react";
-import AddEquipmentModal from "./AddEquipmentModal.tsx";
+import AddEquipmentModal from "./AddEquipmentModal";
 import {
   useDeleteEquipmentsMutation,
   useGetEquipmentsQuery,
@@ -166,85 +166,85 @@ export default function EquipmentPage() {
 
         {/* TABLE */}
         {/* ✅ TABLE (Desktop only) */}
-<TableWrapper>
-  <table>
-    <thead>
-      <tr>
-        <th>Image</th>
-        <th>Asset Name & Details</th>
-        <th>Quantity</th>
-        <th>Rate/Day</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+        <TableWrapper>
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Asset Name & Details</th>
+                <th>Quantity</th>
+                <th>Rate/Day</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
 
-    <tbody>
-      {currentEquipments.map((equipment: any) => (
-        <tr key={equipment._id}>
-          <td>
+            <tbody>
+              {currentEquipments.map((equipment: any) => (
+                <tr key={equipment._id}>
+                  <td>
+                    <img src={equipment.images?.[0]} />
+                  </td>
+                  <td>
+                    <strong>{equipment.name}</strong>
+                    <p>{equipment.type}</p>
+                  </td>
+                  <td>
+                    <Badge green>{equipment.quantity}</Badge>
+                  </td>
+                  <td>₹{equipment.price}</td>
+                  <td>
+                    <Action
+                      onClick={() => {
+                        setSelectedEquipment(equipment);
+                        setShowModal(true);
+                      }}
+                    >
+                      Edit
+                    </Action>
+                    <Delete onClick={() => handledelete(equipment._id)}>
+                      Delete
+                    </Delete>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </TableWrapper>
+
+        {/* ✅ MOBILE CARDS */}
+        {currentEquipments.map((equipment: any) => (
+          <MobileCard key={equipment._id}>
             <img src={equipment.images?.[0]} />
-          </td>
-          <td>
-            <strong>{equipment.name}</strong>
-            <p>{equipment.type}</p>
-          </td>
-          <td>
-            <Badge green>{equipment.quantity}</Badge>
-          </td>
-          <td>₹{equipment.price}</td>
-          <td>
-            <Action
-              onClick={() => {
-                setSelectedEquipment(equipment);
-                setShowModal(true);
-              }}
-            >
-              Edit
-            </Action>
-            <Delete onClick={() => handledelete(equipment._id)}>
-              Delete
-            </Delete>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</TableWrapper>
 
-{/* ✅ MOBILE CARDS */}
-{currentEquipments.map((equipment: any) => (
-  <MobileCard key={equipment._id}>
-    <img src={equipment.images?.[0]} />
+            <MobileContent>
+              <h4>{equipment.name}</h4>
+              <p>{equipment.type}</p>
+              <p>Qty: {equipment.quantity}</p>
+              <p>₹{equipment.price}</p>
 
-    <MobileContent>
-      <h4>{equipment.name}</h4>
-      <p>{equipment.type}</p>
-      <p>Qty: {equipment.quantity}</p>
-      <p>₹{equipment.price}</p>
+              <MobileActions>
+                <button
+                  className="edit"
+                  onClick={() => {
+                    setSelectedEquipment(equipment);
+                    setShowModal(true);
+                  }}
+                >
+                  Edit
+                </button>
 
-      <MobileActions>
-        <button
-          className="edit"
-          onClick={() => {
-            setSelectedEquipment(equipment);
-            setShowModal(true);
-          }}
-        >
-          Edit
-        </button>
+                <button
+                  className="delete"
+                  onClick={() => handledelete(equipment._id)}
+                >
+                  Delete
+                </button>
+              </MobileActions>
+            </MobileContent>
+          </MobileCard>
+        ))}
 
-        <button
-          className="delete"
-          onClick={() => handledelete(equipment._id)}
-        >
-          Delete
-        </button>
-      </MobileActions>
-    </MobileContent>
-  </MobileCard>
-))}
-
-          {/* PAGINATION */}
+        {/* PAGINATION */}
         <PaginationWrapper>
           <p>
             Showing {totalItems === 0 ? 0 : start + 1} to{" "}
@@ -276,7 +276,6 @@ export default function EquipmentPage() {
             </button>
           </PaginationControls>
         </PaginationWrapper>
-        
       </Main>
 
       {/* ✅ MODAL */}

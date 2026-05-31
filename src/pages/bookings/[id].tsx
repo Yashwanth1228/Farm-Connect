@@ -16,7 +16,7 @@ import {
   PrimaryBtn,
   SecondaryBtn,
   DisabledBtn,
-} from "@/pages/bookings/styles/bookingDetails";
+} from "../../components/user/styles/bookings/bookingDetails";
 import FadeInSection from "@/components/user/FadeInSection";
 
 export default function BookingDetails() {

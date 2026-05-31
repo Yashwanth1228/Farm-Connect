@@ -1,9 +1,5 @@
 // /pages/search.tsx
-import {
-  SearchProvider,
-  Results,
-  SearchBox
-} from "@elastic/react-search-ui";
+import { SearchProvider, Results, SearchBox } from "@elastic/react-search-ui";
 import { memo } from "react";
 import styled from "@emotion/styled";
 
@@ -12,14 +8,10 @@ import { useNextRouting } from "@/utils/useNextRouting";
 import { Facet } from "@elastic/react-search-ui";
 import { useRouter } from "next/router";
 
-
-import {  useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/Button";
 import { Paging, PagingInfo } from "@elastic/react-search-ui";
-import { SearchLayout } from "./SearchLayout";
-
-
-
+import { SearchLayout } from "../components/user/styles/equipments/SearchLayout";
 
 type Equipment = {
   id: number;
@@ -29,9 +21,9 @@ type Equipment = {
   images: string;
   available: boolean;
   description: string;
-  enginepower:string;
-  _source : string;
-}
+  enginepower: string;
+  _source: string;
+};
 
 type PriceRange = {
   from?: number;
@@ -39,25 +31,23 @@ type PriceRange = {
   name?: string;
 };
 
+export default function SearchPage() {
+  const router = useRouter();
 
-  export default function SearchPage() {
-    const router = useRouter();
-  
-    const searchTerm =
-      typeof router.query.q === "string" ? router.query.q : "";
-  
-    const config = {
-      ...searchConfig,
-      alwaysSearchOnInitialLoad: true,
-      initialState: {
-        searchTerm,
-        resultsPerPage: 3,
-      },
-    };
-  
-    return (
-      <SearchProvider config={config as any}>
-        <SearchLayout />
-      </SearchProvider>
-    );
-  }
+  const searchTerm = typeof router.query.q === "string" ? router.query.q : "";
+
+  const config = {
+    ...searchConfig,
+    alwaysSearchOnInitialLoad: true,
+    initialState: {
+      searchTerm,
+      resultsPerPage: 3,
+    },
+  };
+
+  return (
+    <SearchProvider config={config as any}>
+      <SearchLayout />
+    </SearchProvider>
+  );
+}

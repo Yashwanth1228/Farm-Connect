@@ -39,7 +39,7 @@ import {
   Select,
   Subject,
   Title,
-} from "./style/contact";
+} from "../../components/admin/styles/contact";
 
 /* ================= COMPONENT ================= */
 
@@ -61,7 +61,7 @@ function ContactPage() {
 
   const filteredContacts = contacts
     .filter((item: any) =>
-      item.email.toLowerCase().includes(searchEmail.toLowerCase())
+      item.email.toLowerCase().includes(searchEmail.toLowerCase()),
     )
     .sort((a: any, b: any) => {
       if (sortOrder === "latest") {
@@ -80,7 +80,7 @@ function ContactPage() {
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const paginatedContacts = filteredContacts.slice(
     startIndex,
-    startIndex + ITEMS_PER_PAGE
+    startIndex + ITEMS_PER_PAGE,
   );
 
   useEffect(() => {
@@ -206,8 +206,8 @@ function ContactPage() {
                       {updating
                         ? "Updating..."
                         : item.isRead
-                        ? "Mark as Unread"
-                        : "Mark as Read"}
+                          ? "Mark as Unread"
+                          : "Mark as Read"}
                     </ActionBtn>
 
                     <ActionBtn
