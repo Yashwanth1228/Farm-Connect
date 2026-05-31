@@ -33,6 +33,8 @@ export default async function handler(
       password: hashedPassword,
     });
 
+    console.log("User created:", user);
+
     // const token = jwt.sign({id : user._id}, process.env.JWT_SECRET, { expiresIn : "7d",});
 
     // res.cookie("token", token, {
