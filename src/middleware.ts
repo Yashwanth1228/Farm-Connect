@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 export async function middleware(req: NextRequest) {
-
   const token = req.cookies.get("token")?.value;
 
   console.log("token:", token);
@@ -10,13 +9,12 @@ export async function middleware(req: NextRequest) {
   if (!token) {
     return NextResponse.json({
       success: false,
-      message: "Unauthorized"
+      message: "Unauthorized",
     });
   }
 
   try {
-
-    const jwtSecret = process.env.jwt_SECRET;
+    const jwtSecret = process.env.JWT_SECRET;
 
     const secret = new TextEncoder().encode(jwtSecret);
 
@@ -27,7 +25,7 @@ export async function middleware(req: NextRequest) {
     if (!payload.id) {
       return NextResponse.json({
         success: false,
-        message: "Invalid token"
+        message: "Invalid token",
       });
     }
 
@@ -41,21 +39,22 @@ export async function middleware(req: NextRequest) {
       request: {
         headers: requestHeaders,
       },
-
     });
-
   } catch (error) {
-
     console.log("JWT ERROR:", error);
 
     return NextResponse.json({
       success: false,
-      message: "Invalid or expired token"
+      message: "Invalid or expired token",
     });
-
   }
 }
 
 export const config = {
-  matcher: ["/api/user/:path*", "/api/bookings/my","/api/admin/user","/admin/dashboard",],
+  matcher: [
+    "/api/user/:path*",
+    "/api/bookings/my",
+    "/api/admin/user",
+    "/admin/dashboard",
+  ],
 };

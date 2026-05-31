@@ -30,7 +30,7 @@ import {
   TotalPrice,
   CloseIcon,
   MobileCheckoutBar,
-} from "@/pages/equipments/style/carts";
+} from "@/components/user/styles/equipments/carts";
 import FadeInSection from "@/components/user/FadeInSection";
 
 export default function CartPage() {

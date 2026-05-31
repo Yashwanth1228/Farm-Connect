@@ -45,7 +45,7 @@ import {
   SkeletonImage,
   SkeletonBody,
   SkeletonLine,
-} from "@/pages/equipments/style/index";
+} from "@/components/user/styles/equipments/index";
 import FadeInSection from "@/components/user/FadeInSection";
 
 type Equipment = {

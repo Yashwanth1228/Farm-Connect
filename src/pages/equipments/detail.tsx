@@ -32,7 +32,7 @@ import {
   SpecItem,
   Details,
   PrimaryBtn,
-} from "@/pages/equipments/style/details";
+} from "@/components/user/styles/equipments/details";
 import FadeInSection from "@/components/user/FadeInSection";
 
 type Props = {
